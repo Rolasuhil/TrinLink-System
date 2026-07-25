@@ -365,7 +365,8 @@ async function doRegister() {
       showRegError(msg);
     }
   } catch (e) {
-    showRegError('حدث خطأ في الاتصال بالخادم');
+    console.error('Registration error:', e);
+    showRegError('حدث خطأ: ' + e.message);
   } finally {
     btn.disabled = false;
     btn.innerHTML = '<i class="ti ti-check"></i> إنشاء الحساب';
