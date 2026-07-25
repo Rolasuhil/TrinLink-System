@@ -45,7 +45,10 @@ class RegisterTraineeView(APIView):
         user = serializer.save()
         otp_obj = OTPVerification.objects.filter(person=user, purpose='registration', is_used=False).last()
         if otp_obj:
-            send_otp_email(user.email, otp_obj.otp_code, purpose='registration')
+            try:
+                send_otp_email(user.email, otp_obj.otp_code, purpose='registration')
+            except Exception:
+                pass
         return Response({
             'message': 'تم التسجيل بنجاح. تم إرسال رمز التحقق على بريدك الإلكتروني.',
             'otp_code': otp_obj.otp_code if otp_obj else None,
@@ -60,7 +63,10 @@ class RegisterCompanyView(APIView):
         user = serializer.save()
         otp_obj = OTPVerification.objects.filter(person=user, purpose='registration', is_used=False).last()
         if otp_obj:
-            send_otp_email(user.email, otp_obj.otp_code, purpose='registration')
+            try:
+                send_otp_email(user.email, otp_obj.otp_code, purpose='registration')
+            except Exception:
+                pass
         return Response({
             'message': 'تم التسجيل بنجاح. تم إرسال رمز التحقق على بريدك الإلكتروني.',
             'otp_code': otp_obj.otp_code if otp_obj else None,
@@ -75,7 +81,10 @@ class RegisterSupervisorView(APIView):
         user = serializer.save()
         otp_obj = OTPVerification.objects.filter(person=user, purpose='registration', is_used=False).last()
         if otp_obj:
-            send_otp_email(user.email, otp_obj.otp_code, purpose='registration')
+            try:
+                send_otp_email(user.email, otp_obj.otp_code, purpose='registration')
+            except Exception:
+                pass
         return Response({
             'message': 'تم التسجيل بنجاح. تم إرسال رمز التحقق على بريدك الإلكتروني.',
             'otp_code': otp_obj.otp_code if otp_obj else None,
