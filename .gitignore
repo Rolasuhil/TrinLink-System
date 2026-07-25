@@ -44,9 +44,6 @@ static_collected/
 Thumbs.db
 desktop.ini
 
-# Django Migrations (keep __init__.py)
-**/migrations/0*.py
-
 # Test / Coverage
 htmlcov/
 .coverage
