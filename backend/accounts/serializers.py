@@ -84,7 +84,7 @@ class RegisterTraineeSerializer(serializers.Serializer):
                     role='academic',
                     status='active',
                 )
-            except SupervisorProfile.DoesNotExist:
+            except (SupervisorProfile.DoesNotExist, ValueError):
                 pass
 
         OTPVerification.objects.create(

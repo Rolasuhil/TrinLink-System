@@ -91,7 +91,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
  
   <!-- LEFT -->
   <div class="left-panel">
-    <div class="logo"><div class="logo-icon"><i class="ti ti-briefcase"></i></div><span class="logo-text">TrainLink</span></div>
+    <a href="01-home.html" class="logo"><div class="logo-icon"><i class="ti ti-briefcase"></i></div><span class="logo-text">TrainLink</span></a>
     <div class="steps-nav">
       <div class="step-item">
         <div class="step-num active" id="sn1">1</div>
@@ -114,14 +114,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
   <!-- RIGHT -->
   <div class="right-panel">
     <div class="form-card">
- 
+      <div class="error-msg" id="regError" style="background:#FEE2E2;border:1px solid #FECACA;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:#DC2626;display:none;align-items:center;gap:8px;margin-bottom:14px"><i class="ti ti-alert-circle"></i><span id="regErrorText"></span></div>
+
       <!-- STEP 1 -->
       <div class="step-content active" id="step1">
         <div class="step-header">
           <div class="step-title">المعلومات الشخصية</div>
           <div class="step-sub">أدخل بياناتك الأساسية لإنشاء حسابك</div>
         </div>
-        <div class="error-msg" id="regError" style="background:#FEE2E2;border:1px solid #FECACA;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:#DC2626;display:none;align-items:center;gap:8px;margin-bottom:14px"><i class="ti ti-alert-circle"></i><span id="regErrorText"></span></div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">الاسم الأول</label>
