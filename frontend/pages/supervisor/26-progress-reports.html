@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — تقارير التقدم</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.content{padding:20px 24px;flex:1}
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text-mid);font-family:var(--font);font-weight:600;transition:all 0.15s}
+.filter-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:14px}
+.report-card{border:1px solid var(--border);border-radius:var(--radius-lg);background:white;margin-bottom:12px;overflow:hidden;transition:all 0.15s}
+.report-card:hover{border-color:var(--primary);box-shadow:0 4px 12px rgba(91,79,207,0.08)}
+.report-header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.report-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0}
+.report-title{font-size:14px;font-weight:700;color:var(--text-dark)}
+.report-meta{font-size:12px;color:var(--text-mid);margin-top:2px}
+.report-status{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;margin-right:auto}
+.report-body{padding:14px 16px;display:none}
+.report-body.open{display:block}
+.report-section{margin-bottom:12px}
+.report-section-title{font-size:12px;font-weight:700;color:var(--text-dark);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.report-section-title i{color:var(--primary);font-size:14px}
+.progress-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.progress-track{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;border-radius:3px}
+.report-text{font-size:13px;color:var(--text-mid);line-height:1.7;padding:10px;background:var(--bg);border-radius:var(--radius-md)}
+.report-actions{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
+.btn-primary{background:var(--primary);color:white}
+.btn-success{background:var(--success);color:white}
+.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.toast.show{display:flex}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:#22C55E;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">مش</div>
+    <div style="color:white;font-size:11px;font-weight:600">د. محمد أبو سمرة</div>
+  </div>
+  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <a href="24-supervisor-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="25-my-trainees.html" class="nav-item"><i class="ti ti-school"></i><span>متدربي</span><span class="nav-badge">8</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-file-text"></i><span>التقارير</span></a>
+  <a href="27-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span><span class="nav-badge">2</span></a>
+  <div class="nav-section">الحساب</div>
+  <a href="#" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
+  <a href="#" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span></a>
+  <div class="sidebar-bottom">
+    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">تقارير التقدم 📝</div>
+      <div class="topbar-sub">مراجعة تقارير المتدربيين الأسبوعية</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterReports(this,'all')">الكل</button>
+      <button class="filter-btn" onclick="filterReports(this,'pending')">بانتظار المراجعة (2)</button>
+      <button class="filter-btn" onclick="filterReports(this,'reviewed')">تمت المراجعة (5)</button>
+    </div>
+
+    <!-- REPORT 1 - PENDING -->
+    <div class="report-card" data-status="pending">
+      <div class="report-header" onclick="toggleReport(this)">
+        <div class="report-avatar" style="background:var(--primary)">سم</div>
+        <div><div class="report-title">تقرير أسبوعي — سارة محمود</div><div class="report-meta">الأسبوع 3 · TechPal · 23 يوليو 2026</div></div>
+        <span class="report-status" style="background:var(--warning-light);color:#B45309">بانتظار المراجعة</span>
+      </div>
+      <div class="report-body">
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-chart-line"></i>تقدم المشروع</div>
+          <div class="progress-row"><span style="font-weight:600">التقدم الكلي</span><span style="font-weight:700;color:var(--primary)">85%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:85%;background:var(--primary)"></div></div>
+          <div class="progress-row"><span style="font-weight:600">المهام المكتملة</span><span style="font-weight:700;color:var(--success)">7/8</span></div>
+        </div>
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-notes"></i>وصف العمل المنجز</div>
+          <div class="report-text">هذا الأسبوع أنهيت صفحة تسجيل الدخول واستخدمت React Router للتنقل. عملت على واجهة المستخدم للوحة التحكم وصممت المكونات الأساسية. تعلمت TypeScript وأستخدمتها في المشروع.</div>
+        </div>
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-star"></i>التحديات</div>
+          <div class="report-text">واجهت صعوبة في التعامل مع الحالة (state management) في React. حاولت استخدام Redux لكن وجدت Context API أسهل.</div>
+        </div>
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-lightbulb"></i>الأسبوع القادم</div>
+          <div class="report-text">سأعمل على صفحة إعدادات المستخدم والتكامل مع API الخلفي. أخطط لإنهاء 90% من المشروع.</div>
+        </div>
+        <div class="report-actions">
+          <button class="btn btn-success" onclick="reviewReport(this,'تمت المراجعة ✓')"><i class="ti ti-check" style="margin-left:4px"></i>تأكيد المراجعة</button>
+          <button class="btn btn-outline" onclick="window.location.href='27-chat.html'"><i class="ti ti-message" style="margin-left:4px"></i>إرسال ملاحظات</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT 2 - PENDING -->
+    <div class="report-card" data-status="pending">
+      <div class="report-header" onclick="toggleReport(this)">
+        <div class="report-avatar" style="background:#22C55E">أح</div>
+        <div><div class="report-title">تقرير أسبوعي — أحمد حسن</div><div class="report-meta">الأسبوع 2 · TechPal · 22 يوليو 2026</div></div>
+        <span class="report-status" style="background:var(--warning-light);color:#B45309">بانتظار المراجعة</span>
+      </div>
+      <div class="report-body">
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-chart-line"></i>تقدم المشروع</div>
+          <div class="progress-row"><span style="font-weight:600">التقدم الكلي</span><span style="font-weight:700;color:var(--primary)">72%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:72%;background:var(--primary)"></div></div>
+        </div>
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-notes"></i>وصف العمل المنجز</div>
+          <div class="report-text">هذا الأسبوع أنشأت REST API باستخدام Django REST Framework. عملت على نماذج البيانات ونقاط النهاية الأساسية. بدأت في كتابة الاختبارات.</div>
+        </div>
+        <div class="report-actions">
+          <button class="btn btn-success" onclick="reviewReport(this,'تمت المراجعة ✓')"><i class="ti ti-check" style="margin-left:4px"></i>تأكيد المراجعة</button>
+          <button class="btn btn-outline"><i class="ti ti-message" style="margin-left:4px"></i>إرسال ملاحظات</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT 3 - REVIEWED -->
+    <div class="report-card" data-status="reviewed">
+      <div class="report-header" onclick="toggleReport(this)">
+        <div class="report-avatar" style="background:#FF6B6B">من</div>
+        <div><div class="report-title">تقرير أسبوعي — منى ناصر</div><div class="report-meta">الأسبوع 3 · DesignHub · 21 يوليو 2026</div></div>
+        <span class="report-status" style="background:var(--success-light);color:#15803D">تمت المراجعة ✓</span>
+      </div>
+      <div class="report-body">
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-chart-line"></i>تقدم المشروع</div>
+          <div class="progress-row"><span style="font-weight:600">التقدم الكلي</span><span style="font-weight:700;color:var(--success)">90%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:90%;background:var(--success)"></div></div>
+        </div>
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-notes"></i>وصف العمل المنجز</div>
+          <div class="report-text">صممت 8 شاشات كاملة باستخدام Figma. أنهيت Design System للمشروع وبدأت في تسليم المكونات للمطورين.</div>
+        </div>
+        <div class="report-actions">
+          <button class="btn" style="background:var(--success-light);color:#15803D;cursor:default"><i class="ti ti-check" style="margin-left:4px"></i>تمت المراجعة</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT 4 - REVIEWED -->
+    <div class="report-card" data-status="reviewed">
+      <div class="report-header" onclick="toggleReport(this)">
+        <div class="report-avatar" style="background:var(--primary)">سم</div>
+        <div><div class="report-title">تقرير أسبوعي — سارة محمود</div><div class="report-meta">الأسبوع 2 · TechPal · 16 يوليو 2026</div></div>
+        <span class="report-status" style="background:var(--success-light);color:#15803D">تمت المراجعة ✓</span>
+      </div>
+      <div class="report-body">
+        <div class="report-section">
+          <div class="report-section-title"><i class="ti ti-chart-line"></i>تقدم المشروع</div>
+          <div class="progress-row"><span style="font-weight:600">التقدم الكلي</span><span style="font-weight:700;color:var(--primary)">65%</span></div>
+          <div class="progress-track"><div class="progress-fill" style="width:65%;background:var(--primary)"></div></div>
+        </div>
+        <div class="report-actions">
+          <button class="btn" style="background:var(--success-light);color:#15803D;cursor:default"><i class="ti ti-check" style="margin-left:4px"></i>تمت المراجعة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+
+<script>
+const API_BASE='/api';
+function getToken(){return localStorage.getItem('trainlink_token')}
+function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
+function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
+
+document.addEventListener('DOMContentLoaded',async function(){
+  try{
+    var res=await fetch(API_BASE+'/performance/performance-reports/',{headers:authHeaders()});
+    if(!res.ok)throw new Error('Failed');
+    var reports=await res.json();
+    var list=reports.results||reports;
+    var container=document.querySelector('.content');
+    if(!container||!Array.isArray(list))return;
+    var filterBar=container.querySelector('.filter-bar');
+    var existingCards=container.querySelectorAll('.report-card');
+    existingCards.forEach(function(c){c.remove()});
+    var colors=['var(--primary)','#22C55E','#FF6B6B','#7C3AED','#F59E0B'];
+    var pendingCount=0,reviewedCount=0;
+    list.forEach(function(r,i){
+      var isPending=r.status==='pending'||!r.is_reviewed;
+      if(isPending)pendingCount++;else reviewedCount++;
+      var name=r.trainee_name||r.trainee||'متدرب';
+      var ini=name.substring(0,2);
+      var col=colors[i%colors.length];
+      var statusClass=isPending?'pending':'reviewed';
+      var statusHtml=isPending?'<span class="report-status" style="background:var(--warning-light);color:#B45309">بانتظار المراجعة</span>':'<span class="report-status" style="background:var(--success-light);color:#15803D">تمت المراجعة ✓</span>';
+      var date=r.created_at?new Date(r.created_at).toLocaleDateString('ar'):'';
+      var bodyContent=r.content||r.description||r.text||'';
+      var progress=r.progress||r.overall_progress||0;
+      var card=document.createElement('div');
+      card.className='report-card';
+      card.setAttribute('data-status',statusClass);
+      card.innerHTML='<div class="report-header" onclick="toggleReport(this)"><div class="report-avatar" style="background:'+col+'">'+ini+'</div><div><div class="report-title">'+(r.title||'تقرير أسبوعي')+' — '+name+'</div><div class="report-meta">'+(r.week?'الأسبوع '+r.week+' · ':'')+date+'</div></div>'+statusHtml+'</div><div class="report-body"><div class="report-section"><div class="report-section-title"><i class="ti ti-chart-line"></i>تقدم المشروع</div><div class="progress-row"><span style="font-weight:600">التقدم الكلي</span><span style="font-weight:700;color:var(--primary)">'+progress+'%</span></div><div class="progress-track"><div class="progress-fill" style="width:'+progress+'%;background:var(--primary)"></div></div></div>'+(bodyContent?'<div class="report-section"><div class="report-section-title"><i class="ti ti-notes"></i>وصف العمل المنجز</div><div class="report-text">'+bodyContent+'</div></div>':'')+(isPending?'<div class="report-actions"><button class="btn btn-success" onclick="reviewReport(this,\'تمت المراجعة ✓\')"><i class="ti ti-check" style="margin-left:4px"></i>تأكيد المراجعة</button></div>':'<div class="report-actions"><button class="btn" style="background:var(--success-light);color:#15803D;cursor:default"><i class="ti ti-check" style="margin-left:4px"></i>تمت المراجعة</button></div>')+'</div>';
+      container.appendChild(card);
+    });
+    var filterBtns=filterBar.querySelectorAll('.filter-btn');
+    if(filterBtns[1])filterBtns[1].innerHTML='بانتظار المراجعة ('+pendingCount+')';
+    if(filterBtns[2])filterBtns[2].innerHTML='تمت المراجعة ('+reviewedCount+')';
+  }catch(e){
+    console.log('Error loading reports:',e);
+  }
+});
+
+function toggleReport(header){
+  var body=header.nextElementSibling;
+  body.classList.toggle('open');
+}
+function filterReports(btn,status){
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  document.querySelectorAll('.report-card').forEach(function(card){
+    card.style.display=(status==='all'||card.dataset.status===status)?'block':'none';
+  });
+}
+function reviewReport(btn,msg){
+  var card=btn.closest('.report-card');
+  card.dataset.status='reviewed';
+  card.querySelector('.report-status').textContent='تمت المراجعة ✓';
+  card.querySelector('.report-status').style.background='var(--success-light)';
+  card.querySelector('.report-status').style.color='#15803D';
+  btn.parentElement.innerHTML='<button class="btn" style="background:var(--success-light);color:#15803D;cursor:default"><i class="ti ti-check" style="margin-left:4px"></i>تمت المراجعة</button>';
+  showToast(msg);
+}
+function showToast(msg){
+  var t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3000);
+}
+</script>
+</body>
+</html>

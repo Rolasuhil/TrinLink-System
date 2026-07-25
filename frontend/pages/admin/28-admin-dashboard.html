@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — لوحة تحكم الأدمن</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.icon-btn{width:34px;height:34px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.icon-btn i{color:var(--text-mid);font-size:16px}
+.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid white}
+.content{padding:20px 24px;flex:1}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(91,79,207,0.1);border-color:var(--primary)}
+.stat-icon{width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-icon i{font-size:22px}
+.stat-num{font-size:24px;font-weight:800;color:var(--text-dark)}
+.stat-label{font-size:11px;color:var(--text-mid);margin-top:2px}
+.stat-change{font-size:10px;font-weight:600;margin-top:4px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
+.card-title i{color:var(--primary);font-size:16px}
+.card-action{font-size:12px;color:var(--primary);cursor:pointer;text-decoration:none;font-weight:600}
+.alert-banner{padding:12px 16px;border-radius:var(--radius-md);display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.user-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.user-item:last-child{border-bottom:none}
+.user-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0}
+.user-name{font-size:13px;font-weight:700;color:var(--text-dark)}
+.user-role{font-size:11px;color:var(--text-mid)}
+.status-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;margin-right:auto}
+.chart-bar{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.chart-label{font-size:12px;color:var(--text-dark);width:70px;flex-shrink:0;text-align:left}
+.chart-track{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.chart-fill{height:100%;border-radius:4px}
+.chart-val{font-size:11px;font-weight:700;color:var(--text-mid);width:36px}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
+    <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
+    <div style="color:rgba(255,255,255,0.4);font-size:10px;margin-top:2px">مدير النظام</div>
+  </div>
+  <div class="nav-section">القائمة</div>
+  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span><span class="nav-badge">5</span></a>
+  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-file-text"></i><span>إدارة المحتوى</span></a>
+  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير والإحصائيات</span></a>
+  <a href="32-assign-trainee.html" class="nav-item"><i class="ti ti-school"></i><span>تعيين المتدربيين</span></a>
+  <div class="nav-section">النظام</div>
+  <a href="#" class="nav-item"><i class="ti ti-settings"></i><span>الإعدادات</span></a>
+  <div class="sidebar-bottom">
+    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">لوحة تحكم المدير 👑</div>
+      <div class="topbar-sub">نظرة عامة على النظام</div>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
+      <div style="width:32px;height:32px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;cursor:pointer">أد</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="alert-banner" style="background:var(--warning-light);border:1px solid #FCD34D">
+      <i class="ti ti-alert-triangle" style="color:var(--warning);font-size:18px"></i>
+      <div style="flex:1"><span style="font-size:13px;font-weight:700;color:var(--text-dark)">5 شركات جديدة تنتظر التأكيد</span> <span style="font-size:12px;color:var(--text-mid)">— يرجى مراجعة طلبات التسجيل</span></div>
+      <a href="29-manage-users.html" style="padding:6px 14px;background:var(--warning);color:white;border-radius:var(--radius-sm);font-size:12px;font-weight:700;text-decoration:none">مراجعة</a>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card" onclick="window.location.href='29-manage-users.html'">
+        <div class="stat-icon" style="background:var(--primary-light)"><i class="ti ti-users" style="color:var(--primary)"></i></div>
+        <div><div class="stat-num">1,247</div><div class="stat-label">إجمالي المستخدمين</div><div class="stat-change" style="color:var(--success)">↑ 23 هذا الشهر</div></div>
+      </div>
+      <div class="stat-card" onclick="window.location.href='29-manage-users.html'">
+        <div class="stat-icon" style="background:var(--success-light)"><i class="ti ti-school" style="color:var(--success)"></i></div>
+        <div><div class="stat-num">1,089</div><div class="stat-label">المتدربيين</div><div class="stat-change" style="color:var(--success)">↑ 18 هذا الشهر</div></div>
+      </div>
+      <div class="stat-card" onclick="window.location.href='29-manage-users.html'">
+        <div class="stat-icon" style="background:#FFF0F0"><i class="ti ti-building" style="color:var(--accent)"></i></div>
+        <div><div class="stat-num">42</div><div class="stat-label">الشركات</div><div class="stat-change" style="color:var(--success)">↑ 5 جديدة</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--warning-light)"><i class="ti ti-user-star" style="color:var(--warning)"></i></div>
+        <div><div class="stat-num">116</div><div class="stat-label">المشرفين</div><div class="stat-change" style="color:var(--success)">↑ 2 جدد</div></div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card" onclick="window.location.href='30-manage-content.html'">
+        <div class="stat-icon" style="background:#F0FFF4"><i class="ti ti-briefcase" style="color:var(--success)"></i></div>
+        <div><div class="stat-num">186</div><div class="stat-label">فرص التدريب</div><div class="stat-change" style="color:var(--success)">156 نشطة</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--primary-light)"><i class="ti ti-file-text" style="color:var(--primary)"></i></div>
+        <div><div class="stat-num">3,456</div><div class="stat-label">إجمالي الطلبات</div><div class="stat-change" style="color:var(--warning)">234 معلقة</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--success-light)"><i class="ti ti-circle-check" style="color:var(--success)"></i></div>
+        <div><div class="stat-num">2,891</div><div class="stat-label">طلبات مقبولة</div><div class="stat-change" style="color:var(--success)">83.6%</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#FEE2E2"><i class="ti ti-circle-x" style="color:#DC2626"></i></div>
+        <div><div class="stat-num">331</div><div class="stat-label">طلبات مرفوضة</div><div class="stat-change" style="color:#DC2626">9.6%</div></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-user-plus"></i>آخر المستخدمين المسجلين</div>
+            <a href="29-manage-users.html" class="card-action">عرض الكل</a>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar" style="background:var(--primary)">سم</div>
+            <div><div class="user-name">سارة محمود</div><div class="user-role">متدربة · IT — الأزهر</div></div>
+            <span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar" style="background:#22C55E">TP</div>
+            <div><div class="user-name">TechPal</div><div class="user-role">شركة · تقنية المعلومات</div></div>
+            <span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar" style="background:#FF6B6B">مش</div>
+            <div><div class="user-name">د. فاطمة أحمد</div><div class="user-role">مشرفة أكاديمية · الأزهر</div></div>
+            <span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span>
+          </div>
+          <div class="user-item">
+            <div class="user-avatar" style="background:#7C3AED">DH</div>
+            <div><div class="user-name">DesignHub</div><div class="user-role">شركة · تصميم</div></div>
+            <span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-chart-bar"></i>إحصائيات الأنشطة</div>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-dark);margin-bottom:8px">التسجيلات هذا الشهر</div>
+          <div class="chart-bar"><div class="chart-label">المتدربيين</div><div class="chart-track"><div class="chart-fill" style="width:85%;background:var(--primary)"></div></div><div class="chart-val">18</div></div>
+          <div class="chart-bar"><div class="chart-label">الشركات</div><div class="chart-track"><div class="chart-fill" style="width:25%;background:var(--success)"></div></div><div class="chart-val">5</div></div>
+          <div class="chart-bar"><div class="chart-label">المشرفين</div><div class="chart-track"><div class="chart-fill" style="width:10%;background:var(--warning)"></div></div><div class="chart-val">2</div></div>
+          <div style="margin-top:14px;font-size:12px;font-weight:700;color:var(--text-dark);margin-bottom:8px">الطلبات هذا الأسبوع</div>
+          <div class="chart-bar"><div class="chart-label">مقبولة</div><div class="chart-track"><div class="chart-fill" style="width:75%;background:var(--success)"></div></div><div class="chart-val">45</div></div>
+          <div class="chart-bar"><div class="chart-label">معلقة</div><div class="chart-track"><div class="chart-fill" style="width:30%;background:var(--warning)"></div></div><div class="chart-val">18</div></div>
+          <div class="chart-bar"><div class="chart-label">مرفوضة</div><div class="chart-track"><div class="chart-fill" style="width:12%;background:var(--accent)"></div></div><div class="chart-val">7</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-activity"></i>نشاط النظام</div>
+          </div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--success)"></div><span style="color:var(--text-mid)">الخادم يعمل بشكل طبيعي</span><span style="margin-right:auto;font-size:10px;color:var(--text-mid)">99.9%</span></div>
+          <div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--success)"></div><span style="color:var(--text-mid)">قاعدة البيانات متصلة</span><span style="margin-right:auto;font-size:10px;color:var(--text-mid)">12ms</span></div>
+          <div style="padding:8px 0;font-size:12px;display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:var(--success)"></div><span style="color:var(--text-mid)">Gemini AI متصل</span><span style="margin-right:auto;font-size:10px;color:var(--text-mid)">156ms</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE='/api';
+function getToken(){return localStorage.getItem('trainlink_token')}
+function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
+function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
+
+document.addEventListener('DOMContentLoaded',async function(){
+  var statNums=document.querySelectorAll('.stat-num');
+  try{
+    var res=await fetch(API_BASE+'/admin-panel/dashboard/',{headers:authHeaders()});
+    if(res.ok){
+      var d=await res.json();
+      if(statNums[0])statNums[0].textContent=d.total_users||0;
+      if(statNums[1])statNums[1].textContent=d.total_trainees||0;
+      if(statNums[2])statNums[2].textContent=d.total_companies||0;
+      if(statNums[3])statNums[3].textContent=d.total_supervisors||0;
+      if(statNums[4])statNums[4].textContent=d.total_internships||0;
+      if(statNums[5])statNums[5].textContent=d.open_internships||0;
+      if(statNums[6])statNums[6].textContent=d.total_applications||0;
+      if(statNums[7])statNums[7].textContent=d.pending_applications||0;
+      if(statNums[8])statNums[8].textContent=d.accepted_applications||0;
+      if(statNums[9])statNums[9].textContent=d.rejected_applications||0;
+      var alertBanner=document.querySelector('.alert-banner');
+      if(alertBanner&&d.pending_companies!==undefined){
+        alertBanner.querySelector('span:first-of-type').textContent=d.pending_companies+' شركات جديدة تنتظر التأكيد';
+      }
+    }
+  }catch(e){console.log('Error loading dashboard:',e)}
+
+  try{
+    var usersRes=await fetch(API_BASE+'/admin-panel/users/?type=trainee',{headers:authHeaders()});
+    if(usersRes.ok){
+      var users=await usersRes.json();
+      var list=users.results||users;
+      if(Array.isArray(list)){
+        var userItems=document.querySelectorAll('.user-item');
+        var lastUsers=list.slice(0,4);
+        lastUsers.forEach(function(u,i){
+          if(i<userItems.length){
+            var ini=u.full_name?u.full_name.substring(0,2):'?';
+            userItems[i].querySelector('.user-name').textContent=u.full_name||'مستخدم';
+            userItems[i].querySelector('.user-role').textContent=u.person_type_display||u.person_type||'';
+            var badge=userItems[i].querySelector('.status-badge');
+            if(badge){
+              if(u.is_active){badge.textContent='مفعّل';badge.style.background='var(--success-light)';badge.style.color='#15803D';}
+              else{badge.textContent='معطّل';badge.style.background='#FEE2E2';badge.style.color='#DC2626';}
+            }
+          }
+        });
+      }
+    }
+  }catch(e){console.log('Error loading users:',e)}
+});
+</script>
+</body>
+</html>

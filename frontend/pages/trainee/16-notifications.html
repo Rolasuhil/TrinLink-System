@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — الإشعارات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.content{padding:20px 24px;flex:1;max-width:760px}
+.tab-bar{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:4px;margin-bottom:16px;width:fit-content}
+.tab{padding:7px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-mid);font-family:var(--font);transition:all 0.15s}
+.tab.active{background:var(--primary);color:white}
+.notif-group-label{font-size:12px;font-weight:700;color:var(--text-mid);margin-bottom:8px;padding-right:4px;text-transform:uppercase;letter-spacing:0.5px}
+.notif-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:all 0.2s;position:relative}
+.notif-card:hover{border-color:var(--primary);box-shadow:0 2px 12px rgba(91,79,207,0.08)}
+.notif-card.unread{background:#FAFAFF;border-right:3px solid var(--primary)}
+.notif-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-icon i{font-size:20px}
+.notif-title{font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:3px}
+.notif-body{font-size:13px;color:var(--text-mid);line-height:1.6}
+.notif-time{font-size:11px;color:var(--text-mid);margin-top:6px;display:flex;align-items:center;gap:4px}
+.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--primary);position:absolute;top:16px;left:16px;flex-shrink:0}
+.notif-action{margin-top:8px;display:flex;gap:8px}
+.btn-notif-action{padding:6px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all 0.15s}
+.btn-primary-action{background:var(--primary);color:white;border:none}
+.btn-outline-action{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-outline-action:hover{background:var(--primary-light)}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">سم</div>
+    <div style="color:white;font-size:11px;font-weight:600">سارة محمود</div>
+  </div>
+  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <a href="08-trainee-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="09-search.html" class="nav-item"><i class="ti ti-search"></i><span>البحث</span></a>
+  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span></a>
+  <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
+  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span></a>
+  <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
+  <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
+  <div class="nav-section">الحساب</div>
+  <a href="12-my-profile.html" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-bell"></i><span>الإشعارات</span></a>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
+</nav>
+ 
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">الإشعارات 🔔</div><div class="topbar-sub">5 إشعارات غير مقروءة</div></div>
+    <button onclick="markAllRead()" style="padding:8px 16px;background:var(--primary-light);color:var(--primary);border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">تحديد الكل كمقروء</button>
+  </div>
+ 
+  <div class="content">
+    <div class="tab-bar">
+      <button class="tab active" onclick="filterNotifs(this,'all')">الكل (12)</button>
+      <button class="tab" onclick="filterNotifs(this,'unread')">غير مقروء (5)</button>
+      <button class="tab" onclick="filterNotifs(this,'apps')">الطلبات</button>
+      <button class="tab" onclick="filterNotifs(this,'msgs')">الرسائل</button>
+      <button class="tab" onclick="filterNotifs(this,'ai')">AI</button>
+    </div>
+ 
+    <div class="notif-group-label">اليوم</div>
+ 
+    <div class="notif-card unread" data-type="apps" onclick="markRead(this)">
+      <div class="unread-dot"></div>
+      <div class="notif-icon" style="background:var(--success-light)"><i class="ti ti-circle-check" style="color:var(--success)"></i></div>
+      <div style="flex:1">
+        <div class="notif-title">🎉 تم قبول طلبك!</div>
+        <div class="notif-body">قبلت <strong>DesignHub</strong> طلبك على وظيفة مصمم UI/UX. يرجى التواصل مع الشركة لترتيب تفاصيل البدء.</div>
+        <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ ساعتين</div>
+        <div class="notif-action">
+          <button class="btn-notif-action btn-primary-action" onclick="event.stopPropagation();window.location.href='15-chat.html'">تواصل مع الشركة</button>
+          <button class="btn-notif-action btn-outline-action" onclick="event.stopPropagation()">عرض الطلب</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="notif-card unread" data-type="msgs" onclick="markRead(this)">
+      <div class="unread-dot"></div>
+      <div class="notif-icon" style="background:var(--primary-light)"><i class="ti ti-message-circle" style="color:var(--primary)"></i></div>
+      <div style="flex:1">
+        <div class="notif-title">رسالة جديدة من TechPal</div>
+        <div class="notif-body">أرسل إليك TechPal رسالة: "هل يمكنك إرسال portfolio أو رابط GitHub؟"</div>
+        <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ 3 ساعات</div>
+        <div class="notif-action">
+          <button class="btn-notif-action btn-primary-action" onclick="event.stopPropagation();window.location.href='15-chat.html'">الرد الآن</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="notif-card unread" data-type="ai" onclick="markRead(this)">
+      <div class="unread-dot"></div>
+      <div class="notif-icon" style="background:#F0FFF4"><i class="ti ti-robot" style="color:var(--success)"></i></div>
+      <div style="flex:1">
+        <div class="notif-title">🤖 فرص جديدة من AI!</div>
+        <div class="notif-body">وجد الذكاء الاصطناعي <strong>5 فرص تدريب جديدة</strong> تناسبك بناءً على ملفك المحدّث. نسب مطابقة تصل إلى 97%!</div>
+        <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ 5 ساعات</div>
+        <div class="notif-action">
+          <button class="btn-notif-action btn-primary-action" onclick="event.stopPropagation();window.location.href='13-ai-assistant.html'">عرض الفرص</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="notif-group-label" style="margin-top:16px">أمس</div>
+ 
+    <div class="notif-card unread" data-type="apps" onclick="markRead(this)">
+      <div class="unread-dot"></div>
+      <div class="notif-icon" style="background:var(--warning-light)"><i class="ti ti-clock" style="color:var(--warning)"></i></div>
+      <div style="flex:1">
+        <div class="notif-title">⚠️ آخر موعد قريب!</div>
+        <div class="notif-body">ينتهي التقديم على فرصة <strong>مطور Frontend — TechPal</strong> خلال <strong>3 أيام</strong> (22 يوليو). سارعي بالتقديم!</div>
+        <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ يوم</div>
+        <div class="notif-action">
+          <button class="btn-notif-action btn-primary-action" onclick="event.stopPropagation();window.location.href='10-internship-details.html'">تقدّم الآن</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="notif-card unread" data-type="apps" onclick="markRead(this)">
+      <div class="unread-dot"></div>
+      <div class="notif-icon" style="background:#FEF2F2"><i class="ti ti-x" style="color:var(--accent)"></i></div>
+      <div style="flex:1">
+        <div class="notif-title">طلبك مرفوض من NetSoft</div>
+        <div class="notif-body">رفضت <strong>NetSoft</strong> طلبك على وظيفة مطور Python. السبب: "نحتاج خبرة أكثر في Django". لا تيأس — هناك فرص أخرى تناسبك!</div>
+        <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ يوم</div>
+        <div class="notif-action">
+          <button class="btn-notif-action btn-outline-action" onclick="event.stopPropagation();window.location.href='09-search.html'">البحث عن بديل</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="notif-group-label" style="margin-top:16px">هذا الأسبوع</div>
+ 
+    <div class="notif-card" data-type="msgs" onclick="markRead(this)">
+      <div class="notif-icon" style="background:var(--success-light)"><i class="ti ti-school" style="color:var(--success)"></i></div>
+      <div style="flex:1">
+        <div class="notif-title">رسالة من مشرفك</div>
+        <div class="notif-body">أرسل إليك <strong>د. محمد أبو سمرة</strong> رسالة: "أداءك ممتاز هذا الأسبوع! استمري على هذا المستوى 🌟"</div>
+        <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ 3 أيام</div>
+      </div>
+    </div>
+ 
+    <div class="notif-card" data-type="ai" onclick="markRead(this)">
+      <div class="notif-icon" style="background:var(--primary-light)"><i class="ti ti-chart-line" style="color:var(--primary)"></i></div>
+      <div style="flex:1">
+        <div class="notif-title">تقرير الأسبوع الثالث</div>
+        <div class="notif-body">تم إنشاء تقرير أدائك الأسبوعي بواسطة Gemini AI. تقييم الأسبوع: <strong>4.5/5 ⭐</strong> — ممتاز!</div>
+        <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ 4 أيام</div>
+        <div class="notif-action">
+          <button class="btn-notif-action btn-outline-action" onclick="event.stopPropagation()">عرض التقرير</button>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="notif-card" data-type="apps" onclick="markRead(this)">
+      <div class="notif-icon" style="background:var(--success-light)"><i class="ti ti-send" style="color:var(--success)"></i></div>
+      <div style="flex:1">
+        <div class="notif-title">تم إرسال طلبك</div>
+        <div class="notif-body">تم استلام طلبك على فرصة <strong>مطور قواعد بيانات — DataSoft</strong> بنجاح. سيتم الرد خلال 5 أيام عمل.</div>
+        <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ 5 أيام</div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<script>
+const API_BASE='/api';
+function getToken(){return localStorage.getItem('trainlink_token');}
+function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
+function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
+
+function filterNotifs(btn,type){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.notif-card').forEach(c=>{
+    if(type==='all') c.style.display='flex';
+    else if(type==='unread') c.style.display=c.classList.contains('unread')?'flex':'none';
+    else c.style.display=c.dataset.type===type?'flex':'none';
+  });
+}
+function markRead(card){
+  const notifId=card.dataset.notifId;
+  if(notifId){
+    fetch(API_BASE+'/chat/notifications/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({notification_id:notifId})})
+    .catch(()=>{});
+  }
+  card.classList.remove('unread');
+  card.querySelector('.unread-dot')?.remove();
+  updateUnreadCount();
+}
+function markAllRead(){
+  fetch(API_BASE+'/chat/notifications/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({mark_all_read:true})})
+  .then(()=>{
+    document.querySelectorAll('.notif-card').forEach(c=>{
+      c.classList.remove('unread');
+      c.querySelector('.unread-dot')?.remove();
+    });
+    document.querySelector('.topbar-sub').textContent='جميع الإشعارات مقروءة';
+    showToast('تم تحديد الكل كمقروء ✓');
+  })
+  .catch(()=>showToast('حدث خطأ أثناء التحديد'));
+}
+function updateUnreadCount(){
+  const count=document.querySelectorAll('.notif-card.unread').length;
+  const sub=document.querySelector('.topbar-sub');
+  if(count===0)sub.textContent='جميع الإشعارات مقروءة';
+  else sub.textContent=count+' إشعارات غير مقروءة';
+}
+function renderNotification(n){
+  const isUnread=!n.is_read;
+  const unreadClass=isUnread?' unread':'';
+  const dot=isUnread?'<div class="unread-dot"></div>':'';
+  const timeAgo=timeSince(n.created_at);
+  const title=n.title||n.message||'إشعار جديد';
+  const body=n.body||n.description||n.message||'';
+  return`<div class="notif-card${unreadClass}" data-type="${n.type||'apps'}" data-notif-id="${n.id||''}" onclick="markRead(this)">${dot}<div class="notif-icon" style="background:var(--primary-light)"><i class="ti ti-bell" style="color:var(--primary)"></i></div><div style="flex:1"><div class="notif-title">${title}</div><div class="notif-body">${body}</div><div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>${timeAgo}</div></div></div>`;
+}
+function timeSince(dateStr){
+  if(!dateStr)return'';
+  const diff=Date.now()-new Date(dateStr).getTime();
+  const mins=Math.floor(diff/60000);
+  if(mins<1)return'الآن';
+  if(mins<60)return'منذ '+mins+' دقيقة';
+  const hrs=Math.floor(mins/60);
+  if(hrs<24)return'منذ '+hrs+' ساعة';
+  const days=Math.floor(hrs/24);
+  return'منذ '+days+' يوم';
+}
+function loadNotifications(){
+  const content=document.querySelector('.content');
+  const tabs=content.querySelector('.tab-bar');
+  fetch(API_BASE+'/chat/notifications/',{headers:authHeaders()})
+  .then(r=>{if(!r.ok)throw new Error();return r.json();})
+  .then(data=>{
+    const notifs=data.notifications||data;
+    const unreadCount=data.unread_count||notifs.filter(n=>!n.is_read).length;
+    document.querySelector('.topbar-sub').textContent=unreadCount>0?unreadCount+' إشعارات غير مقروءة':'جميع الإشعارات مقروءة';
+    const allTab=tabs.querySelector('.tab.active');
+    if(allTab)allTab.textContent='الكل ('+notifs.length+')';
+    const unreadTab=tabs.querySelectorAll('.tab')[1];
+    if(unreadTab)unreadTab.textContent='غير مقروء ('+unreadCount+')';
+    const existing=content.querySelectorAll('.notif-card,.notif-group-label');
+    existing.forEach(el=>el.remove());
+    if(!notifs.length){
+      const empty=document.createElement('div');
+      empty.className='notif-card';
+      empty.innerHTML='<div style="text-align:center;padding:40px;width:100%;color:var(--text-mid)">لا توجد إشعارات</div>';
+      content.appendChild(empty);
+      return;
+    }
+    notifs.forEach(n=>{content.insertAdjacentHTML('beforeend',renderNotification(n));});
+  })
+  .catch(()=>{});
+}
+function showToast(msg){
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:12px;font-size:13px;z-index:9999;font-family:Cairo,sans-serif';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+document.addEventListener('DOMContentLoaded',loadNotifications);
+</script>
+</body>
+</html>

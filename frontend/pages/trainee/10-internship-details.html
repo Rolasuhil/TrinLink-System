@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — تفاصيل فرصة التدريب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px}
+.breadcrumb a{color:var(--text-mid);text-decoration:none}
+.breadcrumb a:hover{color:var(--primary)}
+.breadcrumb span{color:var(--text-mid)}
+.breadcrumb .current{color:var(--text-dark);font-weight:600}
+.content{padding:20px 24px;flex:1}
+.hero-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.hero-left{display:flex;gap:16px;align-items:flex-start;flex:1}
+.company-logo{width:64px;height:64px;border-radius:var(--radius-lg);background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:white;flex-shrink:0}
+.job-title{font-size:22px;font-weight:800;color:var(--text-dark);margin-bottom:4px}
+.company-name{font-size:14px;color:var(--text-mid);display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.verified{color:var(--success);font-size:13px;display:flex;align-items:center;gap:3px}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:11px;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
+.hero-right{display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0}
+.ai-match-box{background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius-md);padding:10px 16px;display:flex;align-items:center;gap:10px}
+.ai-match-text{font-size:13px;color:#15803D;font-weight:700}
+.btn-apply-main{background:var(--primary);color:white;border:none;padding:12px 24px;border-radius:var(--radius-md);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;transition:all 0.2s;box-shadow:0 4px 16px rgba(91,79,207,0.3)}
+.btn-apply-main:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.btn-save-main{background:transparent;color:var(--primary);border:1.5px solid var(--primary);padding:10px 16px;border-radius:var(--radius-md);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;transition:all 0.15s}
+.btn-save-main:hover{background:var(--primary-light)}
+.hero-stats{display:flex;gap:24px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap}
+.hstat{display:flex;align-items:center;gap:8px}
+.hstat i{color:var(--text-mid);font-size:18px}
+.hstat-label{font-size:11px;color:var(--text-mid)}
+.hstat-val{font-size:13px;font-weight:700;color:var(--text-dark)}
+.detail-layout{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab-btn{padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;font-family:var(--font);font-weight:600;transition:all 0.15s}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab-btn:hover:not(.active){color:var(--text-dark)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.desc-section{margin-bottom:18px}
+.desc-section-title{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+.desc-text{font-size:13px;color:var(--text-mid);line-height:1.8}
+.desc-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.desc-list li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text-mid);line-height:1.5}
+.desc-list li i{font-size:14px;margin-top:1px;flex-shrink:0}
+.skills-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.skill-tag{padding:5px 12px;border-radius:20px;font-size:12px}
+.skill-required{background:var(--primary);color:white}
+.skill-optional{background:var(--primary-light);color:var(--primary)}
+.review-summary{display:flex;gap:20px;align-items:center;background:var(--bg);border-radius:var(--radius-md);padding:16px;margin-bottom:18px}
+.review-score{text-align:center;flex-shrink:0}
+.review-big{font-size:40px;font-weight:900;color:var(--text-dark)}
+.review-stars{color:var(--warning);font-size:18px}
+.review-count{font-size:12px;color:var(--text-mid)}
+.review-bars{flex:1}
+.rbar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.rbar-label{font-size:11px;color:var(--text-mid);width:16px;text-align:right}
+.rbar-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.rbar-fill{height:100%;border-radius:3px;background:var(--warning)}
+.rbar-count{font-size:11px;color:var(--text-mid);width:20px}
+.review-item{padding:14px 0;border-bottom:1px solid var(--border)}
+.review-item:last-child{border-bottom:none}
+.review-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.review-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0}
+.review-name{font-size:13px;font-weight:700;color:var(--text-dark)}
+.review-date{font-size:11px;color:var(--text-mid)}
+.review-text{font-size:13px;color:var(--text-mid);line-height:1.7}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.info-row:last-child{border-bottom:none}
+.info-key{color:var(--text-mid)}
+.info-val{color:var(--text-dark);font-weight:600}
+.deadline-box{background:var(--warning-light);border:1px solid #FCD34D;border-radius:var(--radius-md);padding:10px 14px;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.deadline-text{font-size:12px;color:#B45309;font-weight:600}
+.btn-full{width:100%;padding:12px;border-radius:var(--radius-md);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;margin-bottom:8px}
+.btn-full-primary{background:var(--primary);color:white;border:none;box-shadow:0 4px 16px rgba(91,79,207,0.3)}
+.btn-full-primary:hover{background:var(--primary-dark)}
+.btn-full-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-full-outline:hover{background:var(--primary-light)}
+.share-row{display:flex;gap:8px;margin-top:8px}
+.share-btn{flex:1;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;color:var(--text-mid);cursor:pointer;background:white;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.15s}
+.share-btn:hover{border-color:var(--primary);color:var(--primary)}
+.similar-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all 0.15s}
+.similar-item:last-child{border-bottom:none}
+.similar-item:hover{padding-right:4px}
+.similar-logo{width:34px;height:34px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:var(--radius-lg);padding:28px;width:90%;max-width:460px}
+.modal-title{font-size:18px;font-weight:800;color:var(--text-dark);margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--text-mid);margin-bottom:20px}
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--text-dark);margin-bottom:5px}
+.form-textarea{width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);resize:none;min-height:80px;outline:none}
+.form-textarea:focus{border-color:var(--primary)}
+.upload-area{border:2px dashed var(--border);border-radius:var(--radius-md);padding:16px;text-align:center;cursor:pointer;transition:all 0.15s}
+.upload-area:hover{border-color:var(--primary);background:var(--primary-light)}
+.modal-footer{display:flex;gap:10px;margin-top:16px}
+.btn-cancel{flex:1;padding:10px;border-radius:var(--radius-md);font-size:13px;font-weight:600;color:var(--text-mid);background:var(--bg);border:1px solid var(--border);cursor:pointer;font-family:var(--font)}
+.btn-confirm{flex:2;padding:10px;border-radius:var(--radius-md);font-size:13px;font-weight:700;color:white;background:var(--primary);border:none;cursor:pointer;font-family:var(--font)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.toast.show{display:flex}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">سم</div>
+    <div style="color:white;font-size:11px;font-weight:600">سارة محمود</div>
+  </div>
+  <a href="08-trainee-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="09-search.html" class="nav-item active"><i class="ti ti-search"></i><span>البحث</span></a>
+  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span><span class="nav-badge">3</span></a>
+  <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
+  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span></a>
+  <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
+  <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
+  <div class="nav-section" style="padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase">الحساب</div>
+  <a href="12-my-profile.html" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
+  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge">5</span></a>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="breadcrumb">
+      <a href="08-trainee-dashboard.html">الرئيسية</a>
+      <i class="ti ti-chevron-left" style="font-size:14px"></i>
+      <a href="09-search.html">البحث</a>
+      <i class="ti ti-chevron-left" style="font-size:14px"></i>
+      <span class="current">مطور ويب Frontend</span>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white">سم</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- HERO -->
+    <div class="hero-card">
+      <div class="hero-top">
+        <div class="hero-left">
+          <div class="company-logo">TP</div>
+          <div>
+            <div class="job-title">مطور ويب Frontend</div>
+            <div class="company-name">
+              <i class="ti ti-building"></i> TechPal
+              <span class="verified"><i class="ti ti-shield-check"></i> موثّقة</span>
+            </div>
+            <div class="hero-tags">
+              <span class="tag" style="background:var(--success-light);color:#15803D"><i class="ti ti-gift"></i>مجاني</span>
+              <span class="tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-map-pin"></i>داخل غزة</span>
+              <span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-clock"></i>3 أشهر</span>
+              <span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-users"></i>5 مقاعد</span>
+              <span class="tag" style="background:var(--warning-light);color:#B45309"><i class="ti ti-eye"></i>128 مشاهدة</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="ai-match-box">
+            <i class="ti ti-robot" style="color:#15803D;font-size:18px"></i>
+            <span class="ai-match-text">مطابقة 95% مع ملفك</span>
+          </div>
+          <button class="btn-apply-main" onclick="openModal()"><i class="ti ti-send"></i>تقدّم الآن</button>
+          <button class="btn-save-main" id="saveBtn" onclick="toggleSave()"><i class="ti ti-bookmark" id="saveIcon"></i>حفظ</button>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><i class="ti ti-calendar-due"></i><div><div class="hstat-label">آخر موعد</div><div class="hstat-val" style="color:var(--accent)">22 يوليو 2025</div></div></div>
+        <div class="hstat"><i class="ti ti-star" style="color:var(--warning)"></i><div><div class="hstat-label">تقييم الشركة</div><div class="hstat-val">4.8 ★ (24)</div></div></div>
+        <div class="hstat"><i class="ti ti-users"></i><div><div class="hstat-label">المتقدمون</div><div class="hstat-val">32 متدرب</div></div></div>
+        <div class="hstat"><i class="ti ti-check" style="color:var(--success)"></i><div><div class="hstat-label">نسبة القبول</div><div class="hstat-val" style="color:var(--success)">65%</div></div></div>
+        <div class="hstat"><i class="ti ti-armchair"></i><div><div class="hstat-label">المقاعد المتبقية</div><div class="hstat-val" style="color:var(--accent)">3 من 5</div></div></div>
+      </div>
+    </div>
+
+    <div class="detail-layout">
+      <!-- LEFT -->
+      <div>
+        <div class="card">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(this,'desc')">الوصف</button>
+            <button class="tab-btn" onclick="switchTab(this,'skills')">المهارات</button>
+            <button class="tab-btn" onclick="switchTab(this,'reviews')">التقييمات (24)</button>
+            <button class="tab-btn" onclick="switchTab(this,'company')">عن الشركة</button>
+          </div>
+
+          <div class="tab-content active" id="tab-desc">
+            <div class="desc-section">
+              <div class="desc-section-title">نبذة عن الفرصة</div>
+              <div class="desc-text">نبحث عن متدربين متحمسين لتطوير الويب للانضمام لفريقنا. ستعمل على مشاريع حقيقية وتتعلم من مطورين محترفين في بيئة احترافية ومحفزة.</div>
+            </div>
+            <div class="desc-section">
+              <div class="desc-section-title">المهام والمسؤوليات</div>
+              <ul class="desc-list">
+                <li><i class="ti ti-point" style="color:var(--primary)"></i>تطوير واجهات مستخدم باستخدام React.js</li>
+                <li><i class="ti ti-point" style="color:var(--primary)"></i>العمل على مشاريع حقيقية للعملاء</li>
+                <li><i class="ti ti-point" style="color:var(--primary)"></i>المشاركة في اجتماعات الفريق اليومية</li>
+                <li><i class="ti ti-point" style="color:var(--primary)"></i>كتابة كود نظيف وموثّق</li>
+                <li><i class="ti ti-point" style="color:var(--primary)"></i>المشاركة في مراجعة الكود</li>
+              </ul>
+            </div>
+            <div class="desc-section">
+              <div class="desc-section-title">ما ستتعلمه</div>
+              <ul class="desc-list">
+                <li><i class="ti ti-sparkles" style="color:var(--warning)"></i>تطوير تطبيقات React.js من الصفر</li>
+                <li><i class="ti ti-sparkles" style="color:var(--warning)"></i>استخدام Git في بيئة عمل حقيقية</li>
+                <li><i class="ti ti-sparkles" style="color:var(--warning)"></i>التعامل مع APIs وقواعد البيانات</li>
+                <li><i class="ti ti-sparkles" style="color:var(--warning)"></i>مهارات العمل الجماعي المهني</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-skills">
+            <div class="desc-section">
+              <div class="desc-section-title">المهارات الأساسية (مطلوبة)</div>
+              <div class="skills-wrap" style="margin-bottom:16px">
+                <span class="skill-tag skill-required">HTML/CSS</span>
+                <span class="skill-tag skill-required">JavaScript</span>
+                <span class="skill-tag skill-required">React.js</span>
+                <span class="skill-tag skill-required">Git</span>
+              </div>
+              <div class="desc-section-title">المهارات الإضافية (مفضّلة)</div>
+              <div class="skills-wrap">
+                <span class="skill-tag skill-optional">TypeScript</span>
+                <span class="skill-tag skill-optional">Tailwind CSS</span>
+                <span class="skill-tag skill-optional">Node.js</span>
+                <span class="skill-tag skill-optional">Figma</span>
+              </div>
+            </div>
+            <div style="background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius-md);padding:12px 16px;margin-top:12px">
+              <div style="font-size:13px;color:#15803D;display:flex;align-items:center;gap:8px"><i class="ti ti-robot"></i><strong>تحليل AI:</strong> أنتِ تمتلكين 6 من 9 مهارات — نسبة مطابقة 95%!</div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-reviews">
+            <div class="review-summary">
+              <div class="review-score"><div class="review-big">4.8</div><div class="review-stars">★★★★★</div><div class="review-count">24 تقييم</div></div>
+              <div class="review-bars">
+                <div class="rbar-row"><span class="rbar-label">5</span><div class="rbar-track"><div class="rbar-fill" style="width:80%"></div></div><span class="rbar-count">19</span></div>
+                <div class="rbar-row"><span class="rbar-label">4</span><div class="rbar-track"><div class="rbar-fill" style="width:15%"></div></div><span class="rbar-count">4</span></div>
+                <div class="rbar-row"><span class="rbar-label">3</span><div class="rbar-track"><div class="rbar-fill" style="width:5%"></div></div><span class="rbar-count">1</span></div>
+                <div class="rbar-row"><span class="rbar-label">2</span><div class="rbar-track"><div class="rbar-fill" style="width:0%"></div></div><span class="rbar-count">0</span></div>
+                <div class="rbar-row"><span class="rbar-label">1</span><div class="rbar-track"><div class="rbar-fill" style="width:0%"></div></div><span class="rbar-count">0</span></div>
+              </div>
+            </div>
+            <div class="review-item">
+              <div class="review-header"><div class="review-avatar" style="background:#5B4FCF">أح</div><div><div class="review-name">أحمد حسن</div><div class="review-date">مايو 2025</div></div><div style="margin-right:auto;color:var(--warning)">★★★★★</div></div>
+              <div class="review-text">تجربة رائعة جداً! تعلمت React من الصفر وعملت على مشروع حقيقي. الفريق محترف ومتعاون.</div>
+            </div>
+            <div class="review-item">
+              <div class="review-header"><div class="review-avatar" style="background:#FF6B6B">من</div><div><div class="review-name">منى ناصر</div><div class="review-date">أبريل 2025</div></div><div style="margin-right:auto;color:var(--warning)">★★★★★</div></div>
+              <div class="review-text">أفضل قرار اتخذته! المشرف متعاون جداً واكتسبت خبرة ساعدتني في الحصول على وظيفة بعدها.</div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tab-company">
+            <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:16px">
+              <div style="width:56px;height:56px;border-radius:var(--radius-lg);background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;flex-shrink:0">TP</div>
+              <div>
+                <div style="font-size:16px;font-weight:800;color:var(--text-dark);margin-bottom:4px">TechPal <i class="ti ti-shield-check" style="color:var(--success);font-size:14px"></i></div>
+                <div style="font-size:13px;color:var(--text-mid);margin-bottom:8px">تطوير برمجيات · غزة، فلسطين</div>
+                <div style="display:flex;gap:8px">
+                  <span style="font-size:11px;background:var(--primary-light);color:var(--primary);padding:3px 10px;border-radius:20px">تطوير ويب</span>
+                  <span style="font-size:11px;background:var(--bg);color:var(--text-mid);padding:3px 10px;border-radius:20px">10-50 موظف</span>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--text-mid);line-height:1.8;margin-bottom:16px">TechPal شركة متخصصة في تطوير تطبيقات الويب تأسست عام 2018 في غزة. نؤمن بتطوير المواهب الشابة ونقدم بيئة عمل احترافية.</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="background:var(--bg);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--primary)">45+</div><div style="font-size:11px;color:var(--text-mid)">متدرب سابق</div></div>
+              <div style="background:var(--bg);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--warning)">4.8★</div><div style="font-size:11px;color:var(--text-mid)">متوسط التقييم</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT STICKY -->
+      <div>
+        <div class="card" style="position:sticky;top:80px">
+          <div class="deadline-box"><i class="ti ti-clock" style="color:#B45309;font-size:18px"></i><span class="deadline-text">ينتهي التقديم خلال <strong>8 أيام</strong></span></div>
+          <div class="info-row"><span class="info-key">نوع التدريب</span><span class="info-val" style="color:var(--success)">مجاني</span></div>
+          <div class="info-row"><span class="info-key">الموقع</span><span class="info-val">داخل غزة</span></div>
+          <div class="info-row"><span class="info-key">المدة</span><span class="info-val">3 أشهر</span></div>
+          <div class="info-row"><span class="info-key">أيام العمل</span><span class="info-val">5 أيام/أسبوع</span></div>
+          <div class="info-row"><span class="info-key">المقاعد المتبقية</span><span class="info-val" style="color:var(--accent)">3 من 5</span></div>
+          <div class="info-row"><span class="info-key">شهادة إتمام</span><span class="info-val" style="color:var(--success)">متوفرة</span></div>
+          <div style="margin-top:14px">
+            <button class="btn-full btn-full-primary" onclick="openModal()"><i class="ti ti-send"></i>تقدّم الآن</button>
+            <button class="btn-full btn-full-outline" id="saveBtnFull" onclick="toggleSave()"><i class="ti ti-bookmark" id="saveIconFull"></i>حفظ للاحقاً</button>
+            <div class="share-row">
+              <button class="share-btn"><i class="ti ti-brand-whatsapp"></i>واتساب</button>
+              <button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href);showToast('تم نسخ الرابط!')"><i class="ti ti-link"></i>نسخ</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:12px;display:flex;align-items:center;gap:6px"><i class="ti ti-sparkles" style="color:var(--primary)"></i>فرص مشابهة</div>
+          <div class="similar-item" onclick="window.location.href='10-internship-details.html'">
+            <div class="similar-logo" style="background:#FF6B6B">DH</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مصمم UI/UX</div><div style="font-size:11px;color:var(--text-mid)">DesignHub · عن بُعد</div></div>
+            <span style="font-size:10px;background:#FFF0F0;color:#DC2626;padding:2px 8px;border-radius:20px">50$/شهر</span>
+          </div>
+          <div class="similar-item" onclick="window.location.href='10-internship-details.html'">
+            <div class="similar-logo" style="background:#22C55E">DS</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مطور قواعد بيانات</div><div style="font-size:11px;color:var(--text-mid)">DataSoft · عن بُعد</div></div>
+            <span style="font-size:10px;background:var(--success-light);color:#15803D;padding:2px 8px;border-radius:20px">مجاني</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPLY MODAL -->
+<div class="modal-overlay" id="applyModal">
+  <div class="modal">
+    <div class="modal-title">التقديم على الفرصة</div>
+    <div class="modal-sub">مطور ويب Frontend — TechPal</div>
+    <div class="form-group"><label class="form-label">رسالة التقديم</label><textarea class="form-textarea" placeholder="اكتب رسالة مختصرة تشرح سبب اهتمامك بهذه الفرصة..."></textarea></div>
+    <div class="form-group">
+      <label class="form-label">السيرة الذاتية (PDF)</label>
+      <div class="upload-area"><i class="ti ti-upload" style="font-size:24px;color:var(--text-mid);display:block;margin-bottom:6px"></i><div style="font-size:13px;color:var(--text-mid)">اضغط لرفع CV أو اسحبه هنا</div></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+      <button class="btn-confirm" onclick="submitApp()">إرسال الطلب</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+
+<script>
+const API_BASE = '/api';
+function getToken() { return localStorage.getItem('trainlink_token'); }
+function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
+function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
+function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function getUrlId() {
+  const p = new URLSearchParams(window.location.search);
+  return p.get('id');
+}
+
+function switchTab(btn, id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+let saved = false;
+let internshipId = null;
+
+function toggleSave() {
+  saved = !saved;
+  ['saveIcon', 'saveIconFull'].forEach(function(elId) {
+    document.getElementById(elId).className = saved ? 'ti ti-bookmark-filled' : 'ti ti-bookmark';
+  });
+  showToast(saved ? 'تم حفظ الفرصة!' : 'تم إزالة الفرصة من المحفوظات');
+  if (internshipId) {
+    fetch(API_BASE + '/internships/saved/', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ internship_id: internshipId })
+    }).catch(() => {});
+  }
+}
+
+function openModal() { document.getElementById('applyModal').classList.add('open'); }
+function closeModal() { document.getElementById('applyModal').classList.remove('open'); }
+
+async function submitApp() {
+  if (!internshipId) { showToast('خطأ: لا توجد فرصة'); return; }
+  try {
+    const res = await fetch(API_BASE + '/internships/applications/', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ internship_id: internshipId })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || err.error || 'Failed');
+    }
+    closeModal();
+    showToast('تم إرسال طلبك بنجاح!');
+  } catch (err) {
+    closeModal();
+    showToast('حدث خطأ: ' + (err.message || 'لم يتم الإرسال'));
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+  if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
+  internshipId = getUrlId();
+  if (!internshipId) return;
+
+  try {
+    const res = await fetch(API_BASE + '/internships/' + internshipId + '/', { headers: authHeaders() });
+    if (!res.ok) throw new Error('Not found');
+    const d = await res.json();
+
+    const title = d.title || d.name || '';
+    const company = d.company_name || d.company || '';
+    const isFree = d.is_free !== undefined ? d.is_free : !d.salary;
+    const salary = d.salary || (isFree ? 'مجاني' : '');
+    const location = d.location || '';
+    const duration = d.duration || '';
+    const seats = d.seats || d.available_seats || '';
+    const deadline = d.deadline || d.end_date || '';
+    const description = d.description || d.about || '';
+    const skills = d.skills || [];
+    const required_skills = d.required_skills || [];
+    const optional_skills = d.optional_skills || [];
+
+    document.querySelector('.job-title').textContent = title;
+    document.querySelector('.company-name').innerHTML = '<i class="ti ti-building"></i> ' + company;
+    document.title = 'TrainLink — ' + title;
+
+    document.querySelector('.breadcrumb .current').textContent = title;
+
+    const tagsHtml = [];
+    if (isFree) tagsHtml.push('<span class="tag" style="background:var(--success-light);color:#15803D"><i class="ti ti-gift"></i>مجاني</span>');
+    else tagsHtml.push('<span class="tag" style="background:#FFF0F0;color:#DC2626"><i class="ti ti-currency-dollar"></i>' + salary + '</span>');
+    if (location) tagsHtml.push('<span class="tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-map-pin"></i>' + location + '</span>');
+    if (duration) tagsHtml.push('<span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-clock"></i>' + duration + '</span>');
+    if (seats) tagsHtml.push('<span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-users"></i>' + seats + ' مقاعد</span>');
+    document.querySelector('.hero-tags').innerHTML = tagsHtml.join('');
+
+    if (description) {
+      document.querySelector('#tab-desc .desc-text').textContent = description;
+    }
+
+    const allSkills = [...required_skills, ...optional_skills, ...skills];
+    if (allSkills.length) {
+      const reqHtml = required_skills.length ? required_skills.map(s => '<span class="skill-tag skill-required">' + (s.name || s) + '</span>').join('') : '';
+      const optHtml = optional_skills.length ? optional_skills.map(s => '<span class="skill-tag skill-optional">' + (s.name || s) + '</span>').join('') : skills.map(s => '<span class="skill-tag skill-optional">' + (s.name || s) + '</span>').join('');
+      document.querySelector('#tab-skills .skills-wrap').innerHTML = reqHtml + optHtml;
+    }
+
+    if (d.info_row_type) document.querySelector('.info-row:nth-child(1) .info-val').textContent = d.info_row_type;
+    if (location) document.querySelector('.info-row:nth-child(2) .info-val').textContent = location;
+    if (duration) document.querySelector('.info-row:nth-child(3) .info-val').textContent = duration;
+    if (deadline) {
+      document.querySelector('.hstat-val').textContent = deadline;
+      document.querySelector('.deadline-text').innerHTML = 'ينتهي التقديم: <strong>' + deadline + '</strong>';
+    }
+
+    document.querySelector('.breadcrumb .current').textContent = title;
+  } catch (err) {
+    showToast('حدث خطأ في تحميل تفاصيل الفرصة');
+  }
+});
+</script>
+</body>
+</html>

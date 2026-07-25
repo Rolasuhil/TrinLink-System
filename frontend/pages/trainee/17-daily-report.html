@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — الحضور والتقارير اليومية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.content{padding:20px 24px;flex:1}
+.layout{display:grid;grid-template-columns:1fr 320px;gap:20px}
+/* TODAY CARD */
+.today-card{background:linear-gradient(135deg,var(--primary),#7C3AED);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;color:white;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.today-info h2{font-size:20px;font-weight:800;margin-bottom:6px}
+.today-info p{font-size:13px;opacity:0.85;margin-bottom:16px}
+.today-company{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.15);border-radius:var(--radius-md);padding:10px 16px;margin-bottom:16px}
+.today-company-logo{width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.today-company-name{font-size:14px;font-weight:700}
+.today-company-role{font-size:12px;opacity:0.8}
+.btn-checkin{padding:12px 24px;background:white;color:var(--primary);border:none;border-radius:var(--radius-md);font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;transition:all 0.2s}
+.btn-checkin:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+.btn-checkin.checked{background:var(--success);color:white}
+.today-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.today-stat{background:rgba(255,255,255,0.15);border-radius:var(--radius-md);padding:12px;text-align:center}
+.today-stat-num{font-size:22px;font-weight:800}
+.today-stat-label{font-size:11px;opacity:0.8;margin-top:2px}
+/* CARD */
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
+.card-title i{color:var(--primary);font-size:16px}
+/* CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px}
+.cal-header{text-align:center;font-size:11px;font-weight:700;color:var(--text-mid);padding:4px 0}
+.cal-day{height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:all 0.15s;border:1px solid transparent}
+.cal-day.present{background:var(--success-light);color:#15803D;font-weight:700;border-color:#BBF7D0}
+.cal-day.absent{background:#FEF2F2;color:#DC2626;font-weight:700;border-color:#FECACA}
+.cal-day.today{border:2px solid var(--primary);color:var(--primary);font-weight:800}
+.cal-day.future{color:var(--border)}
+.cal-day:hover:not(.future){transform:scale(1.1)}
+.cal-legend{display:flex;gap:16px;font-size:11px;color:var(--text-mid);margin-top:8px}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+/* WORK REPORT FORM */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--text-dark);margin-bottom:5px}
+.form-label span{color:var(--accent)}
+.form-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:var(--text-dark);background:var(--bg);outline:none;transition:border-color 0.15s}
+.form-input:focus{border-color:var(--primary);background:white}
+.form-textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);resize:none;min-height:90px;outline:none;background:var(--bg)}
+.form-textarea:focus{border-color:var(--primary);background:white}
+.char-count{font-size:11px;color:var(--text-mid);text-align:left;margin-top:4px}
+.rating-wrap{display:flex;gap:8px}
+.rating-opt{flex:1;padding:8px;border:1.5px solid var(--border);border-radius:var(--radius-md);text-align:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--text-mid);transition:all 0.15s}
+.rating-opt:hover{border-color:var(--primary);color:var(--primary)}
+.rating-opt.selected{background:var(--primary);color:white;border-color:var(--primary)}
+.upload-mini{border:2px dashed var(--border);border-radius:var(--radius-md);padding:14px;text-align:center;cursor:pointer;transition:all 0.15s}
+.upload-mini:hover{border-color:var(--primary);background:var(--primary-light)}
+.upload-mini.has-file{border-color:var(--success);background:var(--success-light);border-style:solid}
+.btn-submit{width:100%;padding:12px;border-radius:var(--radius-md);font-size:14px;font-weight:700;color:white;background:var(--primary);border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
+.btn-submit:hover{background:#4A3FB5;transform:translateY(-1px)}
+/* HISTORY */
+.hist-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.hist-item:last-child{border-bottom:none}
+.hist-date{width:44px;height:44px;border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.hist-day{font-size:16px;font-weight:800}
+.hist-month{font-size:9px;font-weight:600}
+.hist-title{font-size:13px;font-weight:600;color:var(--text-dark);margin-bottom:3px}
+.hist-sub{font-size:11px;color:var(--text-mid);line-height:1.5}
+.hist-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;margin-top:5px;display:inline-block}
+/* SIDEBAR CARD */
+.week-progress{margin-bottom:8px}
+.week-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.week-bar{height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.week-fill{height:100%;border-radius:3px}
+.perf-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.perf-item:last-child{border-bottom:none}
+.perf-num{font-size:22px;font-weight:800}
+.perf-label{font-size:11px;color:var(--text-mid)}
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.toast.show{display:flex}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">سم</div>
+    <div style="color:white;font-size:11px;font-weight:600">سارة محمود</div>
+  </div>
+  <a href="08-trainee-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="09-search.html" class="nav-item"><i class="ti ti-search"></i><span>البحث</span></a>
+  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span></a>
+  <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
+  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span></a>
+  <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
+  <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
+  <div class="nav-section">الحساب</div>
+  <a href="12-my-profile.html" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
+  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge">5</span></a>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
+</nav>
+ 
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">الحضور والتقارير اليومية 📋</div><div class="topbar-sub">سجّل حضورك وارفع تقرير عملك اليومي</div></div>
+  </div>
+ 
+  <div class="content">
+    <!-- TODAY -->
+    <div class="today-card">
+      <div class="today-info">
+        <h2>اليوم — الخميس 24 يوليو 2025</h2>
+        <p>لا تنسَ تسجيل حضورك ورفع تقرير عملك اليومي</p>
+        <div class="today-company">
+          <div class="today-company-logo">DH</div>
+          <div><div class="today-company-name">DesignHub</div><div class="today-company-role">مصمم UI/UX — الأسبوع 3</div></div>
+        </div>
+        <button class="btn-checkin" id="checkinBtn" onclick="checkIn()">
+          <i class="ti ti-fingerprint"></i>تسجيل الحضور الآن
+        </button>
+      </div>
+      <div class="today-stats">
+        <div class="today-stat"><div class="today-stat-num">18</div><div class="today-stat-label">يوم حضور</div></div>
+        <div class="today-stat"><div class="today-stat-num">2</div><div class="today-stat-label">يوم غياب</div></div>
+        <div class="today-stat"><div class="today-stat-num">90%</div><div class="today-stat-label">نسبة الحضور</div></div>
+        <div class="today-stat"><div class="today-stat-num">أسبوع 3</div><div class="today-stat-label">من 12</div></div>
+      </div>
+    </div>
+ 
+    <div class="layout">
+      <div>
+        <!-- ATTENDANCE CALENDAR -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-calendar"></i>سجل الحضور — يوليو 2025</div>
+            <div style="display:flex;gap:8px">
+              <button style="width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-chevron-right" style="font-size:14px;color:var(--text-mid)"></i></button>
+              <button style="width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-chevron-left" style="font-size:14px;color:var(--text-mid)"></i></button>
+            </div>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-header">أح</div><div class="cal-header">إث</div><div class="cal-header">ثل</div><div class="cal-header">أر</div><div class="cal-header">خم</div><div class="cal-header">جم</div><div class="cal-header">سب</div>
+            <div class="cal-day future">1</div><div class="cal-day present">2</div><div class="cal-day present">3</div><div class="cal-day present">4</div><div class="cal-day present">5</div><div class="cal-day future"></div><div class="cal-day future"></div>
+            <div class="cal-day present">7</div><div class="cal-day present">8</div><div class="cal-day absent">9</div><div class="cal-day present">10</div><div class="cal-day present">11</div><div class="cal-day future"></div><div class="cal-day future"></div>
+            <div class="cal-day present">14</div><div class="cal-day present">15</div><div class="cal-day present">16</div><div class="cal-day present">17</div><div class="cal-day present">18</div><div class="cal-day future"></div><div class="cal-day future"></div>
+            <div class="cal-day present">21</div><div class="cal-day present">22</div><div class="cal-day absent">23</div><div class="cal-day today">24</div><div class="cal-day future">25</div><div class="cal-day future"></div><div class="cal-day future"></div>
+          </div>
+          <div class="cal-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div>حاضر</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>غائب</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--primary);border:2px solid var(--primary)"></div>اليوم</div>
+          </div>
+        </div>
+ 
+        <!-- WORK REPORT FORM -->
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-report"></i>رفع تقرير العمل اليومي</div><span style="font-size:11px;color:var(--accent);font-weight:600">مطلوب يومياً</span></div>
+ 
+          <div class="form-group">
+            <label class="form-label">عنوان التقرير <span>*</span></label>
+            <input type="text" class="form-input" placeholder="مثال: تصميم واجهة صفحة الرئيسية" id="reportTitle">
+          </div>
+ 
+          <div class="form-group">
+            <label class="form-label">ماذا أنجزت اليوم؟ <span>*</span></label>
+            <textarea class="form-textarea" placeholder="اكتب تفاصيل ما أنجزته اليوم بوضوح..." id="reportContent" oninput="countChars(this)"></textarea>
+            <div class="char-count"><span id="charCount">0</span> / 500 حرف</div>
+          </div>
+ 
+          <div class="form-group">
+            <label class="form-label">المهام المخططة لغداً</label>
+            <textarea class="form-textarea" placeholder="اكتب المهام التي تخطط لإنجازها غداً..." style="min-height:60px"></textarea>
+          </div>
+ 
+          <div class="form-group">
+            <label class="form-label">تقييم يومك</label>
+            <div class="rating-wrap">
+              <div class="rating-opt" onclick="selectRating(this)">😔 صعب</div>
+              <div class="rating-opt" onclick="selectRating(this)">😐 عادي</div>
+              <div class="rating-opt selected" onclick="selectRating(this)">😊 جيد</div>
+              <div class="rating-opt" onclick="selectRating(this)">🚀 ممتاز</div>
+            </div>
+          </div>
+ 
+          <div class="form-group">
+            <label class="form-label">مرفق (اختياري)</label>
+            <div class="upload-mini" id="uploadArea" onclick="simulateUpload()">
+              <i class="ti ti-upload" style="font-size:22px;color:var(--text-mid);display:block;margin-bottom:5px"></i>
+              <div style="font-size:12px;color:var(--text-mid)">ارفع صورة أو ملف يثبت عملك</div>
+            </div>
+          </div>
+ 
+          <button class="btn-submit" onclick="submitReport()">
+            <i class="ti ti-send"></i>رفع التقرير اليومي
+          </button>
+        </div>
+ 
+        <!-- HISTORY -->
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-history"></i>سجل التقارير</div></div>
+          <div class="hist-item">
+            <div class="hist-date" style="background:var(--success-light)"><div class="hist-day" style="color:#15803D">23</div><div class="hist-month" style="color:#15803D">يوليو</div></div>
+            <div style="flex:1"><div class="hist-title">تصميم شاشات تسجيل الدخول</div><div class="hist-sub">أنجزت تصميم 3 شاشات كاملة في Figma مع تطبيق Design System</div><span class="hist-badge" style="background:var(--success-light);color:#15803D">✓ مُراجَع</span></div>
+          </div>
+          <div class="hist-item">
+            <div class="hist-date" style="background:var(--primary-light)"><div class="hist-day" style="color:var(--primary)">22</div><div class="hist-month" style="color:var(--primary)">يوليو</div></div>
+            <div style="flex:1"><div class="hist-title">بحث UX وتحليل المنافسين</div><div class="hist-sub">إجراء بحث عن أفضل تصاميم منصات التدريب ورسم wireframes أولية</div><span class="hist-badge" style="background:var(--warning-light);color:#B45309">⏳ قيد المراجعة</span></div>
+          </div>
+          <div class="hist-item">
+            <div class="hist-date" style="background:var(--primary-light)"><div class="hist-day" style="color:var(--primary)">21</div><div class="hist-month" style="color:var(--primary)">يوليو</div></div>
+            <div style="flex:1"><div class="hist-title">إعداد Design System</div><div class="hist-sub">إنشاء Color Palette وTypography System وComponent Library في Figma</div><span class="hist-badge" style="background:var(--success-light);color:#15803D">✓ مُراجَع</span></div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- SIDEBAR -->
+      <div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-chart-bar"></i>تقدم هذا الأسبوع</div></div>
+          <div class="week-progress">
+            <div class="week-row"><span style="font-size:12px;color:var(--text-dark)">نسبة الحضور</span><span style="font-size:12px;font-weight:700;color:var(--success)">90%</span></div>
+            <div class="week-bar"><div class="week-fill" style="width:90%;background:var(--success)"></div></div>
+          </div>
+          <div class="week-progress">
+            <div class="week-row"><span style="font-size:12px;color:var(--text-dark)">التقارير المرفوعة</span><span style="font-size:12px;font-weight:700;color:var(--primary)">4/5</span></div>
+            <div class="week-bar"><div class="week-fill" style="width:80%;background:var(--primary)"></div></div>
+          </div>
+          <div class="week-progress">
+            <div class="week-row"><span style="font-size:12px;color:var(--text-dark)">تقييم الأداء</span><span style="font-size:12px;font-weight:700;color:var(--warning)">4.2/5</span></div>
+            <div class="week-bar"><div class="week-fill" style="width:84%;background:var(--warning)"></div></div>
+          </div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-star"></i>آخر تقييمات الشركة</div></div>
+          <div class="perf-item">
+            <div style="width:44px;height:44px;border-radius:var(--radius-sm);background:var(--success-light);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-star-filled" style="color:var(--warning);font-size:20px"></i></div>
+            <div><div class="perf-num" style="color:var(--success)">4.5</div><div class="perf-label">الأسبوع الثالث</div></div>
+            <div style="font-size:11px;color:var(--text-mid);margin-right:auto">ممتاز</div>
+          </div>
+          <div class="perf-item">
+            <div style="width:44px;height:44px;border-radius:var(--radius-sm);background:var(--warning-light);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-star-filled" style="color:var(--warning);font-size:20px"></i></div>
+            <div><div class="perf-num" style="color:var(--warning)">4.0</div><div class="perf-label">الأسبوع الثاني</div></div>
+            <div style="font-size:11px;color:var(--text-mid);margin-right:auto">جيد</div>
+          </div>
+          <div class="perf-item">
+            <div style="width:44px;height:44px;border-radius:var(--radius-sm);background:var(--success-light);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-star-filled" style="color:var(--warning);font-size:20px"></i></div>
+            <div><div class="perf-num" style="color:var(--success)">4.8</div><div class="perf-label">الأسبوع الأول</div></div>
+            <div style="font-size:11px;color:var(--text-mid);margin-right:auto">ممتاز</div>
+          </div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-bell"></i>تنبيهات</div></div>
+          <div style="background:var(--warning-light);border:1px solid #FCD34D;border-radius:var(--radius-md);padding:12px;font-size:12px;color:#B45309;display:flex;gap:8px;align-items:flex-start;margin-bottom:10px">
+            <i class="ti ti-alert-triangle" style="font-size:16px;flex-shrink:0;margin-top:1px"></i>
+            <span>لم ترفعي تقرير يوم 23 يوليو. يرجى الرفع في أقرب وقت.</span>
+          </div>
+          <div style="background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius-md);padding:12px;font-size:12px;color:#15803D;display:flex;gap:8px;align-items:flex-start">
+            <i class="ti ti-circle-check" style="font-size:16px;flex-shrink:0;margin-top:1px"></i>
+            <span>تقرير الأسبوع الثالث تم تأكيده من DesignHub ✓</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+ 
+<script>
+const API_BASE='/api';
+function getToken(){return localStorage.getItem('trainlink_token');}
+function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
+function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
+
+let checkedIn=false;
+
+function checkIn(){
+  const btn=document.getElementById('checkinBtn');
+  if(!checkedIn){
+    btn.disabled=true;
+    fetch(API_BASE+'/performance/attendance/',{method:'POST',headers:authHeaders(),body:JSON.stringify({status:'present'})})
+    .then(r=>{if(!r.ok)throw new Error();return r.json();})
+    .then(()=>{
+      checkedIn=true;
+      btn.className='btn-checkin checked';
+      const now=new Date();
+      const time=now.getHours()+':'+(now.getMinutes()<10?'0':'')+now.getMinutes()+' '+(now.getHours()<12?'ص':'م');
+      btn.innerHTML='<i class="ti ti-check"></i> تم تسجيل الحضور — '+time;
+      showToast('تم تسجيل حضورك بنجاح!');
+      document.querySelectorAll('.cal-day.today').forEach(d=>{d.classList.add('present');d.style.background='var(--success)';d.style.color='white';});
+      loadAttendanceCalendar();
+    })
+    .catch(()=>{showToast('حدث خطأ أثناء تسجيل الحضور');btn.disabled=false;});
+  }
+}
+function selectRating(el){
+  document.querySelectorAll('.rating-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function countChars(el){document.getElementById('charCount').textContent=el.value.length;}
+function simulateUpload(){
+  const a=document.getElementById('uploadArea');
+  a.classList.add('has-file');
+  a.innerHTML='<i class="ti ti-file-check" style="font-size:22px;color:var(--success);display:block;margin-bottom:5px"></i><div style="font-size:12px;color:var(--success);font-weight:700">work_screenshot.png</div>';
+}
+function submitReport(){
+  const title=document.getElementById('reportTitle').value.trim();
+  const content=document.getElementById('reportContent').value.trim();
+  if(!title||!content){showToast('يرجى ملء العنوان والمحتوى');return;}
+  const btn=document.querySelector('.btn-submit');
+  btn.disabled=true;
+  btn.textContent='جاري الرفع...';
+  fetch(API_BASE+'/performance/work-reports/',{method:'POST',headers:authHeaders(),body:JSON.stringify({task_title:title,description:content})})
+  .then(r=>{if(!r.ok)throw new Error();return r.json();})
+  .then(()=>{
+    showToast('تم رفع تقريرك اليومي بنجاح!');
+    document.getElementById('reportTitle').value='';
+    document.getElementById('reportContent').value='';
+    document.getElementById('charCount').textContent='0';
+    loadReportHistory();
+  })
+  .catch(()=>showToast('حدث خطأ أثناء رفع التقرير'))
+  .finally(()=>{btn.disabled=false;btn.innerHTML='<i class="ti ti-send"></i>رفع التقرير اليومي';});
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function loadAttendanceCalendar(){
+  fetch(API_BASE+'/performance/attendance/',{headers:authHeaders()})
+  .then(r=>{if(!r.ok)throw new Error();return r.json();})
+  .then(records=>{
+    let presentDays=0;let absentDays=0;
+    const today=new Date().toISOString().split('T')[0];
+    const todayRec=records.find(r=>r.date===today);
+    if(todayRec&&todayRec.check_in&&!todayRec.check_out){
+      checkedIn=true;
+      const btn=document.getElementById('checkinBtn');
+      btn.className='btn-checkin checked';
+      const time=todayRec.check_in;
+      btn.innerHTML='<i class="ti ti-check"></i> تم تسجيل الحضور — '+time;
+    }
+    records.forEach(r=>{
+      const dayNum=new Date(r.date).getDate();
+      const calDays=document.querySelectorAll('.cal-day');
+      calDays.forEach(d=>{
+        if(d.textContent.trim()==dayNum&&r.status==='present'){
+          d.classList.add('present');d.classList.remove('absent');
+        }else if(d.textContent.trim()==dayNum&&r.status==='absent'){
+          d.classList.add('absent');d.classList.remove('present');
+        }
+      });
+      if(r.status==='present')presentDays++;
+      else absentDays++;
+    });
+    const total=presentDays+absentDays;
+    const stats=document.querySelectorAll('.today-stat-num');
+    if(stats[0])stats[0].textContent=presentDays;
+    if(stats[1])stats[1].textContent=absentDays;
+    if(stats[2])stats[2].textContent=total>0?Math.round(presentDays/total*100)+'%':'0%';
+  })
+  .catch(()=>{});
+}
+
+function loadReportHistory(){
+  fetch(API_BASE+'/performance/work-reports/',{headers:authHeaders()})
+  .then(r=>{if(!r.ok)throw new Error();return r.json();})
+  .then(reports=>{
+    const histItems=document.querySelectorAll('.hist-item');
+    histItems.forEach(h=>h.remove());
+    const card=document.querySelectorAll('.card')[3];
+    if(!card)return;
+    const header=card.querySelector('.card-header');
+    if(!reports.length){
+      const empty=document.createElement('div');
+      empty.className='empty-state';
+      empty.innerHTML='<i class="ti ti-file-text"></i><h3>لا توجد تقارير</h3><p>ابدأ بإرسال أول تقرير عمل</p>';
+      header.after(empty);
+      return;
+    }
+    reports.forEach(r=>{
+      const d=r.submitted_at?new Date(r.submitted_at):new Date();
+      const day=d.getDate();
+      const months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+      const month=months[d.getMonth()];
+      const badge=r.performance_rating?'<span class="hist-badge" style="background:var(--success-light);color:#15803D">✓ مُراجَع</span>':'<span class="hist-badge" style="background:var(--warning-light);color:#B45309">⏳ قيد المراجعة</span>';
+      const item=document.createElement('div');
+      item.className='hist-item';
+      item.innerHTML=`<div class="hist-date" style="background:var(--primary-light)"><div class="hist-day" style="color:var(--primary)">${day}</div><div class="hist-month" style="color:var(--primary)">${month}</div></div><div style="flex:1"><div class="hist-title">${r.task_title}</div><div class="hist-sub">${r.description}</div>${badge}${r.company_feedback?'<div class="report-feedback" style="margin-top:8px">'+r.company_feedback+'</div>':''}</div>`;
+      header.after(item);
+    });
+  })
+  .catch(()=>{});
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  loadAttendanceCalendar();
+  loadReportHistory();
+});
+</script>
+</body>
+</html>

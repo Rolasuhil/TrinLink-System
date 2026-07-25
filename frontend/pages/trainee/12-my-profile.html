@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — ملفي الشخصي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.content{padding:20px 24px;flex:1}
+.profile-layout{display:grid;grid-template-columns:300px 1fr;gap:20px}
+.profile-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;position:sticky;top:80px}
+.profile-cover{height:100px;background:linear-gradient(135deg,var(--primary),#7C3AED)}
+.profile-avatar-wrap{display:flex;flex-direction:column;align-items:center;padding:0 20px 20px;margin-top:-36px}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:white;border:4px solid white;margin-bottom:12px}
+.profile-name{font-size:18px;font-weight:800;color:var(--text-dark);margin-bottom:3px}
+.profile-role{font-size:13px;color:var(--text-mid);margin-bottom:6px}
+.profile-id{background:var(--primary-light);color:var(--primary);font-size:11px;padding:3px 12px;border-radius:20px;font-weight:700;display:inline-block;margin-bottom:10px}
+.profile-stars{color:var(--warning);font-size:16px;margin-bottom:14px}
+.btn-edit-profile{width:100%;padding:10px;border-radius:var(--radius-md);font-size:13px;font-weight:700;color:var(--primary);background:var(--primary-light);border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.15s;margin-bottom:14px}
+.btn-edit-profile:hover{background:var(--primary);color:white}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--border);padding-top:14px}
+.pstat{text-align:center}
+.pstat-num{font-size:20px;font-weight:800;color:var(--primary)}
+.pstat-label{font-size:10px;color:var(--text-mid);margin-top:2px}
+.completion-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-top:14px}
+.completion-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.completion-title{font-size:13px;font-weight:700;color:var(--text-dark)}
+.completion-pct{font-size:14px;font-weight:800;color:var(--primary)}
+.completion-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:12px}
+.completion-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--primary),#7C3AED)}
+.completion-item{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px}
+.completion-item i{font-size:14px;flex-shrink:0}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:14px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
+.card-title i{color:var(--primary);font-size:16px}
+.btn-edit{font-size:12px;color:var(--primary);cursor:pointer;background:none;border:none;font-family:var(--font);font-weight:600;display:flex;align-items:center;gap:4px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.info-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.info-label{font-size:11px;color:var(--text-mid);margin-bottom:3px}
+.info-val{font-size:13px;font-weight:600;color:var(--text-dark)}
+.skills-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.skill-tag{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.15s}
+.skill-tag:hover{transform:translateY(-1px)}
+.cv-area{border:2px dashed var(--border);border-radius:var(--radius-md);padding:20px;text-align:center;cursor:pointer;transition:all 0.15s}
+.cv-area:hover{border-color:var(--primary);background:var(--primary-light)}
+.cv-area.has-file{border-style:solid;border-color:var(--success);background:var(--success-light)}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.activity-icon i{font-size:16px}
+.activity-text{font-size:13px;color:var(--text-dark);line-height:1.5}
+.activity-time{font-size:11px;color:var(--text-mid);margin-top:2px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:var(--radius-lg);padding:28px;width:90%;max-width:500px;max-height:85vh;overflow-y:auto}
+.modal-title{font-size:18px;font-weight:800;color:var(--text-dark);margin-bottom:16px}
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--text-dark);margin-bottom:5px}
+.form-input{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:var(--text-dark);background:var(--bg);outline:none}
+.form-input:focus{border-color:var(--primary)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-footer{display:flex;gap:10px;margin-top:16px}
+.btn-cancel{flex:1;padding:10px;border-radius:var(--radius-md);font-size:13px;color:var(--text-mid);background:var(--bg);border:1px solid var(--border);cursor:pointer;font-family:var(--font)}
+.btn-save{flex:2;padding:10px;border-radius:var(--radius-md);font-size:13px;font-weight:700;color:white;background:var(--primary);border:none;cursor:pointer;font-family:var(--font)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.toast.show{display:flex}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">سم</div>
+    <div style="color:white;font-size:11px;font-weight:600">سارة محمود</div>
+  </div>
+  <a href="08-trainee-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="09-search.html" class="nav-item"><i class="ti ti-search"></i><span>البحث</span></a>
+  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span><span class="nav-badge">3</span></a>
+  <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
+  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span></a>
+  <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
+  <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
+  <div class="nav-section">الحساب</div>
+  <a href="#" class="nav-item active"><i class="ti ti-user"></i><span>ملفي</span></a>
+  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge">5</span></a>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">ملفي الشخصي</div></div>
+    <div style="display:flex;gap:10px">
+      <button onclick="openEditModal()" style="padding:8px 16px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px"><i class="ti ti-edit"></i>تعديل الملف</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="profile-layout">
+      <!-- LEFT -->
+      <div>
+        <div class="profile-card">
+          <div class="profile-cover"></div>
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar">سم</div>
+            <div class="profile-name">سارة محمود</div>
+            <div class="profile-role">تكنولوجيا المعلومات — السنة الثالثة</div>
+            <div class="profile-id">TRN-00234</div>
+            <div class="profile-stars">★★★★☆</div>
+            <button class="btn-edit-profile" onclick="openEditModal()"><i class="ti ti-edit"></i>تعديل الملف الشخصي</button>
+            <div class="profile-stats">
+              <div class="pstat"><div class="pstat-num">3.7</div><div class="pstat-label">GPA</div></div>
+              <div class="pstat"><div class="pstat-num">8</div><div class="pstat-label">طلبات</div></div>
+              <div class="pstat"><div class="pstat-num">2</div><div class="pstat-label">مقبولة</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="completion-card">
+          <div class="completion-header"><span class="completion-title">اكتمال الملف</span><span class="completion-pct">75%</span></div>
+          <div class="completion-bar"><div class="completion-fill" style="width:75%"></div></div>
+          <div class="completion-item"><i class="ti ti-circle-check" style="color:var(--success)"></i><span style="font-size:12px;color:var(--text-dark)">المعلومات الشخصية</span></div>
+          <div class="completion-item"><i class="ti ti-circle-check" style="color:var(--success)"></i><span style="font-size:12px;color:var(--text-dark)">البيانات الأكاديمية</span></div>
+          <div class="completion-item"><i class="ti ti-circle-check" style="color:var(--success)"></i><span style="font-size:12px;color:var(--text-dark)">المهارات</span></div>
+          <div class="completion-item"><i class="ti ti-alert-circle" style="color:var(--warning)"></i><span style="font-size:12px;color:var(--warning);font-weight:600">السيرة الذاتية — غير مكتملة</span></div>
+          <div class="completion-item"><i class="ti ti-x" style="color:var(--accent)"></i><span style="font-size:12px;color:var(--accent)">وثيقة الهوية — مطلوبة</span></div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-user-circle"></i>المعلومات الشخصية</div><button class="btn-edit" onclick="openEditModal()"><i class="ti ti-edit"></i>تعديل</button></div>
+          <div class="info-grid">
+            <div class="info-item"><div class="info-label">الاسم الكامل</div><div class="info-val">سارة محمود</div></div>
+            <div class="info-item"><div class="info-label">البريد الإلكتروني</div><div class="info-val">sara@gmail.com</div></div>
+            <div class="info-item"><div class="info-label">رقم الهاتف</div><div class="info-val">+970 59 000 000</div></div>
+            <div class="info-item"><div class="info-label">موقع السكن</div><div class="info-val">داخل غزة</div></div>
+            <div class="info-item"><div class="info-label">نوع الحساب</div><div class="info-val">طالب جامعي</div></div>
+            <div class="info-item"><div class="info-label">تفضيل التدريب</div><div class="info-val">داخل وخارج غزة</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-school"></i>البيانات الأكاديمية</div><button class="btn-edit" onclick="openEditModal()"><i class="ti ti-edit"></i>تعديل</button></div>
+          <div class="info-grid">
+            <div class="info-item"><div class="info-label">الجامعة</div><div class="info-val">جامعة الأزهر</div></div>
+            <div class="info-item"><div class="info-label">التخصص</div><div class="info-val">تكنولوجيا المعلومات</div></div>
+            <div class="info-item"><div class="info-label">السنة الدراسية</div><div class="info-val">الثالثة</div></div>
+            <div class="info-item"><div class="info-label">المعدل التراكمي</div><div class="info-val" style="color:var(--success);font-size:16px">3.7 / 4.0</div></div>
+            <div class="info-item"><div class="info-label">مشرف المادة</div><div class="info-val">د. محمد أبو سمرة</div></div>
+            <div class="info-item"><div class="info-label">ID المشرف</div><div class="info-val" style="color:var(--primary)">SUP-00005</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-code"></i>المهارات التقنية</div><button class="btn-edit" onclick="openSkillsModal()"><i class="ti ti-edit"></i>تعديل</button></div>
+          <div class="skills-wrap">
+            <span class="skill-tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-check" style="font-size:12px"></i>HTML/CSS</span>
+            <span class="skill-tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-check" style="font-size:12px"></i>JavaScript</span>
+            <span class="skill-tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-check" style="font-size:12px"></i>React</span>
+            <span class="skill-tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-check" style="font-size:12px"></i>Figma</span>
+            <span class="skill-tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-check" style="font-size:12px"></i>SQL</span>
+            <span class="skill-tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-check" style="font-size:12px"></i>Git</span>
+            <span class="skill-tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-check" style="font-size:12px"></i>Python</span>
+            <button onclick="openSkillsModal()" style="padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);background:var(--bg);border:1.5px dashed var(--border);cursor:pointer;font-family:var(--font)">+ إضافة مهارة</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-file-cv"></i>السيرة الذاتية</div></div>
+          <div class="cv-area has-file" onclick="showToast('فتح CV...')">
+            <i class="ti ti-file-type-pdf" style="font-size:32px;color:var(--success);display:block;margin-bottom:8px"></i>
+            <div style="font-size:13px;font-weight:700;color:var(--success)">sara_cv_2025.pdf</div>
+            <div style="font-size:12px;color:var(--text-mid);margin-top:4px">آخر تحديث: 14 يوليو 2025 · 245 KB</div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:12px">
+            <button style="flex:1;padding:9px;border-radius:var(--radius-md);font-size:13px;font-weight:600;color:var(--primary);background:var(--primary-light);border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px" onclick="showToast('جارٍ تحليل CV...')"><i class="ti ti-robot"></i>تحليل AI</button>
+            <button style="flex:1;padding:9px;border-radius:var(--radius-md);font-size:13px;font-weight:600;color:var(--text-mid);background:var(--bg);border:1px solid var(--border);cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-upload"></i>تحديث CV</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-activity"></i>النشاط الأخير</div></div>
+          <div class="activity-item">
+            <div class="activity-icon" style="background:var(--success-light)"><i class="ti ti-circle-check" style="color:var(--success)"></i></div>
+            <div><div class="activity-text">تم قبول طلبك في <strong>DesignHub</strong></div><div class="activity-time">منذ ساعتين</div></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon" style="background:var(--primary-light)"><i class="ti ti-send" style="color:var(--primary)"></i></div>
+            <div><div class="activity-text">قدّمت على فرصة <strong>مطور Frontend — TechPal</strong></div><div class="activity-time">منذ 3 أيام</div></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon" style="background:var(--warning-light)"><i class="ti ti-robot" style="color:var(--warning)"></i></div>
+            <div><div class="activity-text">تحليل CV بالذكاء الاصطناعي — نتيجة: <strong>78/100</strong></div><div class="activity-time">منذ 5 أيام</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-title">تعديل المعلومات الشخصية</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">الاسم الأول</label><input class="form-input" value="سارة"></div>
+      <div class="form-group"><label class="form-label">الاسم الأخير</label><input class="form-input" value="محمود"></div>
+    </div>
+    <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input class="form-input" value="sara@gmail.com"></div>
+    <div class="form-group"><label class="form-label">رقم الهاتف</label><input class="form-input" value="+970 59 000 000"></div>
+    <div class="form-group"><label class="form-label">GPA</label><input class="form-input" type="number" value="3.7" step="0.1" min="0" max="4"></div>
+    <div class="form-group"><label class="form-label">تفضيل التدريب</label><select class="form-input"><option>داخل غزة</option><option>عن بُعد</option><option selected>كلاهما</option></select></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="document.getElementById('editModal').classList.remove('open')">إلغاء</button>
+      <button class="btn-save" onclick="saveEdit()">حفظ التغييرات</button>
+    </div>
+  </div>
+</div>
+
+<!-- SKILLS MODAL -->
+<div class="modal-overlay" id="skillsModal">
+  <div class="modal">
+    <div class="modal-title">تعديل المهارات</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px" id="skillsList">
+      <span class="skill-tag" style="background:var(--primary);color:white;cursor:pointer" onclick="toggleSkill(this)">HTML/CSS</span>
+      <span class="skill-tag" style="background:var(--primary);color:white;cursor:pointer" onclick="toggleSkill(this)">JavaScript</span>
+      <span class="skill-tag" style="background:var(--primary);color:white;cursor:pointer" onclick="toggleSkill(this)">React</span>
+      <span class="skill-tag" style="background:var(--primary);color:white;cursor:pointer" onclick="toggleSkill(this)">Figma</span>
+      <span class="skill-tag" style="background:var(--primary);color:white;cursor:pointer" onclick="toggleSkill(this)">SQL</span>
+      <span class="skill-tag" style="background:var(--primary);color:white;cursor:pointer" onclick="toggleSkill(this)">Git</span>
+      <span class="skill-tag" style="background:var(--primary-light);color:var(--primary);cursor:pointer" onclick="toggleSkill(this)">Python</span>
+      <span class="skill-tag" style="background:var(--primary-light);color:var(--primary);cursor:pointer" onclick="toggleSkill(this)">Node.js</span>
+      <span class="skill-tag" style="background:var(--primary-light);color:var(--primary);cursor:pointer" onclick="toggleSkill(this)">TypeScript</span>
+      <span class="skill-tag" style="background:var(--primary-light);color:var(--primary);cursor:pointer" onclick="toggleSkill(this)">Django</span>
+      <span class="skill-tag" style="background:var(--primary-light);color:var(--primary);cursor:pointer" onclick="toggleSkill(this)">Flutter</span>
+      <span class="skill-tag" style="background:var(--primary-light);color:var(--primary);cursor:pointer" onclick="toggleSkill(this)">PHP</span>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="document.getElementById('skillsModal').classList.remove('open')">إلغاء</button>
+      <button class="btn-save" onclick="saveSkills()">حفظ المهارات</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+
+<script>
+const API_BASE = '/api';
+function getToken() { return localStorage.getItem('trainlink_token'); }
+function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
+function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
+function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function getInitials(name) {
+  if (!name) return '';
+  const parts = name.trim().split(' ');
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]);
+  return parts[0][0];
+}
+
+let currentProfile = null;
+
+function openEditModal() { document.getElementById('editModal').classList.add('open'); }
+function openSkillsModal() { document.getElementById('skillsModal').classList.add('open'); }
+function toggleSkill(el) {
+  const active = el.style.background === 'rgb(91, 79, 207)';
+  el.style.background = active ? 'var(--primary-light)' : 'var(--primary)';
+  el.style.color = active ? 'var(--primary)' : 'white';
+}
+
+async function saveEdit() {
+  const inputs = document.querySelectorAll('#editModal .form-input');
+  const firstName = inputs[0] ? inputs[0].value.trim() : '';
+  const lastName = inputs[1] ? inputs[1].value.trim() : '';
+  const fullName = (firstName + ' ' + lastName).trim();
+  const phone = inputs[3] ? inputs[3].value.trim() : '';
+
+  try {
+    const res = await fetch(API_BASE + '/auth/profile/', {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify({ full_name: fullName, phone_number: phone })
+    });
+    if (!res.ok) throw new Error('Failed');
+    const updated = await res.json();
+    currentProfile = Object.assign({}, currentProfile, updated);
+    applyProfile(currentProfile);
+    document.getElementById('editModal').classList.remove('open');
+    showToast('تم حفظ التغييرات بنجاح');
+  } catch (err) {
+    showToast('حدث خطأ أثناء الحفظ');
+  }
+}
+
+function saveSkills() {
+  document.getElementById('skillsModal').classList.remove('open');
+  showToast('تم تحديث المهارات');
+}
+
+function applyProfile(p) {
+  const fullName = p.full_name || '';
+  const initials = getInitials(fullName);
+
+  document.querySelector('.profile-avatar').textContent = initials;
+  document.querySelector('.profile-name').textContent = fullName;
+  if (p.person_type) document.querySelector('.profile-role').textContent = p.person_type;
+  if (p.trainee_id) document.querySelector('.profile-id').textContent = p.trainee_id;
+
+  document.querySelector('.sidebar-user .user-avatar').textContent = initials;
+  document.querySelector('.sidebar-user .user-name').textContent = fullName;
+
+  const infoVals = document.querySelectorAll('.info-val');
+  if (infoVals[0]) infoVals[0].textContent = fullName;
+  if (infoVals[1]) infoVals[1].textContent = p.email || '';
+  if (infoVals[2]) infoVals[2].textContent = p.phone_number || '';
+  if (infoVals[3]) infoVals[3].textContent = p.address || '';
+
+  const modalInputs = document.querySelectorAll('#editModal .form-input');
+  if (modalInputs[0]) modalInputs[0].value = firstName(fullName);
+  if (modalInputs[1]) modalInputs[1].value = lastName(fullName);
+  if (modalInputs[2]) modalInputs[2].value = p.email || '';
+  if (modalInputs[3]) modalInputs[3].value = p.phone_number || '';
+}
+
+function firstName(full) {
+  if (!full) return '';
+  return full.split(' ')[0] || full;
+}
+function lastName(full) {
+  if (!full) return '';
+  const parts = full.split(' ');
+  return parts.slice(1).join(' ') || '';
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+  if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
+  try {
+    const res = await fetch(API_BASE + '/auth/profile/', { headers: authHeaders() });
+    if (!res.ok) throw new Error('Failed');
+    currentProfile = await res.json();
+    applyProfile(currentProfile);
+  } catch (err) {
+    showToast('حدث خطأ في تحميل البيانات');
+  }
+});
+</script>
+</body>
+</html>

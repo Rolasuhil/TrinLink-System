@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — نشر فرصة تدريب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--warning:#F59E0B;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--dark:#0F0E1A;--dark-2:#1A1827;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif}
+body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:#1A1827;border-bottom:1px solid rgba(255,255,255,0.08);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100}
+.top-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.top-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.top-logo-icon i{color:white;font-size:15px}
+.top-logo-text{font-size:15px;font-weight:800;color:white}
+.top-nav{display:flex;gap:2px;margin-right:auto}
+.top-nav-item{padding:7px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);cursor:pointer;border:none;background:transparent;font-family:var(--font);transition:all 0.15s;display:flex;align-items:center;gap:6px;text-decoration:none}
+.top-nav-item:hover{background:rgba(255,255,255,0.06);color:white}
+.top-nav-item.active{background:var(--primary);color:white}
+.chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:6px 12px}
+.chip-avatar{width:26px;height:26px;border-radius:6px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white}
+.chip-name{font-size:12px;font-weight:600;color:white}
+.top-right{display:flex;align-items:center;gap:10px;position:relative}
+.icon-btn{width:34px;height:34px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.icon-btn i{color:rgba(255,255,255,0.6);font-size:16px}
+.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid #1A1827}
+.company-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:6px 12px;cursor:pointer}
+.content{padding:24px;flex:1;max-width:1100px;margin:0 auto;width:100%}
+.page-header{margin-bottom:24px}
+.page-title{font-size:22px;font-weight:800;color:white;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.page-title i{color:#A89CFF}
+.page-sub{font-size:13px;color:rgba(255,255,255,0.4)}
+.layout{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+.card{background:#1A1827;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
+.card-title{font-size:14px;font-weight:700;color:white;margin-bottom:16px;display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.card-title i{color:#A89CFF;font-size:16px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);margin-bottom:6px}
+.form-label .req{color:var(--accent)}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:white;background:rgba(255,255,255,0.05);outline:none;transition:border-color 0.15s}
+.form-input:focus{border-color:var(--primary);background:rgba(91,79,207,0.08)}
+.form-input::placeholder{color:rgba(255,255,255,0.2)}
+.form-select{width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:white;background:#1A1827;outline:none}
+.form-select option{background:#1A1827}
+.form-textarea{width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:white;background:rgba(255,255,255,0.05);outline:none;resize:none;min-height:100px}
+.form-textarea:focus{border-color:var(--primary)}
+.form-textarea::placeholder{color:rgba(255,255,255,0.2)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.type-selector{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.type-opt{border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:12px;cursor:pointer;transition:all 0.15s;text-align:center}
+.type-opt:hover{border-color:rgba(91,79,207,0.5);background:rgba(91,79,207,0.08)}
+.type-opt.selected{border-color:var(--primary);background:rgba(91,79,207,0.15)}
+.type-opt-icon{font-size:24px;margin-bottom:6px}
+.type-opt-label{font-size:13px;font-weight:700;color:white;margin-bottom:2px}
+.type-opt-sub{font-size:11px;color:rgba(255,255,255,0.4)}
+.skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.skill-tag{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);background:transparent;font-family:var(--font);transition:all 0.15s}
+.skill-tag.selected{background:rgba(91,79,207,0.2);color:#A89CFF;border-color:var(--primary)}
+.skill-tag:hover:not(.selected){border-color:rgba(91,79,207,0.4);color:rgba(255,255,255,0.8)}
+.btn-publish{width:100%;padding:13px;border-radius:var(--radius-md);font-size:15px;font-weight:700;color:white;background:var(--primary);border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;box-shadow:0 4px 16px rgba(91,79,207,0.4);margin-bottom:10px}
+.btn-publish:hover{background:#4A3FB5;transform:translateY(-1px)}
+.btn-draft{width:100%;padding:11px;border-radius:var(--radius-md);font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);background:transparent;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-family:var(--font)}
+.btn-draft:hover{border-color:rgba(255,255,255,0.3);color:white}
+.preview-card{background:rgba(91,79,207,0.08);border:1px solid rgba(91,79,207,0.2);border-radius:var(--radius-lg);padding:16px}
+.preview-title{font-size:14px;font-weight:700;color:white;margin-bottom:3px}
+.preview-company{font-size:12px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px;margin-bottom:10px}
+.preview-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.preview-tag{font-size:10px;padding:3px 8px;border-radius:20px}
+.tip-item{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;color:rgba(255,255,255,0.5)}
+.tip-item:last-child{border-bottom:none}
+.tip-item i{color:#A89CFF;font-size:14px;flex-shrink:0;margin-top:1px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2D2B3E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;border:1px solid rgba(255,255,255,0.1)}
+.toast.show{display:flex}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="#" class="top-logo"><div class="top-logo-icon"><i class="ti ti-briefcase"></i></div><span class="top-logo-text">TrainLink</span></a>
+  <div class="top-nav">
+    <a href="18-company-dashboard.html" class="top-nav-item"><i class="ti ti-layout-dashboard"></i>لوحة التحكم</a>
+    <a href="20-manage-applications.html" class="top-nav-item"><i class="ti ti-clipboard-list"></i>الطلبات</a>
+    <a href="21-trainees-progress.html" class="top-nav-item"><i class="ti ti-chart-line"></i>المتدربون</a>
+    <a href="23-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
+    <a href="22-company-profile.html" class="top-nav-item"><i class="ti ti-building"></i><span id="navCompanyName">ملف الشركة</span></a>
+  </div>
+  <div class="top-right">
+    <div class="icon-btn" onclick="toggleNotifPanel()" id="notifBtn"><i class="ti ti-bell"></i><div class="notif-dot" id="notifDot"></div></div>
+    <div class="icon-btn" onclick="window.location.href='23-chat.html'" title="الدردشة"><i class="ti ti-messages"></i></div>
+    <div class="company-chip" onclick="toggleMenu()" id="companyChip" style="cursor:pointer">
+      <div class="chip-avatar" id="chipAvatar">TP</div>
+      <div class="chip-name" id="chipName">TechPal</div>
+      <i class="ti ti-chevron-down" style="font-size:12px;color:rgba(255,255,255,0.4)"></i>
+    </div>
+    <div id="userDropdown" style="display:none;position:absolute;top:50px;left:16px;background:#2D2B3E;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);box-shadow:0 8px 24px rgba(0,0,0,0.4);min-width:180px;z-index:200;padding:8px 0">
+      <a href="#" onclick="localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user');window.location.href='../public/02-login.html'" style="display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:#FF6B6B;text-decoration:none"><i class="ti ti-logout"></i> تسجيل الخروج</a>
+    </div>
+    <div id="notifPanel" style="display:none;position:absolute;top:50px;left:50px;background:#2D2B3E;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);box-shadow:0 8px 24px rgba(0,0,0,0.4);min-width:320px;max-height:400px;overflow-y:auto;z-index:200;padding:0">
+      <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:14px;font-weight:700;color:white">الاشعارات</span>
+        <button onclick="markAllRead()" style="background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;font-family:var(--font)">تحديد الكل كمقروء</button>
+      </div>
+      <div id="notifList" style="padding:8px 0"><div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">جاري التحميل...</div></div>
+    </div>
+  </div>
+</div>
+ 
+<div class="content">
+  <div class="page-header">
+    <div class="page-title"><i class="ti ti-plus-circle"></i>نشر فرصة تدريب جديدة</div>
+    <div class="page-sub">أضف تفاصيل فرصة التدريب لعرضها للمتدربين المناسبين</div>
+  </div>
+ 
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-info-circle"></i>المعلومات الأساسية</div>
+        <div class="form-group">
+          <label class="form-label">عنوان الفرصة <span class="req">*</span></label>
+          <input class="form-input" placeholder="مثال: مطور ويب Frontend" id="jobTitle" oninput="updatePreview()">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">المجال <span class="req">*</span></label>
+            <select class="form-select" onchange="updatePreview()">
+              <option>تطوير ويب</option><option>تصميم UI/UX</option><option>تسويق رقمي</option><option>قواعد بيانات</option><option>أمن معلومات</option><option>موبايل</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">الموقع <span class="req">*</span></label>
+            <select class="form-select" onchange="updatePreview()">
+              <option>داخل غزة</option><option>عن بُعد</option><option>كلاهما</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">وصف الفرصة <span class="req">*</span></label>
+          <textarea class="form-textarea" placeholder="اكتب وصفاً واضحاً للفرصة، المهام، وما سيتعلمه المتدرب..." rows="4"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">مدة التدريب <span class="req">*</span></label>
+            <select class="form-select"><option>شهر</option><option>2 أشهر</option><option selected>3 أشهر</option><option>4 أشهر</option><option>6 أشهر</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">عدد المقاعد <span class="req">*</span></label>
+            <input type="number" class="form-input" value="3" min="1" max="20">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">آخر موعد للتقديم <span class="req">*</span></label>
+          <input type="date" class="form-input" value="2025-08-15">
+        </div>
+      </div>
+ 
+      <div class="card">
+        <div class="card-title"><i class="ti ti-coin"></i>نوع التدريب</div>
+        <div class="type-selector">
+          <div class="type-opt selected" onclick="selectType(this)">
+            <div class="type-opt-icon">🆓</div>
+            <div class="type-opt-label">مجاني</div>
+            <div class="type-opt-sub">تدريب مجاني بدون مقابل مادي</div>
+          </div>
+          <div class="type-opt" onclick="selectType(this)">
+            <div class="type-opt-icon">💰</div>
+            <div class="type-opt-label">مدفوع</div>
+            <div class="type-opt-sub">تدريب براتب شهري</div>
+          </div>
+        </div>
+        <div id="salaryField" style="display:none;margin-top:14px">
+          <label class="form-label">الراتب الشهري ($)</label>
+          <input type="number" class="form-input" placeholder="50">
+        </div>
+      </div>
+ 
+      <div class="card">
+        <div class="card-title"><i class="ti ti-code"></i>المهارات المطلوبة</div>
+        <div class="form-group">
+          <label class="form-label">اختر المهارات الأساسية <span class="req">*</span></label>
+          <div class="skills-wrap">
+            <button class="skill-tag selected" onclick="toggleSkill(this)">HTML/CSS</button>
+            <button class="skill-tag selected" onclick="toggleSkill(this)">JavaScript</button>
+            <button class="skill-tag selected" onclick="toggleSkill(this)">React</button>
+            <button class="skill-tag" onclick="toggleSkill(this)">Vue.js</button>
+            <button class="skill-tag" onclick="toggleSkill(this)">Python</button>
+            <button class="skill-tag" onclick="toggleSkill(this)">Django</button>
+            <button class="skill-tag" onclick="toggleSkill(this)">Node.js</button>
+            <button class="skill-tag selected" onclick="toggleSkill(this)">Git</button>
+            <button class="skill-tag" onclick="toggleSkill(this)">SQL</button>
+            <button class="skill-tag" onclick="toggleSkill(this)">Figma</button>
+            <button class="skill-tag" onclick="toggleSkill(this)">Flutter</button>
+            <button class="skill-tag" onclick="toggleSkill(this)">TypeScript</button>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:6px">
+          <label class="form-label">الحد الأدنى للـ GPA (اختياري)</label>
+          <input type="number" class="form-input" placeholder="3.0" step="0.1" min="0" max="4">
+        </div>
+        <div class="form-group">
+          <label class="form-label">السنة الدراسية المطلوبة</label>
+          <select class="form-select"><option>أي سنة</option><option>الثانية فأعلى</option><option>الثالثة فأعلى</option><option>الرابعة فقط</option><option>خريجون فقط</option></select>
+        </div>
+      </div>
+    </div>
+ 
+    <div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-eye"></i>معاينة الفرصة</div>
+        <div class="preview-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+            <div style="display:flex;gap:10px;align-items:center">
+              <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white">TP</div>
+              <div><div class="preview-title" id="prevTitle">مطور ويب Frontend</div><div class="preview-company"><i class="ti ti-shield-check" style="font-size:11px;color:var(--success)"></i>TechPal</div></div>
+            </div>
+            <span style="font-size:10px;background:rgba(34,197,94,0.15);color:var(--success);padding:2px 8px;border-radius:20px;font-weight:700">🤖 AI</span>
+          </div>
+          <div class="preview-tags">
+            <span class="preview-tag" id="prevType" style="background:rgba(34,197,94,0.15);color:var(--success)">🆓 مجاني</span>
+            <span class="preview-tag" id="prevLocation" style="background:rgba(91,79,207,0.15);color:#A89CFF">📍 داخل غزة</span>
+            <span class="preview-tag" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.4)">3 أشهر</span>
+          </div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);display:flex;gap:12px">
+            <span><i class="ti ti-star" style="color:var(--warning)"></i> جديد</span>
+            <span><i class="ti ti-users"></i> 3 مقاعد</span>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="card">
+        <div class="card-title"><i class="ti ti-bulb"></i>نصائح لفرصة أفضل</div>
+        <div class="tip-item"><i class="ti ti-check"></i>اكتب وصفاً تفصيلياً لزيادة التقديمات بنسبة 40%</div>
+        <div class="tip-item"><i class="ti ti-check"></i>حدد المهارات المطلوبة بدقة ليطابقها AI بشكل أفضل</div>
+        <div class="tip-item"><i class="ti ti-check"></i>اضبط آخر موعد لا يقل عن أسبوعين قادمين</div>
+        <div class="tip-item"><i class="ti ti-check"></i>الفرص المجانية تحصل على 3x تقديمات أكثر</div>
+        <div class="tip-item"><i class="ti ti-check"></i>إضافة شهادة إتمام يزيد الجاذبية للمتدربين</div>
+      </div>
+ 
+      <div class="card">
+        <div class="card-title"><i class="ti ti-certificate"></i>خيارات إضافية</div>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:12px">
+          <input type="checkbox" checked style="accent-color:var(--primary);width:16px;height:16px">
+          منح شهادة إتمام التدريب
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:12px">
+          <input type="checkbox" checked style="accent-color:var(--primary);width:16px;height:16px">
+          السماح للذكاء الاصطناعي بالمطابقة
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:rgba(255,255,255,0.7)">
+          <input type="checkbox" style="accent-color:var(--primary);width:16px;height:16px">
+          إشعار فوري عند التقديم
+        </label>
+      </div>
+ 
+      <button class="btn-publish" onclick="publishJob()"><i class="ti ti-send"></i>نشر الفرصة الآن</button>
+      <button class="btn-draft" onclick="saveDraft()"><i class="ti ti-file"></i> حفظ كمسودة</button>
+    </div>
+  </div>
+</div>
+ 
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+ 
+<script>
+const API_BASE='/api';
+function getToken(){return localStorage.getItem('trainlink_token');}
+function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
+function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
+
+async function loadCompanyProfile(){try{var res=await fetch(API_BASE+'/auth/profile/',{headers:authHeaders()});if(!res.ok)return;var d=await res.json();var name=d.company_name||d.name||d.username;if(name){var cn=document.getElementById('chipName');if(cn)cn.textContent=name;var ca=document.getElementById('chipAvatar');if(ca)ca.textContent=name.substring(0,2);var nn=document.getElementById('navCompanyName');if(nn)nn.textContent=name;}}catch(e){}}
+
+function toggleMenu(){var d=document.getElementById('userDropdown');var n=document.getElementById('notifPanel');if(n)n.style.display='none';d.style.display=d.style.display==='none'?'block':'none';}
+function toggleNotifPanel(){var d=document.getElementById('notifPanel');var m=document.getElementById('userDropdown');if(m)m.style.display='none';d.style.display=d.style.display==='none'?'block':'none';if(d.style.display==='block')loadNotifs();}
+document.addEventListener('click',function(e){var chip=document.getElementById('companyChip');var dd=document.getElementById('userDropdown');var nb=document.getElementById('notifBtn');var np=document.getElementById('notifPanel');if(chip&&dd&&!chip.contains(e.target)&&!dd.contains(e.target))dd.style.display='none';if(nb&&np&&!nb.contains(e.target)&&!np.contains(e.target))np.style.display='none';});
+async function loadNotifs(){try{var res=await fetch(API_BASE+'/chat/notifications/',{headers:authHeaders()});if(!res.ok)throw new Error();var d=await res.json();var list=d.notifications||[];var container=document.getElementById('notifList');var dot=document.getElementById('notifDot');if(dot)dot.style.display=d.unread_count>0?'block':'none';if(list.length===0){container.innerHTML='<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">لا توجد اشعارات</div>';return;}container.innerHTML='';list.forEach(function(n){var icon='ti-bell';if(n.type==='message')icon='ti-message';if(n.type==='application')icon='ti-clipboard';if(n.type==='report')icon='ti-file-text';if(n.type==='alert')icon='ti-alert-circle';var item=document.createElement('div');item.style.cssText='padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04);cursor:pointer;'+(n.is_read?'opacity:0.5':'');item.innerHTML='<div style="display:flex;align-items:center;gap:8px"><i class="ti '+icon+'" style="color:var(--primary);font-size:16px;flex-shrink:0"></i><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:white;margin-bottom:2px">'+n.title+'</div><div style="font-size:12px;color:rgba(255,255,255,0.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+n.message+'</div></div></div>';item.addEventListener('click',function(){markNotifRead(n.id);item.style.opacity='0.5';});container.appendChild(item);});}catch(e){}}
+async function markAllRead(){try{await fetch(API_BASE+'/chat/notifications/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({mark_all_read:true})});var dot=document.getElementById('notifDot');if(dot)dot.style.display='none';document.querySelectorAll('#notifList > div').forEach(function(el){el.style.opacity='0.5';});}catch(e){}}
+async function markNotifRead(id){try{await fetch(API_BASE+'/chat/notifications/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({notification_id:id})});}catch(e){}}
+
+let selectedCategoryId=null;
+let selectedType='free';
+
+document.addEventListener('DOMContentLoaded',()=>{
+  loadCategories();
+  setupTypeSelector();
+  loadCompanyProfile();
+});
+
+async function loadCategories(){
+  try{
+    const res=await fetch(API_BASE+'/internships/categories/',{headers:authHeaders()});
+    if(!res.ok)throw new Error('Failed to load categories');
+    const data=await res.json();
+    const categories=Array.isArray(data)?data:(data.results||[]);
+    const select=document.querySelector('.form-row .form-select');
+    if(select&&categories.length){
+      select.innerHTML='';
+      categories.forEach(c=>{
+        const opt=document.createElement('option');
+        opt.value=c.id;opt.textContent=c.name;
+        select.appendChild(opt);
+      });
+      select.addEventListener('change',()=>{selectedCategoryId=select.value;});
+      selectedCategoryId=categories[0].id;
+    }
+  }catch(e){}
+}
+
+function setupTypeSelector(){
+  document.querySelectorAll('.type-opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{
+      document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('selected'));
+      opt.classList.add('selected');
+      const isPaid=opt.querySelector('.type-opt-label').textContent==='مدفوع';
+      selectedType=isPaid?'paid':'free';
+      document.getElementById('salaryField').style.display=isPaid?'block':'none';
+      document.getElementById('prevType').textContent=isPaid?'💰 مدفوع':'🆓 مجاني';
+      document.getElementById('prevType').style.background=isPaid?'rgba(255,107,107,0.15)':'rgba(34,197,94,0.15)';
+      document.getElementById('prevType').style.color=isPaid?'var(--accent)':'var(--success)';
+    });
+  });
+}
+
+function toggleSkill(btn){btn.classList.toggle('selected');}
+function updatePreview(){
+  const title=document.getElementById('jobTitle').value||'عنوان الفرصة';
+  document.getElementById('prevTitle').textContent=title;
+}
+
+async function publishJob(){
+  const title=document.getElementById('jobTitle').value;
+  if(!title){showToast('⚠️ يرجى إدخال عنوان الفرصة');return;}
+  const description=document.querySelector('.form-textarea')?.value||'';
+  const locationSelect=document.querySelectorAll('.form-select')[1];
+  const location=locationSelect?locationSelect.value:'';
+  const seatsInput=document.querySelector('input[type="number"]');
+  const seats=seatsInput?parseInt(seatsInput.value)||1:1;
+  const deadlineInput=document.querySelector('input[type="date"]');
+  const deadline=deadlineInput?deadlineInput.value:'';
+  const selectedSkills=[];
+  document.querySelectorAll('.skill-tag.selected').forEach(t=>selectedSkills.push(t.textContent));
+
+  const body={
+    title:title,
+    description:description,
+    requirements:selectedSkills.join(', '),
+    category_id:selectedCategoryId,
+    location:location,
+    internship_type:selectedType,
+    start_date:new Date().toISOString().split('T')[0],
+    end_date:'',
+    deadline:deadline,
+    available_positions:seats
+  };
+
+  try{
+    const res=await fetch(API_BASE+'/internships/',{
+      method:'POST',headers:authHeaders(),
+      body:JSON.stringify(body)
+    });
+    if(!res.ok)throw new Error('Failed to post');
+    showToast('🎉 تم نشر الفرصة بنجاح!');
+    setTimeout(()=>window.location.href='18-company-dashboard.html',2000);
+  }catch(e){showToast('❌ خطأ في نشر الفرصة');}
+}
+
+function saveDraft(){showToast('💾 تم حفظ المسودة');}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — تعيين المتدربيين</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.content{padding:20px 24px;flex:1;max-width:900px}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
+.card-title{font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title i{color:var(--primary);font-size:18px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;font-weight:700;color:var(--text-dark);display:block;margin-bottom:5px}
+.form-select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none;background:var(--bg);appearance:none;cursor:pointer;transition:all 0.15s}
+.form-select:focus{border-color:var(--primary);background:white}
+.match-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;transition:all 0.15s;cursor:pointer}
+.match-card:hover{border-color:var(--primary);background:var(--primary-light)}
+.match-card.selected{border-color:var(--primary);background:var(--primary-light);box-shadow:0 0 0 2px var(--primary)}
+.match-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;flex-shrink:0}
+.match-info{flex:1}
+.match-name{font-size:14px;font-weight:700;color:var(--text-dark)}
+.match-dept{font-size:12px;color:var(--text-mid);margin-top:2px}
+.match-score{display:flex;flex-direction:column;align-items:center}
+.match-percent{font-size:20px;font-weight:800;color:var(--primary)}
+.match-label{font-size:10px;color:var(--text-mid)}
+.match-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.match-card.selected .match-check{background:var(--primary);border-color:var(--primary)}
+.match-card.selected .match-check::after{content:'✓';color:white;font-size:12px;font-weight:700}
+.btn{padding:10px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
+.btn-primary{background:var(--primary);color:white}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-row{display:flex;gap:10px;margin-top:16px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.toast.show{display:flex}
+.assigned-list{margin-top:16px}
+.assigned-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--radius-md);margin-bottom:8px}
+.assigned-item .match-avatar{width:36px;height:36px;font-size:11px}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
+    <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
+  </div>
+  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <a href="28-admin-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span></a>
+  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-file-text"></i><span>إدارة المحتوى</span></a>
+  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير والإحصائيات</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-school"></i><span>تعيين المتدربيين</span></a>
+  <div class="nav-section">النظام</div>
+  <a href="#" class="nav-item"><i class="ti ti-settings"></i><span>الإعدادات</span></a>
+  <div class="sidebar-bottom">
+    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">تعيين المتدربيين 🎯</div>
+      <div class="topbar-sub">تعيين المتدربين للشركات والفرص المناسبة يدوياً</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-settings"></i>معايير التعيين</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label class="form-label">اختر المتدرب</label>
+          <select class="form-select" id="traineeSelect" onchange="showMatches()">
+            <option value="">— اختر متدرباً —</option>
+            <option value="sara">سارة محمود — IT — GPA: 3.7</option>
+            <option value="ahmed">أحمد حسن — CS — GPA: 3.5</option>
+            <option value="mona">منى ناصر — تصميم — GPA: 3.8</option>
+            <option value="khaled">خالد عمر — IT — GPA: 3.3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">القسم المطلوب</label>
+          <select class="form-select" id="categorySelect" onchange="showMatches()">
+            <option value="">— اختر القسم —</option>
+            <option>تطوير الويب</option>
+            <option>تطوير الموبايل</option>
+            <option>تصميم UI/UX</option>
+            <option>تحليل البيانات</option>
+            <option>أمن المعلومات</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الشركة</label>
+          <select class="form-select">
+            <option value="">— جميع الشركات —</option>
+            <option>TechPal</option>
+            <option>DesignHub</option>
+            <option>DataSoft</option>
+            <option>NetSoft</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الموقع</label>
+          <select class="form-select">
+            <option value="">— جميع المواقع —</option>
+            <option>غزة</option>
+            <option>رفح</option>
+            <option>عن بُعد</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATCHES -->
+    <div id="matchesArea" style="display:none">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-sparkles"></i>الفرص المطابقة — سارة محمود</div>
+        <div class="match-card selected" onclick="this.classList.toggle('selected')">
+          <div class="match-avatar" style="background:var(--primary)">TP</div>
+          <div class="match-info"><div class="match-name">مطور Frontend — React</div><div class="match-dept">TechPal · غزة · مجاني · ينتهي 20 يوليو</div></div>
+          <div class="match-score"><div class="match-percent">95%</div><div class="match-label">مطابقة</div></div>
+          <div class="match-check"></div>
+        </div>
+        <div class="match-card" onclick="this.classList.toggle('selected')">
+          <div class="match-avatar" style="background:#FF6B6B">DH</div>
+          <div class="match-info"><div class="match-name">مصمم UI/UX</div><div class="match-dept">DesignHub · عن بُعد · مجاني · ينتهي 25 يوليو</div></div>
+          <div class="match-score"><div class="match-percent">88%</div><div class="match-label">مطابقة</div></div>
+          <div class="match-check"></div>
+        </div>
+        <div class="match-card" onclick="this.classList.toggle('selected')">
+          <div class="match-avatar" style="background:#22C55E">DS</div>
+          <div class="match-info"><div class="match-name">مطور قواعد بيانات</div><div class="match-dept">DataSoft · عن بُعد · مجاني · ينتهي 1 أغسطس</div></div>
+          <div class="match-score"><div class="match-percent">82%</div><div class="match-label">مطابقة</div></div>
+          <div class="match-check"></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="assignTrainee()"><i class="ti ti-check" style="margin-left:4px"></i>تأكيد التعيين</button>
+          <button class="btn btn-outline" onclick="document.getElementById('matchesArea').style.display='none'">إلغاء</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASSIGNED LIST -->
+    <div class="card">
+      <div class="card-title"><i class="ti ti-list"></i>التعيينات الحالية</div>
+      <div class="assigned-item">
+        <div class="match-avatar" style="background:var(--primary);width:36px;height:36px;font-size:11px">سم</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">سارة محمود</div><div style="font-size:11px;color:var(--text-mid)">مطور Frontend — TechPal</div></div>
+        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:#15803D;font-weight:600">نشط</span>
+        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-weight:600">95% مطابقة</span>
+      </div>
+      <div class="assigned-item">
+        <div class="match-avatar" style="background:#22C55E;width:36px;height:36px;font-size:11px">أح</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">أحمد حسن</div><div style="font-size:11px;color:var(--text-mid)">مطور Backend — TechPal</div></div>
+        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:#15803D;font-weight:600">نشط</span>
+        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-weight:600">91% مطابقة</span>
+      </div>
+      <div class="assigned-item">
+        <div class="match-avatar" style="background:#FF6B6B;width:36px;height:36px;font-size:11px">من</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">منى ناصر</div><div style="font-size:11px;color:var(--text-mid)">مصمم UI/UX — DesignHub</div></div>
+        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:#15803D;font-weight:600">نشط</span>
+        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-weight:600">97% مطابقة</span>
+      </div>
+      <div class="assigned-item" style="opacity:0.6">
+        <div class="match-avatar" style="background:#6B7280;width:36px;height:36px;font-size:11px">عب</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">عبدالرحمن بدر</div><div style="font-size:11px;color:var(--text-mid)">مطور Frontend — TechPal</div></div>
+        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:#FEE2E2;color:#DC2626;font-weight:600">منتهي</span>
+        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:#15803D;font-weight:600">✓ شهادة صادرة</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+
+<script>
+const API_BASE='/api';
+function getToken(){return localStorage.getItem('trainlink_token')}
+function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
+function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
+
+document.addEventListener('DOMContentLoaded',async function(){
+  var traineeSelect=document.getElementById('traineeSelect');
+  var categorySelect=document.getElementById('categorySelect');
+  if(categorySelect){
+    categorySelect.id='supervisorSelect';
+    categorySelect.innerHTML='<option value="">— اختر مشرفاً —</option>';
+    categorySelect.previousElementSibling.textContent='اختر المشرف';
+  }
+  try{
+    var[trainRes,supRes]=await Promise.all([
+      fetch(API_BASE+'/admin-panel/users/?type=trainee',{headers:authHeaders()}),
+      fetch(API_BASE+'/admin-panel/users/?type=supervisor',{headers:authHeaders()})
+    ]);
+    if(trainRes.ok){
+      var tData=await trainRes.json();
+      var tList=tData.results||tData;
+      if(traineeSelect&&Array.isArray(tList)){
+        traineeSelect.innerHTML='<option value="">— اختر متدرباً —</option>';
+        tList.forEach(function(t){
+          var opt=document.createElement('option');
+          opt.value=t.user_id||t.id;
+          opt.textContent=(t.full_name||'متدرب');
+          traineeSelect.appendChild(opt);
+        });
+      }
+    }
+    if(supRes.ok){
+      var sData=await supRes.json();
+      var sList=sData.results||sData;
+      var supSelect=document.getElementById('supervisorSelect');
+      if(supSelect&&Array.isArray(sList)){
+        supSelect.innerHTML='<option value="">— اختر مشرفاً —</option>';
+        sList.forEach(function(s){
+          var opt=document.createElement('option');
+          opt.value=s.user_id||s.id;
+          opt.textContent=(s.full_name||'مشرف');
+          supSelect.appendChild(opt);
+        });
+      }
+    }
+  }catch(e){console.log('Error loading users:',e)}
+});
+
+function showMatches(){
+  var trainee=document.getElementById('traineeSelect').value;
+  if(trainee){
+    document.getElementById('matchesArea').style.display='block';
+    var sel=document.getElementById('traineeSelect');
+    var name=sel.options[sel.selectedIndex].text.split('—')[0].trim();
+    document.querySelector('#matchesArea .card-title').innerHTML='<i class="ti ti-sparkles"></i>تعيين — '+name;
+  }else{
+    document.getElementById('matchesArea').style.display='none';
+  }
+}
+
+async function assignTrainee(){
+  var traineeId=document.getElementById('traineeSelect').value;
+  var supervisorSelect=document.getElementById('supervisorSelect');
+  var supervisorId=supervisorSelect?supervisorSelect.value:'';
+  if(!traineeId){showToast('يرجى اختيار متدرب');return;}
+  if(!supervisorId){showToast('يرجى اختيار مشرف');return;}
+  try{
+    var res=await fetch(API_BASE+'/admin-panel/assign/',{method:'POST',headers:authHeaders(),body:JSON.stringify({trainee_id:traineeId,supervisor_id:supervisorId})});
+    if(res.ok){
+      showToast('تم تعيين المتدرب بنجاح ✓');
+      document.getElementById('matchesArea').style.display='none';
+      document.getElementById('traineeSelect').value='';
+    }else{
+      showToast('حدث خطأ في التعيين');
+    }
+  }catch(e){console.log(e);showToast('حدث خطأ');}
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — إدارة المستخدمين</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.content{padding:20px 24px;flex:1}
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text-mid);font-family:var(--font);font-weight:600;transition:all 0.15s}
+.filter-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+.search-bar{padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none;background:white;width:250px;margin-right:auto}
+.search-bar:focus{border-color:var(--primary)}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:14px}
+.table{width:100%;border-collapse:collapse}
+.table th{text-align:right;padding:10px 12px;font-size:11px;font-weight:700;color:var(--text-mid);border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.3px}
+.table td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.table tr:last-child td{border-bottom:none}
+.table tr:hover td{background:var(--bg)}
+.user-cell{display:flex;align-items:center;gap:10px}
+.user-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.user-name{font-weight:700;color:var(--text-dark)}
+.user-email{font-size:11px;color:var(--text-mid)}
+.status-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;display:inline-block}
+.action-btns{display:flex;gap:4px}
+.action-btn{width:30px;height:30px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
+.action-btn i{font-size:14px;color:var(--text-mid)}
+.action-btn:hover{border-color:var(--primary);background:var(--primary-light)}
+.action-btn:hover i{color:var(--primary)}
+.action-btn.danger:hover{border-color:var(--accent);background:#FEE2E2}
+.action-btn.danger:hover i{color:var(--accent)}
+.btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
+.btn-primary{background:var(--primary);color:white}
+.btn-success{background:var(--success);color:white}
+.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.toast.show{display:flex}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.stat-mini{background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;text-align:center}
+.stat-mini-num{font-size:20px;font-weight:800;color:var(--primary)}
+.stat-mini-label{font-size:11px;color:var(--text-mid);margin-top:2px}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
+    <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
+  </div>
+  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <a href="28-admin-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-users"></i><span>إدارة المستخدمين</span><span class="nav-badge">5</span></a>
+  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-file-text"></i><span>إدارة المحتوى</span></a>
+  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير والإحصائيات</span></a>
+  <a href="32-assign-trainee.html" class="nav-item"><i class="ti ti-school"></i><span>تعيين المتدربيين</span></a>
+  <div class="nav-section">النظام</div>
+  <a href="#" class="nav-item"><i class="ti ti-settings"></i><span>الإعدادات</span></a>
+  <div class="sidebar-bottom">
+    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">إدارة المستخدمين 👥</div>
+      <div class="topbar-sub">إدارة وعرض جميع المستخدمين المسجلين</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="stats-row">
+      <div class="stat-mini"><div class="stat-mini-num">1,089</div><div class="stat-mini-label">متدربين</div></div>
+      <div class="stat-mini"><div class="stat-mini-num" style="color:var(--accent)">42</div><div class="stat-mini-label">شركات</div></div>
+      <div class="stat-mini"><div class="stat-mini-num" style="color:var(--warning)">116</div><div class="stat-mini-label">مشرفين</div></div>
+      <div class="stat-mini"><div class="stat-mini-num" style="color:var(--success)">1,247</div><div class="stat-mini-label">الإجمالي</div></div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterUsers(this,'all')">الكل</button>
+      <button class="filter-btn" onclick="filterUsers(this,'trainee')">المتدربيين</button>
+      <button class="filter-btn" onclick="filterUsers(this,'company')">الشركات</button>
+      <button class="filter-btn" onclick="filterUsers(this,'supervisor')">المشرفين</button>
+      <button class="filter-btn" onclick="filterUsers(this,'pending')">بانتظار التأكيد <span style="background:var(--accent);color:white;padding:1px 5px;border-radius:8px;font-size:9px;margin-right:2px">5</span></button>
+      <input class="search-bar" placeholder="🔍 بحث بالاسم أو البريد...">
+    </div>
+
+    <div class="card" style="padding:0;overflow-x:auto">
+      <table class="table">
+        <thead>
+          <tr><th>المستخدم</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th></tr>
+        </thead>
+        <tbody>
+          <tr data-type="trainee" data-status="active">
+            <td><div class="user-cell"><div class="user-avatar" style="background:var(--primary)">سم</div><div><div class="user-name">سارة محمود</div><div class="user-email">sara@alazhar.edu</div></div></div></td>
+            <td><span style="font-size:12px;font-weight:600">متدربة</span></td>
+            <td><span style="font-size:12px;color:var(--text-mid)">1 يوليو 2026</span></td>
+            <td><span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span></td>
+            <td><div class="action-btns">
+              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
+              <button class="action-btn" title="تعديل"><i class="ti ti-edit"></i></button>
+              <button class="action-btn danger" title="حظر"><i class="ti ti-ban"></i></button>
+            </div></td>
+          </tr>
+          <tr data-type="trainee" data-status="active">
+            <td><div class="user-cell"><div class="user-avatar" style="background:#22C55E">أح</div><div><div class="user-name">أحمد حسن</div><div class="user-email">ahmed@alazhar.edu</div></div></div></td>
+            <td><span style="font-size:12px;font-weight:600">متدرب</span></td>
+            <td><span style="font-size:12px;color:var(--text-mid)">5 يوليو 2026</span></td>
+            <td><span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span></td>
+            <td><div class="action-btns">
+              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
+              <button class="action-btn" title="تعديل"><i class="ti ti-edit"></i></button>
+              <button class="action-btn danger" title="حظر"><i class="ti ti-ban"></i></button>
+            </div></td>
+          </tr>
+          <tr data-type="company" data-status="pending">
+            <td><div class="user-cell"><div class="user-avatar" style="background:#7C3AED">TP</div><div><div class="user-name">TechPal</div><div class="user-email">hr@techpal.com</div></div></div></td>
+            <td><span style="font-size:12px;font-weight:600">شركة</span></td>
+            <td><span style="font-size:12px;color:var(--text-mid)">20 يوليو 2026</span></td>
+            <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span></td>
+            <td><div class="action-btns">
+              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
+              <button class="action-btn" style="border-color:var(--success)" title="تأكيد" onclick="activateUser(this,'TechPal')"><i class="ti ti-check" style="color:var(--success)"></i></button>
+              <button class="action-btn danger" title="رفض" onclick="rejectUser(this,'TechPal')"><i class="ti ti-x"></i></button>
+            </div></td>
+          </tr>
+          <tr data-type="company" data-status="pending">
+            <td><div class="user-cell"><div class="user-avatar" style="background:#FF6B6B">DH</div><div><div class="user-name">DesignHub</div><div class="user-email">info@designhub.com</div></div></div></td>
+            <td><span style="font-size:12px;font-weight:600">شركة</span></td>
+            <td><span style="font-size:12px;color:var(--text-mid)">19 يوليو 2026</span></td>
+            <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span></td>
+            <td><div class="action-btns">
+              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
+              <button class="action-btn" style="border-color:var(--success)" title="تأكيد" onclick="activateUser(this,'DesignHub')"><i class="ti ti-check" style="color:var(--success)"></i></button>
+              <button class="action-btn danger" title="رفض" onclick="rejectUser(this,'DesignHub')"><i class="ti ti-x"></i></button>
+            </div></td>
+          </tr>
+          <tr data-type="supervisor" data-status="active">
+            <td><div class="user-cell"><div class="user-avatar" style="background:#22C55E">مش</div><div><div class="user-name">د. محمد أبو سمرة</div><div class="user-email">mohammed@alazhar.edu</div></div></div></td>
+            <td><span style="font-size:12px;font-weight:600">مشرف</span></td>
+            <td><span style="font-size:12px;color:var(--text-mid)">15 يونيو 2026</span></td>
+            <td><span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span></td>
+            <td><div class="action-btns">
+              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
+              <button class="action-btn" title="تعديل"><i class="ti ti-edit"></i></button>
+              <button class="action-btn danger" title="حظر"><i class="ti ti-ban"></i></button>
+            </div></td>
+          </tr>
+          <tr data-type="company" data-status="pending">
+            <td><div class="user-cell"><div class="user-avatar" style="background:#F59E0B">DS</div><div><div class="user-name">DataSoft</div><div class="user-email">team@datasoft.com</div></div></div></td>
+            <td><span style="font-size:12px;font-weight:600">شركة</span></td>
+            <td><span style="font-size:12px;color:var(--text-mid)">18 يوليو 2026</span></td>
+            <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span></td>
+            <td><div class="action-btns">
+              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
+              <button class="action-btn" style="border-color:var(--success)" title="تأكيد" onclick="activateUser(this,'DataSoft')"><i class="ti ti-check" style="color:var(--success)"></i></button>
+              <button class="action-btn danger" title="رفض" onclick="rejectUser(this,'DataSoft')"><i class="ti ti-x"></i></button>
+            </div></td>
+          </tr>
+          <tr data-type="trainee" data-status="active">
+            <td><div class="user-cell"><div class="user-avatar" style="background:#FF6B6B">من</div><div><div class="user-name">منى ناصر</div><div class="user-email">mona@alquds.edu</div></div></div></td>
+            <td><span style="font-size:12px;font-weight:600">متدربة</span></td>
+            <td><span style="font-size:12px;color:var(--text-mid)">3 يوليو 2026</span></td>
+            <td><span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span></td>
+            <td><div class="action-btns">
+              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
+              <button class="action-btn" title="تعديل"><i class="ti ti-edit"></i></button>
+              <button class="action-btn danger" title="حظر"><i class="ti ti-ban"></i></button>
+            </div></td>
+          </tr>
+          <tr data-type="trainee" data-status="blocked">
+            <td><div class="user-cell"><div class="user-avatar" style="background:#6B7280">حم</div><div><div class="user-name">حمزة عويضة</div><div class="user-email">hamza@alazhar.edu</div></div></div></td>
+            <td><span style="font-size:12px;font-weight:600">متدرب</span></td>
+            <td><span style="font-size:12px;color:var(--text-mid)">10 يونيو 2026</span></td>
+            <td><span class="status-badge" style="background:#FEE2E2;color:#DC2626">محظور</span></td>
+            <td><div class="action-btns">
+              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
+              <button class="action-btn" style="border-color:var(--success)" title="إلغاء الحظر" onclick="unblockUser(this)"><i class="ti ti-lock-open" style="color:var(--success)"></i></button>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+
+<script>
+const API_BASE='/api';
+function getToken(){return localStorage.getItem('trainlink_token')}
+function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
+function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
+
+var currentFilter='all';
+
+document.addEventListener('DOMContentLoaded',async function(){
+  await loadUsers('all');
+  var searchInput=document.querySelector('.search-bar');
+  if(searchInput){
+    searchInput.addEventListener('input',function(){
+      var q=this.value.toLowerCase();
+      document.querySelectorAll('tbody tr').forEach(function(row){
+        row.style.display=row.textContent.toLowerCase().indexOf(q)!==-1?'table-row':'none';
+      });
+    });
+  }
+});
+
+async function loadUsers(type){
+  var tbody=document.querySelector('tbody');
+  if(tbody)tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-mid)">جارٍ التحميل...</td></tr>';
+  try{
+    var url=type&&type!=='all'&&type!=='pending'?API_BASE+'/admin-panel/users/?type='+type:API_BASE+'/admin-panel/users/';
+    var res=await fetch(url,{headers:authHeaders()});
+    if(!res.ok)throw new Error('Failed');
+    var data=await res.json();
+    var list=data.results||data;
+    if(!tbody||!Array.isArray(list))return;
+    tbody.innerHTML='';
+    var colors=['var(--primary)','#22C55E','#7C3AED','#FF6B6B','#F59E0B','#6B7280'];
+    var counts={trainee:0,company:0,supervisor:0,total:list.length,pending:0};
+    list.forEach(function(u,i){
+      if(u.person_type==='trainee')counts.trainee++;
+      if(u.person_type==='company')counts.company++;
+      if(u.person_type==='supervisor')counts.supervisor++;
+      if(!u.is_verified)counts.pending++;
+    });
+    var statNums=document.querySelectorAll('.stat-mini-num');
+    if(statNums[0])statNums[0].textContent=counts.trainee;
+    if(statNums[1])statNums[1].textContent=counts.company;
+    if(statNums[2])statNums[2].textContent=counts.supervisor;
+    if(statNums[3])statNums[3].textContent=counts.total;
+    var typeLabels={trainee:'متدرب',company:'شركة',supervisor:'مشرف'};
+    var isPendingType=type==='pending';
+    list.forEach(function(u,i){
+      if(isPendingType&&u.is_verified)return;
+      var ini=u.full_name?u.full_name.substring(0,2):'?';
+      var col=colors[i%colors.length];
+      var row=document.createElement('tr');
+      row.setAttribute('data-type',u.person_type||'');
+      row.setAttribute('data-status',u.is_active?'active':'blocked');
+      var typeLabel=u.person_type_display||typeLabels[u.person_type]||u.person_type||'';
+      var date=u.created_at?new Date(u.created_at).toLocaleDateString('ar'):'';
+      var statusHtml=u.is_active?'<span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span>':u.is_verified?'<span class="status-badge" style="background:#FEE2E2;color:#DC2626">محظور</span>':'<span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span>';
+      var actions='';
+      if(!u.is_verified){
+        actions='<button class="action-btn" style="border-color:var(--success)" title="تأكيد" onclick="activateUser(\''+u.user_id+'\','+(i)+')"><i class="ti ti-check" style="color:var(--success)"></i></button><button class="action-btn danger" title="رفض" onclick="deleteUser(\''+u.user_id+'\','+(i)+')"><i class="ti ti-x"></i></button>';
+      }else if(!u.is_active){
+        actions='<button class="action-btn" style="border-color:var(--success)" title="إلغاء الحظر" onclick="activateUser(\''+u.user_id+'\','+(i)+')"><i class="ti ti-lock-open" style="color:var(--success)"></i></button>';
+      }else{
+        actions='<button class="action-btn danger" title="حظر" onclick="deactivateUser(\''+u.user_id+'\','+(i)+')"><i class="ti ti-ban"></i></button>';
+      }
+      row.innerHTML='<td><div class="user-cell"><div class="user-avatar" style="background:'+col+'">'+ini+'</div><div><div class="user-name">'+(u.full_name||'مستخدم')+'</div><div class="user-email">'+(u.email||'')+'</div></div></div></td><td><span style="font-size:12px;font-weight:600">'+typeLabel+'</span></td><td><span style="font-size:12px;color:var(--text-mid)">'+date+'</span></td><td>'+statusHtml+'</td><td><div class="action-btns">'+actions+'</div></td>';
+      tbody.appendChild(row);
+    });
+  }catch(e){
+    if(tbody)tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-mid)">حدث خطأ في تحميل البيانات</td></tr>';
+    console.log('Error loading users:',e);
+  }
+}
+
+async function activateUser(userId){
+  try{
+    var res=await fetch(API_BASE+'/admin-panel/users/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({user_id:userId,is_active:true,is_verified:true})});
+    if(res.ok){showToast('تم التفعيل بنجاح ✓');loadUsers(currentFilter);}
+    else{showToast('حدث خطأ');}
+  }catch(e){console.log(e);showToast('حدث خطأ');}
+}
+
+async function deactivateUser(userId){
+  try{
+    var res=await fetch(API_BASE+'/admin-panel/users/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({user_id:userId,is_active:false})});
+    if(res.ok){showToast('تم الحظر بنجاح');loadUsers(currentFilter);}
+    else{showToast('حدث خطأ');}
+  }catch(e){console.log(e);showToast('حدث خطأ');}
+}
+
+async function deleteUser(userId){
+  try{
+    var res=await fetch(API_BASE+'/admin-panel/users/',{method:'DELETE',headers:authHeaders(),body:JSON.stringify({user_id:userId})});
+    if(res.ok){showToast('تم الحذف بنجاح');loadUsers(currentFilter);}
+    else{showToast('حدث خطأ');}
+  }catch(e){console.log(e);showToast('حدث خطأ');}
+}
+
+function filterUsers(btn,type){
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  currentFilter=type;
+  if(type==='all'||type==='pending')loadUsers(type);
+  else loadUsers(type);
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3000);
+}
+</script>
+</body>
+</html>

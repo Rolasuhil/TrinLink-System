@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — لوحة تحكم المتدرب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.sidebar-user{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px}
+.user-avatar{width:42px;height:42px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;margin:0 auto 8px}
+.user-name{color:white;font-size:12px;font-weight:600;text-align:center}
+.user-role{color:rgba(255,255,255,0.4);font-size:10px;text-align:center;margin-top:2px}
+.user-id{background:rgba(91,79,207,0.3);color:#A89CFF;font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:5px}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+/* MAIN */
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.icon-btn{width:34px;height:34px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.icon-btn i{color:var(--text-mid);font-size:16px}
+.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid white}
+.content{padding:20px 24px;flex:1}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(91,79,207,0.1);border-color:var(--primary)}
+.stat-icon{width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-icon i{font-size:22px}
+.stat-num{font-size:24px;font-weight:800;color:var(--text-dark)}
+.stat-label{font-size:11px;color:var(--text-mid);margin-top:2px}
+.stat-change{font-size:10px;font-weight:600;margin-top:4px}
+/* GRID */
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
+.card-title i{color:var(--primary);font-size:16px}
+.card-action{font-size:12px;color:var(--primary);cursor:pointer;text-decoration:none;font-weight:600}
+/* TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:14px}
+.tab{padding:5px 14px;border-radius:20px;font-size:12px;cursor:pointer;color:var(--text-mid);border:none;background:transparent;font-family:var(--font);transition:all 0.15s}
+.tab.active{background:var(--primary);color:white}
+.tab:hover:not(.active){background:var(--bg)}
+/* REC ITEMS */
+.rec-item{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg);border-radius:var(--radius-md);margin-bottom:8px;cursor:pointer;transition:all 0.15s;border:1px solid transparent}
+.rec-item:hover{background:var(--primary-light);border-color:var(--primary)}
+.rec-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rec-icon i{font-size:18px}
+.rec-title{font-size:13px;font-weight:600;color:var(--text-dark)}
+.rec-sub{font-size:11px;color:var(--text-mid);margin-top:2px}
+.rec-match{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-right:auto;flex-shrink:0}
+/* APP ITEMS */
+.app-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all 0.15s}
+.app-item:last-child{border-bottom:none}
+.app-item:hover{padding-right:6px}
+.app-avatar{width:34px;height:34px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.status-badge{font-size:10px;padding:3px 8px;border-radius:20px;margin-right:auto;flex-shrink:0}
+/* PROFILE CARD */
+.profile-mini{text-align:center;padding:16px 0}
+.profile-avatar{width:60px;height:60px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:20px;font-weight:700;color:white}
+.profile-name{font-size:14px;font-weight:700;color:var(--text-dark)}
+.profile-meta{font-size:12px;color:var(--text-mid);margin-top:3px}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
+.pstat-num{font-size:18px;font-weight:800;color:var(--primary)}
+.pstat-label{font-size:10px;color:var(--text-mid)}
+/* PROGRESS */
+.progress-item{margin-bottom:10px}
+.progress-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.progress-track{height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+/* CALENDAR */
+.cal-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.cal-item:last-child{border-bottom:none}
+.cal-date{width:36px;height:36px;border-radius:var(--radius-sm);background:var(--primary-light);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.cal-day{font-size:14px;font-weight:800;color:var(--primary)}
+.cal-month{font-size:9px;color:var(--text-mid)}
+.cal-title{font-size:12px;font-weight:600;color:var(--text-dark)}
+.cal-sub{font-size:11px;color:var(--text-mid);margin-top:2px}
+/* NOTIF PANEL */
+.notif-panel{position:absolute;top:50px;left:60px;width:280px;background:white;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,0.12);z-index:200;display:none}
+.notif-panel.open{display:block}
+.notif-header{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--text-dark);display:flex;justify-content:space-between}
+.notif-item{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.notif-item:hover{background:var(--bg)}
+.notif-item:last-child{border-bottom:none}
+.notif-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-icon i{font-size:14px}
+.notif-text{font-size:12px;color:var(--text-dark);line-height:1.5}
+.notif-time{font-size:10px;color:var(--text-mid);margin-top:3px}
+.notif-unread{width:6px;height:6px;border-radius:50%;background:var(--primary);margin-right:auto;flex-shrink:0;margin-top:4px}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div>
+    <span class="sidebar-logo-text">TrainLink</span>
+  </div>
+  <div class="sidebar-user">
+    <div class="user-avatar">سم</div>
+    <div class="user-name">سارة محمود</div>
+    <div class="user-role">IT — السنة الثالثة</div>
+    <div style="text-align:center"><span class="user-id">TRN-00234</span></div>
+  </div>
+  <div class="nav-section">القائمة</div>
+  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="09-search.html" class="nav-item"><i class="ti ti-search"></i><span>البحث</span></a>
+  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span><span class="nav-badge">3</span></a>
+  <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
+  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span><span class="nav-badge">2</span></a>
+  <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
+  <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
+  <div class="nav-section">الحساب</div>
+  <a href="12-my-profile.html" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
+  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge">5</span></a>
+  <div class="sidebar-bottom">
+    <a href="../public/02-login.html" class="nav-item" style="color:rgba(255,107,107,0.7)"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">مرحباً، سارة 👋</div>
+      <div class="topbar-sub">لديك 5 فرص جديدة تناسبك اليوم!</div>
+    </div>
+    <div class="topbar-right" style="position:relative">
+      <div class="icon-btn" onclick="toggleNotif()"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
+      <div class="icon-btn"><i class="ti ti-search"></i></div>
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;cursor:pointer">سم</div>
+      <!-- NOTIF PANEL -->
+      <div class="notif-panel" id="notifPanel">
+        <div class="notif-header"><span>الإشعارات</span><span style="font-size:11px;color:var(--primary);cursor:pointer">تحديد الكل كمقروء</span></div>
+        <div class="notif-item"><div class="notif-icon" style="background:var(--success-light)"><i class="ti ti-circle-check" style="color:var(--success)"></i></div><div style="flex:1"><div class="notif-text">تم قبول طلبك في DesignHub 🎉</div><div class="notif-time">منذ ساعتين</div></div><div class="notif-unread"></div></div>
+        <div class="notif-item"><div class="notif-icon" style="background:var(--primary-light)"><i class="ti ti-robot" style="color:var(--primary)"></i></div><div style="flex:1"><div class="notif-text">الذكاء الاصطناعي وجد 3 فرص جديدة لك</div><div class="notif-time">منذ 5 ساعات</div></div><div class="notif-unread"></div></div>
+        <div class="notif-item"><div class="notif-icon" style="background:var(--warning-light)"><i class="ti ti-calendar" style="color:var(--warning)"></i></div><div style="flex:1"><div class="notif-text">تذكير: آخر موعد تقديم TechPal غداً</div><div class="notif-time">منذ يوم</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card" onclick="window.location.href='11-my-applications.html'">
+        <div class="stat-icon" style="background:var(--primary-light)"><i class="ti ti-send" style="color:var(--primary)"></i></div>
+        <div><div class="stat-num">8</div><div class="stat-label">طلبات مرسلة</div><div class="stat-change" style="color:var(--success)">↑ 2 هذا الأسبوع</div></div>
+      </div>
+      <div class="stat-card" onclick="window.location.href='11-my-applications.html'">
+        <div class="stat-icon" style="background:var(--success-light)"><i class="ti ti-circle-check" style="color:var(--success)"></i></div>
+        <div><div class="stat-num">2</div><div class="stat-label">مقبولة</div><div class="stat-change" style="color:var(--success)">↑ نسبة 25%</div></div>
+      </div>
+      <div class="stat-card" onclick="window.location.href='11-my-applications.html'">
+        <div class="stat-icon" style="background:var(--warning-light)"><i class="ti ti-clock" style="color:var(--warning)"></i></div>
+        <div><div class="stat-num">3</div><div class="stat-label">قيد المراجعة</div><div class="stat-change" style="color:var(--warning)">انتظار رد</div></div>
+      </div>
+      <div class="stat-card" onclick="window.location.href='09-search.html'">
+        <div class="stat-icon" style="background:#FFF0F0"><i class="ti ti-sparkles" style="color:var(--accent)"></i></div>
+        <div><div class="stat-num">12</div><div class="stat-label">فرص مقترحة</div><div class="stat-change" style="color:var(--primary)">من AI</div></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <!-- AI RECOMMENDATIONS -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-robot"></i>توصيات الذكاء الاصطناعي</div>
+            <a href="09-search.html" class="card-action">عرض الكل</a>
+          </div>
+          <div class="tab-bar">
+            <button class="tab active">الكل</button>
+            <button class="tab">مجاني</button>
+            <button class="tab">مدفوع</button>
+            <button class="tab">داخل غزة</button>
+          </div>
+          <div class="rec-item" onclick="window.location.href='10-internship-details.html'">
+            <div class="rec-icon" style="background:var(--primary-light)"><i class="ti ti-code" style="color:var(--primary)"></i></div>
+            <div style="flex:1"><div class="rec-title">مطور ويب Frontend</div><div class="rec-sub">TechPal · داخل غزة · مجاني</div></div>
+            <div class="rec-match" style="background:var(--success-light);color:#15803D">🤖 95%</div>
+          </div>
+          <div class="rec-item" onclick="window.location.href='10-internship-details.html'">
+            <div class="rec-icon" style="background:#FFF0F0"><i class="ti ti-palette" style="color:var(--accent)"></i></div>
+            <div style="flex:1"><div class="rec-title">مصمم UI/UX</div><div class="rec-sub">DesignHub · عن بُعد · 50$/شهر</div></div>
+            <div class="rec-match" style="background:var(--warning-light);color:#B45309">🤖 88%</div>
+          </div>
+          <div class="rec-item" onclick="window.location.href='10-internship-details.html'">
+            <div class="rec-icon" style="background:#F0FFF4"><i class="ti ti-database" style="color:var(--success)"></i></div>
+            <div style="flex:1"><div class="rec-title">مطور قواعد بيانات</div><div class="rec-sub">DataSoft · عن بُعد · مجاني</div></div>
+            <div class="rec-match" style="background:var(--success-light);color:#15803D">🤖 82%</div>
+          </div>
+        </div>
+
+        <!-- LATEST APPS -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-clipboard-list"></i>آخر الطلبات</div>
+            <a href="11-my-applications.html" class="card-action">عرض الكل</a>
+          </div>
+          <div class="app-item" onclick="window.location.href='11-my-applications.html'">
+            <div class="app-avatar" style="background:#5B4FCF">TP</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مطور Frontend — TechPal</div><div style="font-size:11px;color:var(--text-mid)">منذ 3 أيام</div></div>
+            <span class="status-badge" style="background:var(--warning-light);color:#B45309">⏳ قيد المراجعة</span>
+          </div>
+          <div class="app-item" onclick="window.location.href='11-my-applications.html'">
+            <div class="app-avatar" style="background:#22C55E">DH</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مصمم UI — DesignHub</div><div style="font-size:11px;color:var(--text-mid)">منذ أسبوع</div></div>
+            <span class="status-badge" style="background:var(--success-light);color:#15803D">✓ مقبول</span>
+          </div>
+          <div class="app-item" onclick="window.location.href='11-my-applications.html'">
+            <div class="app-avatar" style="background:#FF6B6B">NS</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مطور Python — NetSoft</div><div style="font-size:11px;color:var(--text-mid)">منذ أسبوعين</div></div>
+            <span class="status-badge" style="background:#FEE2E2;color:#DC2626">✗ مرفوض</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div>
+        <!-- PROFILE CARD -->
+        <div class="card">
+          <div class="profile-mini">
+            <div class="profile-avatar">سم</div>
+            <div class="profile-name">سارة محمود</div>
+            <div class="profile-meta">IT — السنة الثالثة · الأزهر</div>
+            <div style="color:var(--warning);margin:8px 0;font-size:14px">★★★★☆</div>
+            <a href="12-my-profile.html" style="display:inline-block;padding:7px 20px;background:var(--primary-light);color:var(--primary);border-radius:var(--radius-sm);font-size:12px;font-weight:700;text-decoration:none;margin-top:4px">عرض الملف الشخصي</a>
+          </div>
+          <div class="profile-stats">
+            <div style="text-align:center"><div class="pstat-num">3.7</div><div class="pstat-label">GPA</div></div>
+            <div style="text-align:center"><div class="pstat-num">8</div><div class="pstat-label">طلبات</div></div>
+            <div style="text-align:center"><div class="pstat-num">2</div><div class="pstat-label">مقبولة</div></div>
+          </div>
+        </div>
+
+        <!-- PROFILE COMPLETION -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">اكتمال الملف</div><span style="font-size:13px;font-weight:700;color:var(--primary)">75%</span></div>
+          <div class="progress-item">
+            <div class="progress-row"><span style="font-size:12px;color:var(--text-dark)">المعلومات الشخصية</span><span style="font-size:11px;color:var(--success)">✓</span></div>
+            <div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-row"><span style="font-size:12px;color:var(--text-dark)">البيانات الأكاديمية</span><span style="font-size:11px;color:var(--success)">✓</span></div>
+            <div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-row"><span style="font-size:12px;color:var(--text-dark)">السيرة الذاتية</span><span style="font-size:11px;color:var(--warning)">40%</span></div>
+            <div class="progress-track"><div class="progress-fill" style="width:40%;background:var(--warning)"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-row"><span style="font-size:12px;color:var(--text-dark)">المهارات</span><span style="font-size:11px;color:var(--success)">✓</span></div>
+            <div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
+          </div>
+        </div>
+
+        <!-- CALENDAR -->
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-calendar"></i>المواعيد القادمة</div></div>
+          <div class="cal-item">
+            <div class="cal-date"><div class="cal-day">18</div><div class="cal-month">يوليو</div></div>
+            <div><div class="cal-title">آخر موعد — TechPal</div><div class="cal-sub">انتهاء التقديم</div></div>
+          </div>
+          <div class="cal-item">
+            <div class="cal-date"><div class="cal-day">22</div><div class="cal-month">يوليو</div></div>
+            <div><div class="cal-title">مقابلة — DesignHub</div><div class="cal-sub">10:00 ص · Zoom</div></div>
+          </div>
+          <div class="cal-item">
+            <div class="cal-date"><div class="cal-day">25</div><div class="cal-month">يوليو</div></div>
+            <div><div class="cal-title">آخر موعد — DataSoft</div><div class="cal-sub">انتهاء التقديم</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = '/api';
+function getToken() { return localStorage.getItem('trainlink_token'); }
+function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
+function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
+function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  if (!toast) { alert(msg); return; }
+  document.getElementById('toastMsg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+function getInitials(name) {
+  if (!name) return '';
+  const parts = name.trim().split(' ');
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]);
+  return parts[0][0];
+}
+
+function toggleNotif(){
+  document.getElementById('notifPanel').classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.topbar-right'))document.getElementById('notifPanel').classList.remove('open');
+});
+
+document.addEventListener('DOMContentLoaded', async function() {
+  if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
+
+  try {
+    const res = await fetch(API_BASE + '/auth/profile/', { headers: authHeaders() });
+    if (!res.ok) throw new Error('Failed to load profile');
+    const profile = await res.json();
+    const user = getUser();
+    const fullName = profile.full_name || (user && user.full_name) || '';
+    const firstName = fullName.split(' ')[0] || fullName;
+    const initials = getInitials(fullName);
+
+    document.querySelector('.topbar-title').textContent = 'مرحباً، ' + firstName + ' 👋';
+
+    const sidebarAvatar = document.querySelector('.sidebar-user .user-avatar');
+    const sidebarName = document.querySelector('.sidebar-user .user-name');
+    const sidebarRole = document.querySelector('.sidebar-user .user-role');
+    if (sidebarAvatar) sidebarAvatar.textContent = initials;
+    if (sidebarName) sidebarName.textContent = fullName;
+    if (sidebarRole && profile.person_type) sidebarRole.textContent = profile.person_type;
+    if (profile.trainee_id) {
+      const idEl = document.querySelector('.sidebar-user .user-id');
+      if (idEl) idEl.textContent = profile.trainee_id;
+    }
+
+    document.querySelector('.profile-avatar').textContent = initials;
+    document.querySelector('.profile-name').textContent = fullName;
+    const metaParts = [];
+    if (profile.person_type) metaParts.push(profile.person_type);
+    const metaEl = document.querySelector('.profile-meta');
+    if (metaEl && metaParts.length) metaEl.textContent = metaParts.join(' · ');
+  } catch (err) {
+    showToast('حدث خطأ في تحميل البيانات');
+  }
+});
+</script>
+</body>
+</html>

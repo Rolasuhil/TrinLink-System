@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — منصة التدريب الميداني الذكي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  /* ===== RESET ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  /* ===== TOKENS ===== */
+  :root {
+    --primary: #5B4FCF;
+    --primary-dark: #4A3FB5;
+    --primary-light: #EEF0FF;
+    --primary-glow: rgba(91,79,207,0.15);
+    --accent: #FF6B6B;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --dark: #0F0E1A;
+    --dark-2: #1A1827;
+    --text-white: #FFFFFF;
+    --text-light: #E2E0F0;
+    --text-muted: #9B96B8;
+    --bg: #F9F7FF;
+    --bg-card: #FFFFFF;
+    --text-dark: #1E1B2E;
+    --text-mid: #6B7280;
+    --border: #E5E7EB;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --shadow-sm: 0 2px 8px rgba(91,79,207,0.08);
+    --shadow-md: 0 8px 24px rgba(91,79,207,0.12);
+    --shadow-lg: 0 20px 60px rgba(91,79,207,0.18);
+    --font: 'Cairo', sans-serif;
+  }
+ 
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text-dark); overflow-x: hidden; }
+ 
+  /* ===== NAVBAR ===== */
+  .navbar {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: box-shadow 0.3s;
+  }
+  .navbar.scrolled { box-shadow: var(--shadow-md); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-icon {
+    width: 36px; height: 36px; background: var(--primary); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo-icon i { color: white; font-size: 18px; }
+  .nav-logo-text { font-size: 20px; font-weight: 800; color: var(--primary); }
+  .nav-links { display: flex; align-items: center; gap: 8px; }
+  .nav-link {
+    padding: 8px 16px; border-radius: var(--radius-sm); font-size: 14px;
+    font-weight: 600; color: var(--text-mid); text-decoration: none;
+    transition: all 0.15s;
+  }
+  .nav-link:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-btns { display: flex; gap: 10px; align-items: center; }
+  .btn-outline {
+    padding: 8px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
+    color: var(--primary); border: 1.5px solid var(--primary); background: transparent;
+    cursor: pointer; text-decoration: none; transition: all 0.15s; font-family: var(--font);
+  }
+  .btn-outline:hover { background: var(--primary-light); }
+  .btn-primary {
+    padding: 8px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700;
+    color: white; background: var(--primary); border: none;
+    cursor: pointer; text-decoration: none; transition: all 0.15s; font-family: var(--font);
+  }
+  .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+ 
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0F0E1A 0%, #1A1827 40%, #2D1B69 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 100px 40px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-glow {
+    position: absolute; width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(91,79,207,0.3) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(91,79,207,0.2); border: 1px solid rgba(91,79,207,0.4);
+    border-radius: 40px; padding: 6px 16px; margin-bottom: 28px;
+    font-size: 13px; font-weight: 600; color: #A89CFF;
+  }
+  .hero-badge i { font-size: 16px; }
+  .hero-title {
+    font-size: clamp(36px, 5vw, 64px); font-weight: 900; line-height: 1.15;
+    color: white; margin-bottom: 20px; max-width: 800px;
+  }
+  .hero-title span { color: #A89CFF; }
+  .hero-subtitle {
+    font-size: 18px; font-weight: 400; color: #9B96B8;
+    max-width: 560px; line-height: 1.8; margin-bottom: 40px;
+  }
+  .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+  .hero-btn-main {
+    padding: 14px 32px; border-radius: var(--radius-md); font-size: 16px; font-weight: 700;
+    color: white; background: var(--primary); border: none; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; text-decoration: none; font-family: var(--font);
+    transition: all 0.2s; box-shadow: 0 8px 24px rgba(91,79,207,0.4);
+  }
+  .hero-btn-main:hover { background: var(--primary-dark); transform: translateY(-2px); }
+  .hero-btn-sec {
+    padding: 14px 32px; border-radius: var(--radius-md); font-size: 16px; font-weight: 700;
+    color: white; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none;
+    font-family: var(--font); transition: all 0.2s; backdrop-filter: blur(8px);
+  }
+  .hero-btn-sec:hover { background: rgba(255,255,255,0.2); }
+  .hero-stats {
+    display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 40px; width: 100%; max-width: 700px;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num { font-size: 32px; font-weight: 900; color: white; }
+  .hero-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+ 
+  /* ===== SECTION ===== */
+  .section { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+  .section-badge {
+    display: inline-block; background: var(--primary-light); color: var(--primary);
+    font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 40px;
+    margin-bottom: 12px; letter-spacing: 0.5px;
+  }
+  .section-title { font-size: clamp(26px, 3vw, 38px); font-weight: 800; color: var(--text-dark); margin-bottom: 12px; }
+  .section-sub { font-size: 16px; color: var(--text-mid); line-height: 1.8; max-width: 560px; }
+  .section-header { text-align: center; margin-bottom: 52px; }
+  .section-header .section-sub { margin: 0 auto; }
+ 
+  /* ===== HOW IT WORKS ===== */
+  .how-section { background: var(--dark); padding: 80px 40px; }
+  .how-inner { max-width: 1200px; margin: 0 auto; }
+  .how-section .section-title { color: white; }
+  .how-section .section-sub { color: var(--text-muted); }
+  .how-section .section-badge { background: rgba(91,79,207,0.2); color: #A89CFF; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 52px; }
+  .step-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg); padding: 28px; position: relative; overflow: hidden;
+    transition: all 0.2s;
+  }
+  .step-card:hover { background: rgba(91,79,207,0.1); border-color: rgba(91,79,207,0.3); transform: translateY(-4px); }
+  .step-num {
+    font-size: 48px; font-weight: 900; color: rgba(91,79,207,0.2);
+    position: absolute; top: 16px; left: 20px; line-height: 1;
+  }
+  .step-icon {
+    width: 48px; height: 48px; background: var(--primary-glow);
+    border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .step-icon i { font-size: 24px; color: #A89CFF; }
+  .step-title { font-size: 16px; font-weight: 700; color: white; margin-bottom: 8px; }
+  .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+ 
+  /* ===== FEATURES ===== */
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .feature-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 28px; transition: all 0.2s; cursor: default;
+  }
+  .feature-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-4px); }
+  .feature-icon {
+    width: 52px; height: 52px; background: var(--primary-light); border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+  }
+  .feature-icon i { font-size: 26px; color: var(--primary); }
+  .feature-title { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+  .feature-desc { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+ 
+  /* ===== USER TYPES ===== */
+  .users-section { background: var(--primary-light); padding: 80px 40px; }
+  .users-inner { max-width: 1200px; margin: 0 auto; }
+  .users-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 52px; }
+  .user-card {
+    background: white; border-radius: var(--radius-xl); padding: 32px 24px; text-align: center;
+    box-shadow: var(--shadow-sm); transition: all 0.2s; cursor: default;
+  }
+  .user-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-6px); }
+  .user-avatar {
+    width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 16px; font-size: 32px;
+  }
+  .user-title { font-size: 18px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+  .user-desc { font-size: 13px; color: var(--text-mid); line-height: 1.7; margin-bottom: 20px; }
+  .user-list { list-style: none; text-align: right; }
+  .user-list li {
+    display: flex; align-items: center; gap: 8px; font-size: 13px;
+    color: var(--text-mid); margin-bottom: 6px;
+  }
+  .user-list li i { color: var(--success); font-size: 14px; flex-shrink: 0; }
+ 
+  /* ===== TESTIMONIALS ===== */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .testimonial-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 24px; transition: all 0.2s;
+  }
+  .testimonial-card:hover { box-shadow: var(--shadow-md); }
+  .testimonial-stars { color: var(--warning); font-size: 16px; margin-bottom: 12px; }
+  .testimonial-text { font-size: 14px; color: var(--text-mid); line-height: 1.8; margin-bottom: 16px; font-style: italic; }
+  .testimonial-author { display: flex; align-items: center; gap: 10px; }
+  .testimonial-avatar {
+    width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 14px; font-weight: 700; color: white;
+  }
+  .testimonial-name { font-size: 14px; font-weight: 700; color: var(--text-dark); }
+  .testimonial-role { font-size: 12px; color: var(--text-mid); }
+ 
+  /* ===== CTA SECTION ===== */
+  .cta-section {
+    background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
+    padding: 80px 40px; text-align: center;
+  }
+  .cta-title { font-size: clamp(26px, 3vw, 40px); font-weight: 900; color: white; margin-bottom: 16px; }
+  .cta-sub { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+  .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-btn-white {
+    padding: 14px 32px; border-radius: var(--radius-md); font-size: 15px; font-weight: 700;
+    color: var(--primary); background: white; border: none; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; text-decoration: none; font-family: var(--font);
+    transition: all 0.2s;
+  }
+  .cta-btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .cta-btn-trans {
+    padding: 14px 32px; border-radius: var(--radius-md); font-size: 15px; font-weight: 700;
+    color: white; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none;
+    font-family: var(--font); transition: all 0.2s;
+  }
+  .cta-btn-trans:hover { background: rgba(255,255,255,0.25); }
+ 
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--dark); padding: 60px 40px 30px;
+    color: var(--text-muted);
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  .footer-brand { }
+  .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .footer-logo-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .footer-logo-icon i { color: white; font-size: 16px; }
+  .footer-logo-text { font-size: 18px; font-weight: 800; color: white; }
+  .footer-desc { font-size: 13px; line-height: 1.8; max-width: 280px; }
+  .footer-col-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 16px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+  .footer-links a:hover { color: white; }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center; font-size: 12px;
+  }
+  .footer-socials { display: flex; gap: 12px; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.06);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .social-btn:hover { background: var(--primary); }
+  .social-btn i { font-size: 16px; color: var(--text-muted); }
+  .social-btn:hover i { color: white; }
+ 
+  /* ===== SCROLL ANIMATION ===== */
+  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+ 
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon"><i class="ti ti-briefcase"></i></div>
+    <span class="nav-logo-text">TrainLink</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features" class="nav-link">المميزات</a>
+    <a href="#how" class="nav-link">كيف يعمل</a>
+    <a href="#users" class="nav-link">للمستخدمين</a>
+    <a href="#testimonials" class="nav-link">آراء المتدربين</a>
+  </div>
+  <div class="nav-btns" id="navBtns">
+    <a href="02-login.html" class="btn-outline">تسجيل الدخول</a>
+    <a href="03-register-type.html" class="btn-primary">ابدأ مجاناً</a>
+  </div>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-badge"><i class="ti ti-robot"></i> مدعوم بالذكاء الاصطناعي</div>
+  <h1 class="hero-title">
+    منصتك الذكية<br>
+    <span>لفرص التدريب الميداني</span><br>
+    في غزة والعالم
+  </h1>
+  <p class="hero-subtitle">
+    نربط الطلاب والخريجين بالشركات التي تقدم تدريباً مجانياً ومهنياً — بمطابقة ذكية تعتمد على مهاراتك وتخصصك
+  </p>
+  <div class="hero-btns">
+    <a href="03-register-trainee.html" class="hero-btn-main">
+      <i class="ti ti-search"></i> ابحث عن تدريب
+    </a>
+    <a href="04-register-company.html" class="hero-btn-sec">
+      <i class="ti ti-building"></i> انشر فرصة تدريب
+    </a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">500+</div>
+      <div class="hero-stat-label">فرصة تدريب منشورة</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">1,200+</div>
+      <div class="hero-stat-label">متدرب مسجل</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">120+</div>
+      <div class="hero-stat-label">شركة شريكة</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">95%</div>
+      <div class="hero-stat-label">دقة مطابقة AI</div>
+    </div>
+  </div>
+</section>
+ 
+<!-- HOW IT WORKS -->
+<div class="how-section" id="how">
+  <div class="how-inner">
+    <div class="section-header fade-up">
+      <span class="section-badge">كيف يعمل</span>
+      <h2 class="section-title" style="color:white">أربع خطوات للوصول لتدريبك المثالي</h2>
+      <p class="section-sub">من التسجيل حتى بدء التدريب — كل شيء منظم وذكي</p>
+    </div>
+    <div class="steps">
+      <div class="step-card fade-up">
+        <div class="step-num">01</div>
+        <div class="step-icon"><i class="ti ti-user-plus"></i></div>
+        <div class="step-title">أنشئ ملفك الشخصي</div>
+        <div class="step-desc">سجّل حسابك وأضف مهاراتك وبياناتك الأكاديمية خلال دقيقتين</div>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">02</div>
+        <div class="step-icon"><i class="ti ti-robot"></i></div>
+        <div class="step-title">اكتشف فرصك</div>
+        <div class="step-desc">يحلل الذكاء الاصطناعي ملفك ويعرض أنسب الفرص بنسب مطابقة دقيقة</div>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">03</div>
+        <div class="step-icon"><i class="ti ti-send"></i></div>
+        <div class="step-title">قدّم بنقرة واحدة</div>
+        <div class="step-desc">تقدّم مباشرة من المنصة وتابع حالة طلبك لحظة بلحظة</div>
+      </div>
+      <div class="step-card fade-up">
+        <div class="step-num">04</div>
+        <div class="step-icon"><i class="ti ti-chart-line"></i></div>
+        <div class="step-title">ابدأ وتطور</div>
+        <div class="step-desc">تتبع أداءك اليومي وتلقَّ تقارير أسبوعية مع مشرفك الأكاديمي</div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-header fade-up">
+    <span class="section-badge">المميزات</span>
+    <h2 class="section-title">كل ما تحتاجه في منصة واحدة</h2>
+    <p class="section-sub">مصمم خصيصاً للطلاب والخريجين في غزة مع أدوات ذكاء اصطناعي حقيقية</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card fade-up">
+      <div class="feature-icon"><i class="ti ti-sparkles"></i></div>
+      <div class="feature-title">مطابقة ذكية بالـ AI</div>
+      <div class="feature-desc">يحلل الذكاء الاصطناعي ملفك ومهاراتك ومعدلك ليوصيك بأنسب الفرص</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon"><i class="ti ti-file-cv"></i></div>
+      <div class="feature-title">تحليل السيرة الذاتية</div>
+      <div class="feature-desc">ارفع CV وستحصل فوراً على نقاط تحسين واقتراحات مخصصة لتدريبك</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon"><i class="ti ti-messages"></i></div>
+      <div class="feature-title">دردشة مباشرة</div>
+      <div class="feature-desc">تواصل مع الشركات ومشرفيك الأكاديميين مباشرةً داخل المنصة</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon"><i class="ti ti-chart-bar"></i></div>
+      <div class="feature-title">متابعة الأداء</div>
+      <div class="feature-desc">سجّل حضورك اليومي وارفع تقارير العمل وتابع تقييمات الشركة أسبوعياً</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon"><i class="ti ti-star"></i></div>
+      <div class="feature-title">تقييمات موثوقة</div>
+      <div class="feature-desc">اطلع على آراء المتدربين السابقين قبل التقديم لأي فرصة</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-icon"><i class="ti ti-bell"></i></div>
+      <div class="feature-title">إشعارات فورية</div>
+      <div class="feature-desc">لا تفوّت أي تحديث — سواء قبول أو رفض أو رسالة أو تقرير</div>
+    </div>
+  </div>
+</section>
+ 
+<!-- USER TYPES -->
+<div class="users-section" id="users">
+  <div class="users-inner">
+    <div class="section-header fade-up">
+      <span class="section-badge">للجميع</span>
+      <h2 class="section-title">منصة واحدة لأربع فئات</h2>
+      <p class="section-sub">صُممت TrainLink لتخدم كل طرف في منظومة التدريب الميداني</p>
+    </div>
+    <div class="users-grid">
+      <div class="user-card fade-up">
+        <div class="user-avatar" style="background:#EEF0FF;font-size:36px">🎓</div>
+        <div class="user-title">المتدرب</div>
+        <div class="user-desc">طالب جامعي أو خريج يبحث عن فرصة تدريب مجانية ومهنية</div>
+        <ul class="user-list">
+          <li><i class="ti ti-check"></i> بحث وفلترة الفرص</li>
+          <li><i class="ti ti-check"></i> تقديم مباشر بنقرة</li>
+          <li><i class="ti ti-check"></i> تحليل CV بالذكاء الاصطناعي</li>
+          <li><i class="ti ti-check"></i> متابعة الأداء اليومي</li>
+        </ul>
+      </div>
+      <div class="user-card fade-up">
+        <div class="user-avatar" style="background:#FAECE7;font-size:36px">🏢</div>
+        <div class="user-title">الشركة</div>
+        <div class="user-desc">مؤسسة تقدم فرص تدريب وتبحث عن كفاءات شابة مؤهلة</div>
+        <ul class="user-list">
+          <li><i class="ti ti-check"></i> نشر فرص التدريب</li>
+          <li><i class="ti ti-check"></i> مراجعة المتقدمين بنسبة AI</li>
+          <li><i class="ti ti-check"></i> قبول أو رفض الطلبات</li>
+          <li><i class="ti ti-check"></i> تقديم تقارير الأداء</li>
+        </ul>
+      </div>
+      <div class="user-card fade-up">
+        <div class="user-avatar" style="background:#FEF3C7;font-size:36px">👨‍🏫</div>
+        <div class="user-title">مشرف المادة</div>
+        <div class="user-desc">عضو هيئة تدريس يتابع أداء طلابه خلال فترة التدريب</div>
+        <ul class="user-list">
+          <li><i class="ti ti-check"></i> متابعة تقدم المتدربين</li>
+          <li><i class="ti ti-check"></i> تقارير أسبوعية آلية</li>
+          <li><i class="ti ti-check"></i> تنبيهات ضعف الأداء</li>
+          <li><i class="ti ti-check"></i> دردشة مباشرة</li>
+        </ul>
+      </div>
+      <div class="user-card fade-up">
+        <div class="user-avatar" style="background:#F3E8FF;font-size:36px">👑</div>
+        <div class="user-title">المشرف العام</div>
+        <div class="user-desc">مدير المنصة المسؤول عن إدارة المحتوى والمستخدمين</div>
+        <ul class="user-list">
+          <li><i class="ti ti-check"></i> إدارة جميع المستخدمين</li>
+          <li><i class="ti ti-check"></i> تفعيل حسابات الشركات</li>
+          <li><i class="ti ti-check"></i> إزالة المحتوى المخالف</li>
+          <li><i class="ti ti-check"></i> تقارير وإحصائيات</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- TESTIMONIALS -->
+<section class="section" id="testimonials">
+  <div class="section-header fade-up">
+    <span class="section-badge">آراء المتدربين</span>
+    <h2 class="section-title">ماذا يقولون عن TrainLink</h2>
+    <p class="section-sub">تجارب حقيقية من طلاب وخريجين استخدموا المنصة</p>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card fade-up">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"بعد ما حللت الذكاء الاصطناعي سيرتي الذاتية، قُبلت في أول طلب! الاقتراحات كانت دقيقة جداً وساعدتني كثيراً."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:#5B4FCF">سم</div>
+        <div>
+          <div class="testimonial-name">سارة محمود</div>
+          <div class="testimonial-role">طالبة IT — جامعة الأزهر</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-up">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"وجدت تدريباً مجانياً عن بُعد في أقل من أسبوع! قبل TrainLink كنت أبحث لأشهر دون نتيجة."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:#22C55E">أح</div>
+        <div>
+          <div class="testimonial-name">أحمد حسن</div>
+          <div class="testimonial-role">خريج هندسة برمجيات</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-up">
+      <div class="testimonial-stars">★★★★☆</div>
+      <p class="testimonial-text">"المنصة وفّرت علينا جهداً كبيراً في إيجاد متدربين مؤهلين. نسب المطابقة بالذكاء الاصطناعي دقيقة جداً."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:#FF6B6B">TP</div>
+        <div>
+          <div class="testimonial-name">TechPal</div>
+          <div class="testimonial-role">شركة تطوير برمجيات — غزة</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CTA -->
+<div class="cta-section">
+  <h2 class="cta-title fade-up">ابدأ رحلتك المهنية اليوم</h2>
+  <p class="cta-sub fade-up">انضم لآلاف الطلاب الذين وجدوا تدريبهم المثالي مجاناً عبر TrainLink</p>
+  <div class="cta-btns fade-up">
+    <a href="03-register-trainee.html" class="cta-btn-white">
+      <i class="ti ti-user-plus"></i> سجّل كمتدرب مجاناً
+    </a>
+    <a href="04-register-company.html" class="cta-btn-trans">
+      <i class="ti ti-building"></i> انضم كشركة
+    </a>
+  </div>
+</div>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="footer-logo-icon"><i class="ti ti-briefcase"></i></div>
+          <span class="footer-logo-text">TrainLink</span>
+        </div>
+        <p class="footer-desc">منصة ذكية تربط المتدربين بالشركات في غزة — مجاناً ومنظماً وبدعم من الذكاء الاصطناعي.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">للمتدربين</div>
+        <ul class="footer-links">
+          <li><a href="#">البحث عن تدريب</a></li>
+          <li><a href="#">تحليل CV</a></li>
+          <li><a href="#">المجتمع</a></li>
+          <li><a href="#">التقديم</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">للشركات</div>
+        <ul class="footer-links">
+          <li><a href="#">نشر فرصة</a></li>
+          <li><a href="#">إدارة الطلبات</a></li>
+          <li><a href="#">التقارير</a></li>
+          <li><a href="#">التسجيل</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">تواصل</div>
+        <ul class="footer-links">
+          <li><a href="#">عن المشروع</a></li>
+          <li><a href="#">سياسة الخصوصية</a></li>
+          <li><a href="#">الشروط والأحكام</a></li>
+          <li><a href="#">تواصل معنا</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 TrainLink — جامعة الأقصى، غزة</span>
+      <div class="footer-socials">
+        <div class="social-btn"><i class="ti ti-brand-github"></i></div>
+        <div class="social-btn"><i class="ti ti-brand-linkedin"></i></div>
+        <div class="social-btn"><i class="ti ti-brand-whatsapp"></i></div>
+      </div>
+    </div>
+  </div>
+</footer>
+ 
+<script>
+var token = localStorage.getItem('trainlink_token');
+var user = null;
+try { user = JSON.parse(localStorage.getItem('trainlink_user')); } catch(e) {}
+
+if(token && user) {
+  var dashboards = {trainee:'../trainee/08-trainee-dashboard.html', company:'../company/18-company-dashboard.html', supervisor:'../supervisor/24-supervisor-dashboard.html', admin:'../admin/28-admin-dashboard.html'};
+  var dashUrl = dashboards[user.person_type] || '../trainee/08-trainee-dashboard.html';
+  var btns = document.getElementById('navBtns');
+  if(btns) {
+    btns.innerHTML = '<a href="'+dashUrl+'" class="btn-primary"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a><a href="#" class="btn-outline" onclick="localStorage.removeItem(\'trainlink_token\');localStorage.removeItem(\'trainlink_user\');window.location.reload();">تسجيل الخروج</a>';
+  }
+}
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+ 
+// Fade up animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+ 
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — طلباتي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.content{padding:20px 24px;flex:1}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-mini{background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;display:flex;align-items:center;gap:10px}
+.stat-mini-icon{width:38px;height:38px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-mini-icon i{font-size:20px}
+.stat-mini-num{font-size:20px;font-weight:800;color:var(--text-dark)}
+.stat-mini-label{font-size:11px;color:var(--text-mid)}
+.tab-bar{display:flex;gap:4px;margin-bottom:16px;background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:4px;width:fit-content}
+.tab{padding:7px 18px;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;color:var(--text-mid);border:none;background:transparent;font-family:var(--font);font-weight:600;transition:all 0.15s}
+.tab.active{background:var(--primary);color:white}
+.app-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:12px;transition:all 0.2s;cursor:pointer}
+.app-card:hover{border-color:var(--primary);box-shadow:0 4px 16px rgba(91,79,207,0.08)}
+.app-card-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.company-logo{width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;flex-shrink:0}
+.app-job-title{font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:3px}
+.app-company{font-size:13px;color:var(--text-mid);display:flex;align-items:center;gap:5px}
+.app-date{font-size:12px;color:var(--text-mid);margin-top:3px;display:flex;align-items:center;gap:5px}
+.status-badge{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.app-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.app-tag{font-size:11px;padding:3px 8px;border-radius:20px}
+.app-footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border)}
+.app-ai{font-size:12px;color:#15803D;background:var(--success-light);padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:5px}
+.app-actions{display:flex;gap:8px}
+.btn-sm{padding:6px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);display:flex;align-items:center;gap:5px;transition:all 0.15s}
+.btn-primary-sm{background:var(--primary);color:white}
+.btn-primary-sm:hover{background:#4A3FB5}
+.btn-outline-sm{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-outline-sm:hover{background:var(--primary-light)}
+.btn-danger-sm{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.rejection-box{background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius-sm);padding:10px 14px;margin-top:10px;font-size:13px;color:#DC2626;display:flex;align-items:flex-start;gap:8px}
+.rejection-box i{font-size:16px;flex-shrink:0;margin-top:1px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:white;border-radius:var(--radius-lg);padding:28px;width:90%;max-width:440px}
+.modal-title{font-size:18px;font-weight:800;color:var(--text-dark);margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--text-mid);margin-bottom:20px}
+.modal-info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.modal-info-row:last-child{border-bottom:none}
+.modal-footer{display:flex;gap:10px;margin-top:16px}
+.btn-cancel{flex:1;padding:10px;border-radius:var(--radius-md);font-size:13px;color:var(--text-mid);background:var(--bg);border:1px solid var(--border);cursor:pointer;font-family:var(--font)}
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:flex;gap:12px;padding-bottom:16px;position:relative}
+.timeline-item:not(:last-child)::after{content:'';position:absolute;right:11px;top:24px;width:2px;bottom:0;background:var(--border)}
+.timeline-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+.timeline-dot i{font-size:12px}
+.timeline-content{flex:1;padding-top:2px}
+.timeline-title{font-size:13px;font-weight:600;color:var(--text-dark)}
+.timeline-date{font-size:11px;color:var(--text-mid);margin-top:2px}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">سم</div>
+    <div style="color:white;font-size:11px;font-weight:600">سارة محمود</div>
+  </div>
+  <a href="08-trainee-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="09-search.html" class="nav-item"><i class="ti ti-search"></i><span>البحث</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-clipboard-list"></i><span>طلباتي</span></a>
+  <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
+  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span><span class="nav-badge">2</span></a>
+  <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
+  <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
+  <div class="nav-section">الحساب</div>
+  <a href="12-my-profile.html" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
+  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge">5</span></a>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">طلباتي</div><div class="topbar-sub">تابع حالة جميع طلباتك المرسلة</div></div>
+    <a href="09-search.html" style="padding:8px 16px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:6px"><i class="ti ti-plus"></i>تقديم جديد</a>
+  </div>
+
+  <div class="content">
+    <div class="stats-row">
+      <div class="stat-mini"><div class="stat-mini-icon" style="background:var(--primary-light)"><i class="ti ti-send" style="color:var(--primary)"></i></div><div><div class="stat-mini-num">8</div><div class="stat-mini-label">إجمالي الطلبات</div></div></div>
+      <div class="stat-mini"><div class="stat-mini-icon" style="background:var(--warning-light)"><i class="ti ti-clock" style="color:var(--warning)"></i></div><div><div class="stat-mini-num">3</div><div class="stat-mini-label">قيد المراجعة</div></div></div>
+      <div class="stat-mini"><div class="stat-mini-icon" style="background:var(--success-light)"><i class="ti ti-circle-check" style="color:var(--success)"></i></div><div><div class="stat-mini-num">2</div><div class="stat-mini-label">مقبولة</div></div></div>
+      <div class="stat-mini"><div class="stat-mini-icon" style="background:#FEF2F2"><i class="ti ti-x" style="color:var(--accent)"></i></div><div><div class="stat-mini-num">3</div><div class="stat-mini-label">مرفوضة</div></div></div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab active" onclick="filterApps(this,'all')">الكل (8)</button>
+      <button class="tab" onclick="filterApps(this,'pending')">قيد المراجعة (3)</button>
+      <button class="tab" onclick="filterApps(this,'accepted')">مقبولة (2)</button>
+      <button class="tab" onclick="filterApps(this,'rejected')">مرفوضة (3)</button>
+    </div>
+
+    <div id="appsList">
+      <!-- PENDING -->
+      <div class="app-card" data-status="pending" onclick="openDetail()">
+        <div class="app-card-top">
+          <div class="company-logo" style="background:#5B4FCF">TP</div>
+          <div style="flex:1">
+            <div class="app-job-title">مطور ويب Frontend</div>
+            <div class="app-company"><i class="ti ti-building" style="font-size:12px"></i>TechPal</div>
+            <div class="app-date"><i class="ti ti-calendar" style="font-size:12px"></i>تقدّمت: 14 يوليو 2025</div>
+          </div>
+          <span class="status-badge" style="background:var(--warning-light);color:#B45309"><i class="ti ti-clock"></i>قيد المراجعة</span>
+        </div>
+        <div class="app-tags">
+          <span class="app-tag" style="background:var(--success-light);color:#15803D">مجاني</span>
+          <span class="app-tag" style="background:var(--primary-light);color:var(--primary)">داخل غزة</span>
+          <span class="app-tag" style="background:var(--bg);color:var(--text-mid)">3 أشهر</span>
+        </div>
+        <div class="app-footer">
+          <div class="app-ai"><i class="ti ti-robot"></i>نسبة مطابقة: 95%</div>
+          <div class="app-actions">
+            <button class="btn-sm btn-outline-sm" onclick="event.stopPropagation();window.location.href='10-internship-details.html'"><i class="ti ti-eye"></i>عرض الفرصة</button>
+            <button class="btn-sm btn-danger-sm" onclick="event.stopPropagation();withdrawApp(this)"><i class="ti ti-x"></i>سحب الطلب</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCEPTED -->
+      <div class="app-card" data-status="accepted" onclick="openDetail()">
+        <div class="app-card-top">
+          <div class="company-logo" style="background:#22C55E">DH</div>
+          <div style="flex:1">
+            <div class="app-job-title">مصمم UI/UX</div>
+            <div class="app-company"><i class="ti ti-building" style="font-size:12px"></i>DesignHub</div>
+            <div class="app-date"><i class="ti ti-calendar" style="font-size:12px"></i>تقدّمت: 7 يوليو 2025</div>
+          </div>
+          <span class="status-badge" style="background:var(--success-light);color:#15803D"><i class="ti ti-circle-check"></i>مقبول</span>
+        </div>
+        <div class="app-tags">
+          <span class="app-tag" style="background:#FFF0F0;color:#DC2626">50$/شهر</span>
+          <span class="app-tag" style="background:var(--primary-light);color:var(--primary)">عن بُعد</span>
+          <span class="app-tag" style="background:var(--bg);color:var(--text-mid)">6 أشهر</span>
+        </div>
+        <div style="background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:13px;color:#15803D;display:flex;align-items:center;gap:8px">
+          <i class="ti ti-circle-check"></i> تهانينا! تم قبول طلبك. سيتواصل معك DesignHub خلال 48 ساعة لبدء التدريب.
+        </div>
+        <div class="app-footer">
+          <div class="app-ai"><i class="ti ti-robot"></i>نسبة مطابقة: 88%</div>
+          <div class="app-actions">
+            <button class="btn-sm btn-primary-sm" onclick="event.stopPropagation();window.location.href='15-chat.html'"><i class="ti ti-messages"></i>تواصل مع الشركة</button>
+            <button class="btn-sm btn-outline-sm" onclick="event.stopPropagation();window.location.href='17-attendance.html'"><i class="ti ti-chart-line"></i>بدء التدريب</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- REJECTED -->
+      <div class="app-card" data-status="rejected" onclick="openDetail()">
+        <div class="app-card-top">
+          <div class="company-logo" style="background:#FF6B6B">NS</div>
+          <div style="flex:1">
+            <div class="app-job-title">مطور Python</div>
+            <div class="app-company"><i class="ti ti-building" style="font-size:12px"></i>NetSoft</div>
+            <div class="app-date"><i class="ti ti-calendar" style="font-size:12px"></i>تقدّمت: 1 يوليو 2025</div>
+          </div>
+          <span class="status-badge" style="background:#FEF2F2;color:#DC2626"><i class="ti ti-x"></i>مرفوض</span>
+        </div>
+        <div class="rejection-box">
+          <i class="ti ti-info-circle"></i>
+          <span><strong>سبب الرفض:</strong> نحتاج خبرة أكثر في Django. ننصحك بأخذ دورة Python قبل التقديم مجدداً.</span>
+        </div>
+        <div class="app-footer" style="margin-top:10px">
+          <div class="app-ai"><i class="ti ti-robot"></i>نسبة مطابقة: 62%</div>
+          <div class="app-actions">
+            <button class="btn-sm btn-outline-sm" onclick="event.stopPropagation();window.location.href='09-search.html'"><i class="ti ti-refresh"></i>البحث عن بديل</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PENDING 2 -->
+      <div class="app-card" data-status="pending">
+        <div class="app-card-top">
+          <div class="company-logo" style="background:#F59E0B">DS</div>
+          <div style="flex:1">
+            <div class="app-job-title">مطور قواعد بيانات</div>
+            <div class="app-company"><i class="ti ti-building" style="font-size:12px"></i>DataSoft</div>
+            <div class="app-date"><i class="ti ti-calendar" style="font-size:12px"></i>تقدّمت: 10 يوليو 2025</div>
+          </div>
+          <span class="status-badge" style="background:var(--warning-light);color:#B45309"><i class="ti ti-clock"></i>قيد المراجعة</span>
+        </div>
+        <div class="app-tags">
+          <span class="app-tag" style="background:var(--success-light);color:#15803D">مجاني</span>
+          <span class="app-tag" style="background:var(--primary-light);color:var(--primary)">عن بُعد</span>
+          <span class="app-tag" style="background:var(--bg);color:var(--text-mid)">2 أشهر</span>
+        </div>
+        <div class="app-footer">
+          <div class="app-ai"><i class="ti ti-robot"></i>نسبة مطابقة: 82%</div>
+          <div class="app-actions">
+            <button class="btn-sm btn-outline-sm" onclick="window.location.href='10-internship-details.html'"><i class="ti ti-eye"></i>عرض الفرصة</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCEPTED 2 -->
+      <div class="app-card" data-status="accepted">
+        <div class="app-card-top">
+          <div class="company-logo" style="background:#7C3AED">TC</div>
+          <div style="flex:1">
+            <div class="app-job-title">مطور React</div>
+            <div class="app-company"><i class="ti ti-building" style="font-size:12px"></i>TechCo</div>
+            <div class="app-date"><i class="ti ti-calendar" style="font-size:12px"></i>تقدّمت: 3 يوليو 2025</div>
+          </div>
+          <span class="status-badge" style="background:var(--success-light);color:#15803D"><i class="ti ti-circle-check"></i>مقبول</span>
+        </div>
+        <div class="app-footer">
+          <div class="app-ai"><i class="ti ti-robot"></i>نسبة مطابقة: 79%</div>
+          <div class="app-actions">
+            <button class="btn-sm btn-primary-sm" onclick="window.location.href='15-chat.html'"><i class="ti ti-messages"></i>تواصل مع الشركة</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div class="modal-title">تفاصيل الطلب</div>
+      <button onclick="document.getElementById('detailModal').classList.remove('open')" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-mid)"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-info-row"><span style="color:var(--text-mid)">الوظيفة</span><span style="font-weight:700">مطور ويب Frontend</span></div>
+    <div class="modal-info-row"><span style="color:var(--text-mid)">الشركة</span><span style="font-weight:700">TechPal</span></div>
+    <div class="modal-info-row"><span style="color:var(--text-mid)">تاريخ التقديم</span><span>14 يوليو 2025</span></div>
+    <div class="modal-info-row"><span style="color:var(--text-mid)">الحالة</span><span style="color:var(--warning);font-weight:700">قيد المراجعة</span></div>
+    <div class="modal-info-row"><span style="color:var(--text-mid)">نسبة AI</span><span style="color:#15803D;font-weight:700">95%</span></div>
+    <div style="margin-top:16px">
+      <div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:10px">مسار الطلب</div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--success);color:white"><i class="ti ti-check"></i></div><div class="timeline-content"><div class="timeline-title">تم إرسال الطلب</div><div class="timeline-date">14 يوليو 2025 — 10:30 ص</div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--success);color:white"><i class="ti ti-check"></i></div><div class="timeline-content"><div class="timeline-title">تم استلام الطلب من الشركة</div><div class="timeline-date">14 يوليو 2025 — 11:00 ص</div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--warning);color:white"><i class="ti ti-clock"></i></div><div class="timeline-content"><div class="timeline-title">قيد المراجعة</div><div class="timeline-date">جارٍ مراجعة طلبك...</div></div></div>
+        <div class="timeline-item"><div class="timeline-dot" style="background:var(--border);color:var(--text-mid)"><i class="ti ti-question-mark"></i></div><div class="timeline-content"><div class="timeline-title" style="color:var(--text-mid)">القرار النهائي</div><div class="timeline-date">في انتظار...</div></div></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="document.getElementById('detailModal').classList.remove('open')">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = '/api';
+function getToken() { return localStorage.getItem('trainlink_token'); }
+function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
+function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
+function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
+function showToast(msg) { alert(msg); }
+
+const COLORS = ['#5B4FCF','#22C55E','#FF6B6B','#F59E0B','#7C3AED','#EC4899'];
+let allApps = [];
+
+function getColor(i) { return COLORS[i % COLORS.length]; }
+function getInitials(name) {
+  if (!name) return '??';
+  return name.substring(0, 2);
+}
+function statusInfo(status) {
+  const s = (status || '').toLowerCase();
+  if (s === 'accepted' || s === 'approved') return { label: 'مقبول', color: 'var(--success-light);color:#15803D', icon: 'ti ti-circle-check' };
+  if (s === 'rejected' || s === 'declined') return { label: 'مرفوض', color: '#FEF2F2;color:#DC2626', icon: 'ti ti-x' };
+  return { label: 'قيد المراجعة', color: 'var(--warning-light);color:#B45309', icon: 'ti ti-clock' };
+}
+
+function renderAppCard(app, idx) {
+  const internship = app.internship || {};
+  const title = internship.title || app.title || 'فرصة تدريب';
+  const company = internship.company_name || app.company_name || '';
+  const status = app.status || 'pending';
+  const si = statusInfo(status);
+  const created = app.created_at || app.applied_at || '';
+  let dateStr = '';
+  if (created) {
+    try { dateStr = new Date(created).toLocaleDateString('ar', { year: 'numeric', month: 'long', day: 'numeric' }); } catch(e) { dateStr = created; }
+  }
+  const id = internship.id || app.internship_id || '';
+  const location = internship.location || '';
+  const duration = internship.duration || '';
+  const isFree = internship.is_free !== undefined ? internship.is_free : true;
+
+  const tags = [];
+  tags.push('<span class="app-tag" style="background:' + (isFree ? 'var(--success-light);color:#15803D' : '#FFF0F0;color:#DC2626') + '">' + (isFree ? 'مجاني' : 'مدفوع') + '</span>');
+  if (location) tags.push('<span class="app-tag" style="background:var(--primary-light);color:var(--primary)">' + location + '</span>');
+  if (duration) tags.push('<span class="app-tag" style="background:var(--bg);color:var(--text-mid)">' + duration + '</span>');
+
+  let actionsHtml = '';
+  if (status === 'accepted' || status === 'approved') {
+    actionsHtml = '<button class="btn-sm btn-primary-sm" onclick="event.stopPropagation();window.location.href=\'15-chat.html\'"><i class="ti ti-messages"></i>تواصل مع الشركة</button>';
+  } else if (status === 'rejected') {
+    actionsHtml = '<button class="btn-sm btn-outline-sm" onclick="event.stopPropagation();window.location.href=\'09-search.html\'"><i class="ti ti-refresh"></i>البحث عن بديل</button>';
+  } else {
+    actionsHtml = '<button class="btn-sm btn-outline-sm" onclick="event.stopPropagation();window.location.href=\'10-internship-details.html?id=' + id + '\'"><i class="ti ti-eye"></i>عرض الفرصة</button>' +
+      '<button class="btn-sm btn-danger-sm" onclick="event.stopPropagation();withdrawApp(this)"><i class="ti ti-x"></i>سحب الطلب</button>';
+  }
+
+  let acceptedMsg = '';
+  if (status === 'accepted' || status === 'approved') {
+    acceptedMsg = '<div style="background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:12px;font-size:13px;color:#15803D;display:flex;align-items:center;gap:8px"><i class="ti ti-circle-check"></i> تهانينا! تم قبول طلبك.</div>';
+  }
+
+  let rejectedMsg = '';
+  if (status === 'rejected' || status === 'declined') {
+    const reason = app.rejection_reason || app.reason || '';
+    rejectedMsg = '<div class="rejection-box"><i class="ti ti-info-circle"></i><span><strong>سبب الرفض:</strong> ' + (reason || 'لم يُحدد سبب') + '</span></div>';
+  }
+
+  return '<div class="app-card" data-status="' + status + '" onclick="openDetail(' + id + ')">' +
+    '<div class="app-card-top">' +
+      '<div class="company-logo" style="background:' + getColor(idx) + '">' + getInitials(company) + '</div>' +
+      '<div style="flex:1">' +
+        '<div class="app-job-title">' + title + '</div>' +
+        '<div class="app-company"><i class="ti ti-building" style="font-size:12px"></i>' + company + '</div>' +
+        (dateStr ? '<div class="app-date"><i class="ti ti-calendar" style="font-size:12px"></i>تقدّمت: ' + dateStr + '</div>' : '') +
+      '</div>' +
+      '<span class="status-badge" style="background:' + si.color + '"><i class="' + si.icon + '"></i>' + si.label + '</span>' +
+    '</div>' +
+    (tags.length ? '<div class="app-tags">' + tags.join('') + '</div>' : '') +
+    acceptedMsg + rejectedMsg +
+    '<div class="app-footer">' +
+      '<div class="app-ai"><i class="ti ti-robot"></i>نسبة مطابقة</div>' +
+      '<div class="app-actions">' + actionsHtml + '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderApps(apps) {
+  const container = document.getElementById('appsList');
+  if (!apps.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid)">لا توجد طلبات</div>';
+    return;
+  }
+  container.innerHTML = apps.map((a, i) => renderAppCard(a, i)).join('');
+
+  const total = apps.length;
+  const pending = apps.filter(a => !a.status || a.status === 'pending').length;
+  const accepted = apps.filter(a => a.status === 'accepted' || a.status === 'approved').length;
+  const rejected = apps.filter(a => a.status === 'rejected' || a.status === 'declined').length;
+  const nums = document.querySelectorAll('.stat-mini-num');
+  if (nums[0]) nums[0].textContent = total;
+  if (nums[1]) nums[1].textContent = pending;
+  if (nums[2]) nums[2].textContent = accepted;
+  if (nums[3]) nums[3].textContent = rejected;
+
+  const tabs = document.querySelectorAll('.tab');
+  if (tabs[0]) tabs[0].textContent = 'الكل (' + total + ')';
+  if (tabs[1]) tabs[1].textContent = 'قيد المراجعة (' + pending + ')';
+  if (tabs[2]) tabs[2].textContent = 'مقبولة (' + accepted + ')';
+  if (tabs[3]) tabs[3].textContent = 'مرفوضة (' + rejected + ')';
+}
+
+function filterApps(btn, status) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.app-card').forEach(c => {
+    c.style.display = (status === 'all' || c.dataset.status === status) ? 'block' : 'none';
+  });
+}
+
+function openDetail(id) { document.getElementById('detailModal').classList.add('open'); }
+
+function withdrawApp(btn) {
+  if (confirm('هل أنت متأكد من سحب الطلب؟')) {
+    btn.closest('.app-card').style.opacity = '0.5';
+    btn.textContent = 'تم السحب';
+    btn.disabled = true;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+  if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
+  try {
+    const res = await fetch(API_BASE + '/internships/applications/', { headers: authHeaders() });
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    allApps = Array.isArray(data) ? data : (data.results || []);
+    renderApps(allApps);
+  } catch (err) {
+    document.getElementById('appsList').innerHTML = '<div style="text-align:center;padding:40px;color:var(--accent)">حدث خطأ في تحميل الطلبات</div>';
+  }
+});
+</script>
+</body>
+</html>

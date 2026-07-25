@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrainLink — البحث عن تدريب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sidebar-logo-icon i{color:white;font-size:15px}
+.sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,0.06)}
+.nav-item.active{background:var(--primary)}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
+.nav-item.active i,.nav-item.active span{color:white}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+.sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+.main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text-dark)}
+.topbar-sub{font-size:12px;color:var(--text-mid)}
+.content{padding:20px 24px;flex:1}
+/* SEARCH BAR */
+.search-section{background:linear-gradient(135deg,var(--primary),#7C3AED);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px}
+.search-title{font-size:18px;font-weight:800;color:white;margin-bottom:16px}
+.search-bar{display:flex;gap:10px;margin-bottom:14px}
+.search-input-wrap{flex:1;position:relative}
+.search-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-mid);font-size:18px}
+.search-input{width:100%;padding:12px 44px 12px 14px;border:none;border-radius:var(--radius-md);font-size:14px;font-family:var(--font);color:var(--text-dark);outline:none;background:white}
+.btn-search{background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);padding:12px 20px;border-radius:var(--radius-md);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;transition:all 0.15s;white-space:nowrap}
+.btn-search:hover{background:rgba(255,255,255,0.3)}
+.quick-filters{display:flex;gap:8px;flex-wrap:wrap}
+.qf-btn{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.1);font-family:var(--font);transition:all 0.15s}
+.qf-btn.active,.qf-btn:hover{background:white;color:var(--primary);border-color:white}
+/* FILTERS PANEL */
+.page-layout{display:grid;grid-template-columns:240px 1fr;gap:20px}
+.filters-panel{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;height:fit-content;position:sticky;top:80px}
+.filter-title{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.filter-clear{font-size:11px;color:var(--primary);cursor:pointer;font-weight:600}
+.filter-section{margin-bottom:18px;border-bottom:1px solid var(--border);padding-bottom:18px}
+.filter-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.filter-section-title{font-size:12px;font-weight:700;color:var(--text-dark);margin-bottom:10px}
+.filter-option{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--text-mid)}
+.filter-option input{accent-color:var(--primary);width:15px;height:15px}
+.filter-option:hover{color:var(--text-dark)}
+/* RESULTS */
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.results-count{font-size:14px;font-weight:600;color:var(--text-dark)}
+.sort-select{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:var(--font);color:var(--text-mid);background:white;outline:none}
+.jobs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.job-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;cursor:pointer;transition:all 0.2s}
+.job-card:hover{border-color:var(--primary);box-shadow:0 6px 20px rgba(91,79,207,0.1);transform:translateY(-2px)}
+.job-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.company-logo{width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;flex-shrink:0}
+.save-btn{width:30px;height:30px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
+.save-btn:hover{background:var(--primary-light);border-color:var(--primary)}
+.save-btn i{font-size:16px;color:var(--text-mid)}
+.save-btn.saved i{color:var(--primary)}
+.job-title{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:3px}
+.job-company{font-size:12px;color:var(--text-mid);display:flex;align-items:center;gap:4px;margin-bottom:10px}
+.job-company i{font-size:12px;color:var(--success)}
+.job-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.job-tag{font-size:10px;padding:3px 8px;border-radius:20px}
+.job-footer{display:flex;justify-content:space-between;align-items:center}
+.job-rating{font-size:12px;color:var(--warning);display:flex;align-items:center;gap:3px}
+.job-accept{font-size:11px;color:var(--text-mid)}
+.btn-apply{padding:7px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;color:white;background:var(--primary);border:none;cursor:pointer;font-family:var(--font);transition:all 0.15s}
+.btn-apply:hover{background:var(--primary-dark)}
+.ai-badge{background:var(--success-light);color:#15803D;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700}
+/* PAGINATION */
+.pagination{display:flex;gap:6px;justify-content:center;margin-top:20px}
+.page-btn{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1px solid var(--border);background:white;color:var(--text-mid);font-family:var(--font);transition:all 0.15s}
+.page-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+.page-btn:hover:not(.active){border-color:var(--primary);color:var(--primary)}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">سم</div>
+    <div style="color:white;font-size:11px;font-weight:600">سارة محمود</div>
+    <div style="color:rgba(255,255,255,0.4);font-size:10px">TRN-00234</div>
+  </div>
+  <div class="nav-section">القائمة</div>
+  <a href="08-trainee-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-search"></i><span>البحث</span></a>
+  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span><span class="nav-badge">3</span></a>
+  <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
+  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span></a>
+  <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
+  <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
+  <div class="nav-section">الحساب</div>
+  <a href="12-my-profile.html" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
+  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge">5</span></a>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="topbar-title">البحث عن تدريب 🔍</div><div class="topbar-sub">تصفح جميع فرص التدريب المتاحة</div></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white">سم</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- SEARCH SECTION -->
+    <div class="search-section">
+      <div class="search-title">🤖 ابحث عن فرصة تدريبك المثالية</div>
+      <div class="search-bar">
+        <div class="search-input-wrap">
+          <i class="ti ti-search search-icon"></i>
+          <input type="text" class="search-input" placeholder="ابحث عن تدريب، شركة، تخصص..." id="searchInput" oninput="filterJobs()">
+        </div>
+        <button class="btn-search"><i class="ti ti-adjustments"></i>فلتر متقدم</button>
+      </div>
+      <div class="quick-filters">
+        <button class="qf-btn active" onclick="setFilter(this,'all')">الكل</button>
+        <button class="qf-btn" onclick="setFilter(this,'free')">مجاني</button>
+        <button class="qf-btn" onclick="setFilter(this,'paid')">مدفوع</button>
+        <button class="qf-btn" onclick="setFilter(this,'gaza')">داخل غزة</button>
+        <button class="qf-btn" onclick="setFilter(this,'remote')">عن بُعد</button>
+        <button class="qf-btn" onclick="setFilter(this,'web')">تطوير ويب</button>
+        <button class="qf-btn" onclick="setFilter(this,'design')">تصميم</button>
+      </div>
+    </div>
+
+    <div class="page-layout">
+      <!-- FILTERS -->
+      <div class="filters-panel">
+        <div class="filter-title">الفلاتر <span class="filter-clear" onclick="clearFilters()">مسح الكل</span></div>
+        <div class="filter-section">
+          <div class="filter-section-title">نوع التدريب</div>
+          <label class="filter-option"><input type="checkbox" checked> مجاني</label>
+          <label class="filter-option"><input type="checkbox"> مدفوع</label>
+        </div>
+        <div class="filter-section">
+          <div class="filter-section-title">الموقع</div>
+          <label class="filter-option"><input type="checkbox" checked> داخل غزة</label>
+          <label class="filter-option"><input type="checkbox" checked> عن بُعد</label>
+          <label class="filter-option"><input type="checkbox"> كلاهما</label>
+        </div>
+        <div class="filter-section">
+          <div class="filter-section-title">المجال</div>
+          <label class="filter-option"><input type="checkbox" checked> تطوير ويب</label>
+          <label class="filter-option"><input type="checkbox"> تصميم</label>
+          <label class="filter-option"><input type="checkbox"> قواعد بيانات</label>
+          <label class="filter-option"><input type="checkbox"> موبايل</label>
+          <label class="filter-option"><input type="checkbox"> تسويق رقمي</label>
+        </div>
+        <div class="filter-section">
+          <div class="filter-section-title">المدة</div>
+          <label class="filter-option"><input type="checkbox"> شهر</label>
+          <label class="filter-option"><input type="checkbox" checked> 2-3 أشهر</label>
+          <label class="filter-option"><input type="checkbox"> 6 أشهر</label>
+        </div>
+        <div class="filter-section">
+          <div class="filter-section-title">التقييم</div>
+          <label class="filter-option"><input type="checkbox"> ★★★★★ فقط</label>
+          <label class="filter-option"><input type="checkbox" checked> ★★★★ وأعلى</label>
+          <label class="filter-option"><input type="checkbox"> ★★★ وأعلى</label>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div>
+        <div class="results-header">
+          <div class="results-count">عُثر على <strong>24</strong> فرصة تدريب</div>
+          <select class="sort-select" onchange="sortJobs(this.value)">
+            <option value="match">ترتيب حسب: نسبة AI</option>
+            <option value="date">الأحدث</option>
+            <option value="rating">التقييم</option>
+          </select>
+        </div>
+
+        <div class="jobs-grid" id="jobsGrid">
+          <!-- JOB 1 -->
+          <div class="job-card" onclick="window.location.href='10-internship-details.html'">
+            <div class="job-card-top">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="company-logo" style="background:#5B4FCF">TP</div>
+                <div><div class="job-title">مطور ويب Frontend</div><div class="job-company"><i class="ti ti-shield-check"></i>TechPal</div></div>
+              </div>
+              <button class="save-btn saved" onclick="event.stopPropagation();toggleSave(this)"><i class="ti ti-bookmark-filled"></i></button>
+            </div>
+            <div class="job-tags">
+              <span class="job-tag" style="background:var(--success-light);color:#15803D">مجاني</span>
+              <span class="job-tag" style="background:var(--primary-light);color:var(--primary)">داخل غزة</span>
+              <span class="job-tag" style="background:var(--bg);color:var(--text-mid)">3 أشهر</span>
+              <span class="ai-badge">🤖 95%</span>
+            </div>
+            <div class="job-footer">
+              <div><div class="job-rating">★★★★★ <span style="font-size:11px;color:var(--text-mid)">(24)</span></div><div class="job-accept" style="margin-top:3px">نسبة قبول: 65%</div></div>
+              <button class="btn-apply" onclick="event.stopPropagation();window.location.href='10-internship-details.html'">تقدّم الآن</button>
+            </div>
+          </div>
+
+          <!-- JOB 2 -->
+          <div class="job-card" onclick="window.location.href='10-internship-details.html'">
+            <div class="job-card-top">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="company-logo" style="background:#FF6B6B">DH</div>
+                <div><div class="job-title">مصمم UI/UX</div><div class="job-company"><i class="ti ti-shield-check"></i>DesignHub</div></div>
+              </div>
+              <button class="save-btn" onclick="event.stopPropagation();toggleSave(this)"><i class="ti ti-bookmark"></i></button>
+            </div>
+            <div class="job-tags">
+              <span class="job-tag" style="background:#FFF0F0;color:#DC2626">50$/شهر</span>
+              <span class="job-tag" style="background:var(--primary-light);color:var(--primary)">عن بُعد</span>
+              <span class="job-tag" style="background:var(--bg);color:var(--text-mid)">6 أشهر</span>
+              <span class="ai-badge">🤖 88%</span>
+            </div>
+            <div class="job-footer">
+              <div><div class="job-rating">★★★★☆ <span style="font-size:11px;color:var(--text-mid)">(18)</span></div><div class="job-accept" style="margin-top:3px">نسبة قبول: 45%</div></div>
+              <button class="btn-apply" onclick="event.stopPropagation();window.location.href='10-internship-details.html'">تقدّم الآن</button>
+            </div>
+          </div>
+
+          <!-- JOB 3 -->
+          <div class="job-card" onclick="window.location.href='10-internship-details.html'">
+            <div class="job-card-top">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="company-logo" style="background:#22C55E">DS</div>
+                <div><div class="job-title">مطور قواعد بيانات</div><div class="job-company"><i class="ti ti-shield-check"></i>DataSoft</div></div>
+              </div>
+              <button class="save-btn" onclick="event.stopPropagation();toggleSave(this)"><i class="ti ti-bookmark"></i></button>
+            </div>
+            <div class="job-tags">
+              <span class="job-tag" style="background:var(--success-light);color:#15803D">مجاني</span>
+              <span class="job-tag" style="background:var(--primary-light);color:var(--primary)">عن بُعد</span>
+              <span class="job-tag" style="background:var(--bg);color:var(--text-mid)">2 أشهر</span>
+              <span class="ai-badge">🤖 82%</span>
+            </div>
+            <div class="job-footer">
+              <div><div class="job-rating">★★★★★ <span style="font-size:11px;color:var(--text-mid)">(31)</span></div><div class="job-accept" style="margin-top:3px">نسبة قبول: 70%</div></div>
+              <button class="btn-apply" onclick="event.stopPropagation();window.location.href='10-internship-details.html'">تقدّم الآن</button>
+            </div>
+          </div>
+
+          <!-- JOB 4 -->
+          <div class="job-card" onclick="window.location.href='10-internship-details.html'">
+            <div class="job-card-top">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="company-logo" style="background:#F59E0B">NS</div>
+                <div><div class="job-title">مطور React Native</div><div class="job-company">NetSoft</div></div>
+              </div>
+              <button class="save-btn" onclick="event.stopPropagation();toggleSave(this)"><i class="ti ti-bookmark"></i></button>
+            </div>
+            <div class="job-tags">
+              <span class="job-tag" style="background:var(--success-light);color:#15803D">مجاني</span>
+              <span class="job-tag" style="background:var(--primary-light);color:var(--primary)">داخل غزة</span>
+              <span class="job-tag" style="background:var(--bg);color:var(--text-mid)">4 أشهر</span>
+              <span class="ai-badge">🤖 75%</span>
+            </div>
+            <div class="job-footer">
+              <div><div class="job-rating">★★★☆☆ <span style="font-size:11px;color:var(--text-mid)">(9)</span></div><div class="job-accept" style="margin-top:3px">نسبة قبول: 55%</div></div>
+              <button class="btn-apply" onclick="event.stopPropagation();window.location.href='10-internship-details.html'">تقدّم الآن</button>
+            </div>
+          </div>
+
+          <!-- JOB 5 -->
+          <div class="job-card" onclick="window.location.href='10-internship-details.html'">
+            <div class="job-card-top">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="company-logo" style="background:#7C3AED">TC</div>
+                <div><div class="job-title">مطور Python/Django</div><div class="job-company"><i class="ti ti-shield-check"></i>TechCo</div></div>
+              </div>
+              <button class="save-btn" onclick="event.stopPropagation();toggleSave(this)"><i class="ti ti-bookmark"></i></button>
+            </div>
+            <div class="job-tags">
+              <span class="job-tag" style="background:var(--success-light);color:#15803D">مجاني</span>
+              <span class="job-tag" style="background:var(--primary-light);color:var(--primary)">عن بُعد</span>
+              <span class="job-tag" style="background:var(--bg);color:var(--text-mid)">3 أشهر</span>
+              <span class="ai-badge">🤖 78%</span>
+            </div>
+            <div class="job-footer">
+              <div><div class="job-rating">★★★★☆ <span style="font-size:11px;color:var(--text-mid)">(14)</span></div><div class="job-accept" style="margin-top:3px">نسبة قبول: 60%</div></div>
+              <button class="btn-apply" onclick="event.stopPropagation();window.location.href='10-internship-details.html'">تقدّم الآن</button>
+            </div>
+          </div>
+
+          <!-- JOB 6 -->
+          <div class="job-card" onclick="window.location.href='10-internship-details.html'">
+            <div class="job-card-top">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="company-logo" style="background:#EC4899">PS</div>
+                <div><div class="job-title">مسوّق رقمي</div><div class="job-company">PixelStudio</div></div>
+              </div>
+              <button class="save-btn" onclick="event.stopPropagation();toggleSave(this)"><i class="ti ti-bookmark"></i></button>
+            </div>
+            <div class="job-tags">
+              <span class="job-tag" style="background:#FFF0F0;color:#DC2626">30$/شهر</span>
+              <span class="job-tag" style="background:var(--primary-light);color:var(--primary)">عن بُعد</span>
+              <span class="job-tag" style="background:var(--bg);color:var(--text-mid)">3 أشهر</span>
+              <span class="ai-badge">🤖 71%</span>
+            </div>
+            <div class="job-footer">
+              <div><div class="job-rating">★★★★☆ <span style="font-size:11px;color:var(--text-mid)">(7)</span></div><div class="job-accept" style="margin-top:3px">نسبة قبول: 40%</div></div>
+              <button class="btn-apply" onclick="event.stopPropagation();window.location.href='10-internship-details.html'">تقدّم الآن</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pagination">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">...</button>
+          <button class="page-btn">8</button>
+          <button class="page-btn"><i class="ti ti-chevron-left" style="font-size:14px"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = '/api';
+function getToken() { return localStorage.getItem('trainlink_token'); }
+function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
+function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
+function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
+function showToast(msg) { alert(msg); }
+
+const COLORS = ['#5B4FCF','#FF6B6B','#22C55E','#F59E0B','#7C3AED','#EC4899','#0EA5E9','#14B8A6'];
+let currentFilter = 'all';
+let allInternships = [];
+
+function getColor(i) { return COLORS[i % COLORS.length]; }
+function getInitials(name) {
+  if (!name) return '??';
+  return name.substring(0, 2);
+}
+
+function renderJobCard(item, idx) {
+  const title = item.title || item.name || 'فرصة تدريب';
+  const company = item.company_name || item.company || '';
+  const location = item.location || '';
+  const duration = item.duration || '';
+  const isFree = item.is_free !== undefined ? item.is_free : !item.salary;
+  const salary = item.salary || (isFree ? 'مجاني' : '');
+  const tag1Color = isFree ? 'var(--success-light);color:#15803D' : '#FFF0F0;color:#DC2626';
+  const tag1Text = isFree ? 'مجاني' : salary;
+  const tags = [];
+  tags.push('<span class="job-tag" style="background:' + tag1Color + '">' + tag1Text + '</span>');
+  if (location) tags.push('<span class="job-tag" style="background:var(--primary-light);color:var(--primary)">' + location + '</span>');
+  if (duration) tags.push('<span class="job-tag" style="background:var(--bg);color:var(--text-mid)">' + duration + '</span>');
+  const id = item.id || idx;
+  return '<div class="job-card" onclick="window.location.href=\'10-internship-details.html?id=' + id + '\'">' +
+    '<div class="job-card-top">' +
+      '<div style="display:flex;align-items:center;gap:10px">' +
+        '<div class="company-logo" style="background:' + getColor(idx) + '">' + getInitials(company) + '</div>' +
+        '<div><div class="job-title">' + title + '</div><div class="job-company"><i class="ti ti-shield-check"></i>' + company + '</div></div>' +
+      '</div>' +
+      '<button class="save-btn" onclick="event.stopPropagation();toggleSave(this,' + id + ')"><i class="ti ti-bookmark"></i></button>' +
+    '</div>' +
+    '<div class="job-tags">' + tags.join('') + '</div>' +
+    '<div class="job-footer">' +
+      '<div><div class="job-rating">★★★★☆ <span style="font-size:11px;color:var(--text-mid)"></span></div></div>' +
+      '<button class="btn-apply" onclick="event.stopPropagation();window.location.href=\'10-internship-details.html?id=' + id + '\'">تقدّم الآن</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderJobs(jobs) {
+  const grid = document.getElementById('jobsGrid');
+  if (!jobs.length) {
+    grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid);grid-column:1/-1">لا توجد نتائج</div>';
+    return;
+  }
+  grid.innerHTML = jobs.map((j, i) => renderJobCard(j, i)).join('');
+  document.querySelector('.results-count').innerHTML = 'عُثر على <strong>' + jobs.length + '</strong> فرصة تدريب';
+}
+
+async function fetchInternships(params) {
+  const grid = document.getElementById('jobsGrid');
+  grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid);grid-column:1/-1">جارٍ التحميل...</div>';
+  try {
+    let url = API_BASE + '/internships/';
+    const q = [];
+    if (params && params.search) q.push('search=' + encodeURIComponent(params.search));
+    if (params && params.category) q.push('category=' + encodeURIComponent(params.category));
+    if (params && params.location) q.push('location=' + encodeURIComponent(params.location));
+    if (params && params.type) q.push('type=' + encodeURIComponent(params.type));
+    if (q.length) url += '?' + q.join('&');
+    const res = await fetch(url, { headers: authHeaders() });
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    allInternships = Array.isArray(data) ? data : (data.results || []);
+    renderJobs(allInternships);
+  } catch (err) {
+    grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--accent);grid-column:1/-1">حدث خطأ في تحميل البيانات</div>';
+  }
+}
+
+function setFilter(btn, type) {
+  document.querySelectorAll('.qf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = type;
+  const params = {};
+  if (type === 'free') params.type = 'free';
+  else if (type === 'paid') params.type = 'paid';
+  else if (type === 'gaza') params.location = 'gaza';
+  else if (type === 'remote') params.location = 'remote';
+  else if (type === 'web') params.category = 'web';
+  else if (type === 'design') params.category = 'design';
+  fetchInternships(params);
+}
+
+function toggleSave(btn, id) {
+  btn.classList.toggle('saved');
+  const icon = btn.querySelector('i');
+  icon.className = btn.classList.contains('saved') ? 'ti ti-bookmark-filled' : 'ti ti-bookmark';
+  fetch(API_BASE + '/internships/saved/', {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify({ internship_id: id })
+  }).catch(() => {});
+}
+
+let searchTimer = null;
+function filterJobs() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function() {
+    const q = document.getElementById('searchInput').value.trim();
+    fetchInternships({ search: q });
+  }, 400);
+}
+
+function clearFilters() {
+  document.querySelectorAll('.filter-option input').forEach(i => i.checked = false);
+}
+
+function sortJobs(val) { fetchInternships(); }
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
+  fetchInternships();
+});
+</script>
+</body>
+</html>
