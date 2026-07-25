@@ -77,14 +77,15 @@ class RegisterTraineeSerializer(serializers.Serializer):
         if supervisor_id:
             try:
                 from performance.models import SupervisionAssignment
-                supervisor = SupervisorProfile.objects.get(id=supervisor_id)
+                sid = int(supervisor_id.replace('SUP-', '').lstrip('0') or '0')
+                supervisor = SupervisorProfile.objects.get(id=sid)
                 SupervisionAssignment.objects.create(
                     supervisor=supervisor,
                     trainee=trainee,
                     role='academic',
                     status='active',
                 )
-            except SupervisorProfile.DoesNotExist:
+            except (SupervisorProfile.DoesNotExist, ValueError):
                 pass
 
         OTPVerification.objects.create(
