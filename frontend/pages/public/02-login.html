@@ -213,7 +213,8 @@ async function doLogin() {
       window.location.href = '../' + currentType + '/' + (routes[currentType] || '08-trainee-dashboard.html');
     } else {
       const err = document.getElementById('errorMsg');
-      document.getElementById('errorText').textContent = data.error || data.detail || 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+      const msg = data.error || data.detail || (data.non_field_errors && data.non_field_errors[0]) || 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+      document.getElementById('errorText').textContent = msg;
       err.style.display = 'flex';
     }
   } catch (e) {
