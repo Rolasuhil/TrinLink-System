@@ -202,9 +202,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   var user=getUser();
   if(user){
     var name=user.company_name||user.name||user.username||'TP';
-    var initials=name.substring(0,2);
-    document.getElementById('chipAvatar').textContent=initials;
-    document.getElementById('chipName').textContent=name;
     var nn=document.getElementById('navCompanyName');if(nn)nn.textContent=name;
   }
 });

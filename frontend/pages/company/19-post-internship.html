@@ -239,8 +239,7 @@ async function loadProfile() {
     companyUser = data;
     const name = data.company_name || data.full_name || 'الشركة';
     const initials = name.substring(0, 2);
-    document.getElementById('navCompanyName').textContent = name;
-    document.getElementById('navCompanyAvatar').textContent = initials;
+
     document.getElementById('previewCompanyName').textContent = name;
     document.getElementById('previewAvatar').textContent = initials;
   } catch(e) {}

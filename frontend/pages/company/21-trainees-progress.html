@@ -193,8 +193,6 @@ async function loadProfile(){
     if(!res.ok){window.location.href='../public/02-login.html';return;}
     const data=await res.json();
     const name=data.company_name||data.full_name||'الشركة';
-    document.getElementById('navCompanyName').textContent=name;
-    document.getElementById('navCompanyAvatar').textContent=name.substring(0,2);
   }catch(e){}
 }
 

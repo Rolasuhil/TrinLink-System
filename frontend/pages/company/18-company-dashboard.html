@@ -273,11 +273,6 @@ async function loadProfile(){
     const name=data.company_name||data.name||data.username||'الشركة';
     const initials=name.substring(0,2);
     document.querySelector('.chip-name').textContent=name;
-    document.querySelector('.chip-avatar').textContent=initials;
-    document.querySelector('.company-chip .chip-name').textContent=name;
-    document.querySelector('.company-chip .chip-avatar').textContent=initials;
-    var ca=document.getElementById('chipAvatar');if(ca)ca.textContent=initials;
-    var cn=document.getElementById('chipName');if(cn)cn.textContent=name;
     var nn=document.getElementById('navCompanyName');if(nn)nn.textContent=name;
     document.querySelector('.content > div:first-child > div:first-child').innerHTML=
       '<div style="font-size:20px;font-weight:800;color:white">مرحباً، '+name+'! 👋</div>'+

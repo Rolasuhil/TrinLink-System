@@ -185,8 +185,6 @@ async function loadProfile(){
     const data=await res.json();
     const name=data.company_name||data.full_name||'الشركة';
     const initials=name.substring(0,2);
-    document.getElementById('navName').textContent=name;
-    document.getElementById('navAvatar').textContent=initials;
     document.getElementById('logoText').textContent=initials;
     document.getElementById('companyNameDisplay').innerHTML=name+' <i class="ti ti-shield-check" style="color:var(--success);font-size:18px"></i>';
     document.getElementById('companyIndustry').textContent=data.industry||'تطوير برمجيات';
