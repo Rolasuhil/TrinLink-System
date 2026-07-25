@@ -22,11 +22,6 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 .chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:6px 12px}
 .chip-avatar{width:26px;height:26px;border-radius:6px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white}
 .chip-name{font-size:12px;font-weight:600;color:white}
-.top-right{display:flex;align-items:center;gap:10px;position:relative}
-.icon-btn{width:34px;height:34px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
-.icon-btn i{color:rgba(255,255,255,0.6);font-size:16px}
-.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid #1A1827}
-.company-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:6px 12px;cursor:pointer}
 .content{padding:20px 24px;flex:1}
 .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .page-title{font-size:20px;font-weight:800;color:white}
@@ -47,8 +42,8 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 .tab{padding:7px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.4);font-family:var(--font);transition:all 0.15s}
 .tab.active{background:var(--primary);color:white}
 .tab:hover:not(.active){background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7)}
-.app-card{background:#1A1827;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:16px;margin-bottom:10px;transition:all 0.2s;cursor:pointer}
-.app-card:hover{border-color:rgba(91,79,207,0.4);transform:translateY(-1px)}
+.app-card{background:#1A1827;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:16px;margin-bottom:10px;transition:all 0.2s}
+.app-card:hover{border-color:rgba(91,79,207,0.4)}
 .app-card-inner{display:flex;align-items:flex-start;gap:14px}
 .trainee-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;flex-shrink:0}
 .trainee-name{font-size:14px;font-weight:700;color:white;margin-bottom:2px}
@@ -78,6 +73,9 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 .modal-footer{display:flex;gap:10px;margin-top:14px}
 .btn-cancel{flex:1;padding:10px;border-radius:var(--radius-md);font-size:13px;color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-family:var(--font)}
 .btn-confirm-reject{flex:2;padding:10px;border-radius:var(--radius-md);font-size:13px;font-weight:700;color:white;background:var(--accent);border:none;cursor:pointer;font-family:var(--font)}
+.empty-state{text-align:center;padding:60px 20px;color:rgba(255,255,255,0.3)}
+.empty-state i{font-size:48px;margin-bottom:12px;display:block}
+.empty-state p{font-size:14px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2D2B3E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;border:1px solid rgba(255,255,255,0.1)}
 .toast.show{display:flex}
 </style>
@@ -87,319 +85,174 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
   <a href="#" class="top-logo"><div class="top-logo-icon"><i class="ti ti-briefcase"></i></div><span class="top-logo-text">TrainLink</span></a>
   <div class="top-nav">
     <a href="18-company-dashboard.html" class="top-nav-item"><i class="ti ti-layout-dashboard"></i>لوحة التحكم</a>
+    <a href="19-post-internship.html" class="top-nav-item"><i class="ti ti-plus-circle"></i>نشر فرصة</a>
     <a href="#" class="top-nav-item active"><i class="ti ti-clipboard-list"></i>الطلبات</a>
     <a href="21-trainees-progress.html" class="top-nav-item"><i class="ti ti-chart-line"></i>المتدربون</a>
-    <a href="23-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
-    <a href="22-company-profile.html" class="top-nav-item"><i class="ti ti-building"></i><span id="navCompanyName">ملف الشركة</span></a>
+    <a href="23-company-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
+    <a href="22-company-profile.html" class="top-nav-item"><i class="ti ti-building"></i>ملف الشركة</a>
   </div>
-  <div class="top-right">
-    <div class="icon-btn" onclick="toggleNotifPanel()" id="notifBtn"><i class="ti ti-bell"></i><div class="notif-dot" id="notifDot"></div></div>
-    <div class="icon-btn" onclick="window.location.href='23-chat.html'" title="الدردشة"><i class="ti ti-messages"></i></div>
-    <div class="company-chip" onclick="toggleMenu()" id="companyChip" style="cursor:pointer">
-      <div class="chip-avatar" id="chipAvatar">TP</div>
-      <div class="chip-name" id="chipName">TechPal</div>
-      <i class="ti ti-chevron-down" style="font-size:12px;color:rgba(255,255,255,0.4)"></i>
-    </div>
-    <div id="userDropdown" style="display:none;position:absolute;top:50px;left:16px;background:#2D2B3E;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);box-shadow:0 8px 24px rgba(0,0,0,0.4);min-width:180px;z-index:200;padding:8px 0">
-      <a href="#" onclick="localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user');window.location.href='../public/02-login.html'" style="display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:#FF6B6B;text-decoration:none"><i class="ti ti-logout"></i> تسجيل الخروج</a>
-    </div>
-    <div id="notifPanel" style="display:none;position:absolute;top:50px;left:50px;background:#2D2B3E;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);box-shadow:0 8px 24px rgba(0,0,0,0.4);min-width:320px;max-height:400px;overflow-y:auto;z-index:200;padding:0">
-      <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:14px;font-weight:700;color:white">الاشعارات</span>
-        <button onclick="markAllRead()" style="background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;font-family:var(--font)">تحديد الكل كمقروء</button>
-      </div>
-      <div id="notifList" style="padding:8px 0"><div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">جاري التحميل...</div></div>
-    </div>
-  </div>
+  <div class="chip"><div class="chip-avatar" id="navCompanyAvatar">TP</div><span class="chip-name" id="navCompanyName">TechPal</span></div>
 </div>
- 
+
 <div class="content">
   <div class="page-header">
     <div><div class="page-title">إدارة الطلبات 📋</div><div class="page-sub">مراجعة وقبول أو رفض طلبات التدريب</div></div>
   </div>
- 
+
   <div class="stats-row">
-    <div class="mini-stat"><div class="mini-stat-icon" style="background:rgba(91,79,207,0.2)"><i class="ti ti-users" style="color:#A89CFF"></i></div><div><div class="mini-stat-num">32</div><div class="mini-stat-label">إجمالي الطلبات</div></div></div>
-    <div class="mini-stat"><div class="mini-stat-icon" style="background:rgba(245,158,11,0.15)"><i class="ti ti-clock" style="color:var(--warning)"></i></div><div><div class="mini-stat-num">8</div><div class="mini-stat-label">في الانتظار</div></div></div>
-    <div class="mini-stat"><div class="mini-stat-icon" style="background:rgba(34,197,94,0.15)"><i class="ti ti-check" style="color:var(--success)"></i></div><div><div class="mini-stat-num">12</div><div class="mini-stat-label">مقبول</div></div></div>
-    <div class="mini-stat"><div class="mini-stat-icon" style="background:rgba(255,107,107,0.15)"><i class="ti ti-x" style="color:var(--accent)"></i></div><div><div class="mini-stat-num">12</div><div class="mini-stat-label">مرفوض</div></div></div>
+    <div class="mini-stat"><div class="mini-stat-icon" style="background:rgba(91,79,207,0.2)"><i class="ti ti-users" style="color:#A89CFF"></i></div><div><div class="mini-stat-num" id="statTotal">0</div><div class="mini-stat-label">إجمالي الطلبات</div></div></div>
+    <div class="mini-stat"><div class="mini-stat-icon" style="background:rgba(245,158,11,0.15)"><i class="ti ti-clock" style="color:var(--warning)"></i></div><div><div class="mini-stat-num" id="statPending">0</div><div class="mini-stat-label">في الانتظار</div></div></div>
+    <div class="mini-stat"><div class="mini-stat-icon" style="background:rgba(34,197,94,0.15)"><i class="ti ti-check" style="color:var(--success)"></i></div><div><div class="mini-stat-num" id="statAccepted">0</div><div class="mini-stat-label">مقبول</div></div></div>
+    <div class="mini-stat"><div class="mini-stat-icon" style="background:rgba(255,107,107,0.15)"><i class="ti ti-x" style="color:var(--accent)"></i></div><div><div class="mini-stat-num" id="statRejected">0</div><div class="mini-stat-label">مرفوض</div></div></div>
   </div>
- 
+
   <div class="filters-row">
     <div class="search-wrap"><i class="ti ti-search search-icon"></i><input class="search-input" placeholder="بحث باسم المتدرب..." oninput="searchApps(this.value)"></div>
-    <select class="filter-select"><option>كل الفرص</option><option>مطور Frontend</option><option>مطور Backend</option><option>مصمم UI/UX</option></select>
-    <select class="filter-select"><option>ترتيب: نسبة AI ↓</option><option>الأحدث</option><option>GPA ↓</option></select>
+    <select class="filter-select" id="filterInternship" onchange="loadApplications()"><option value="">كل الفرص</option></select>
   </div>
- 
+
   <div class="tab-row">
-    <button class="tab active" onclick="filterApps(this,'all')">الكل (32)</button>
-    <button class="tab" onclick="filterApps(this,'pending')">⏳ انتظار (8)</button>
-    <button class="tab" onclick="filterApps(this,'accepted')">✓ مقبول (12)</button>
-    <button class="tab" onclick="filterApps(this,'rejected')">✗ مرفوض (12)</button>
+    <button class="tab active" onclick="filterApps(this,'all')">الكل</button>
+    <button class="tab" onclick="filterApps(this,'pending')">⏳ انتظار</button>
+    <button class="tab" onclick="filterApps(this,'accepted')">✓ مقبول</button>
+    <button class="tab" onclick="filterApps(this,'rejected')">✗ مرفوض</button>
   </div>
- 
+
   <div id="appsList">
-    <div class="app-card" data-status="pending" data-name="سارة محمود">
-      <div class="app-card-inner">
-        <div class="trainee-avatar" style="background:#5B4FCF">سم</div>
-        <div style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div><div class="trainee-name">سارة محمود</div><div class="trainee-meta"><i class="ti ti-building-bank" style="font-size:11px"></i>جامعة الأزهر <i class="ti ti-book" style="font-size:11px"></i>IT — السنة 3 <i class="ti ti-star" style="font-size:11px;color:var(--warning)"></i>GPA: 3.7</div></div>
-            <span class="status-badge" style="background:rgba(245,158,11,0.15);color:var(--warning)">⏳ جديد</span>
-          </div>
-          <div class="trainee-tags"><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">HTML/CSS</span><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">JavaScript</span><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">React</span><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">Figma</span></div>
-          <div class="match-section"><span class="match-label">🤖 مطابقة AI:</span><div class="match-bar-track"><div class="match-bar-fill" style="width:95%;background:var(--success)"></div></div><span class="match-pct" style="color:var(--success)">95%</span></div>
-          <div class="action-row">
-            <button class="btn-accept" onclick="event.stopPropagation();acceptApp(this)"><i class="ti ti-check"></i>قبول</button>
-            <button class="btn-reject" onclick="event.stopPropagation();openRejectModal(this)"><i class="ti ti-x"></i>رفض</button>
-            <button class="btn-view-cv"><i class="ti ti-file-cv"></i>عرض CV</button>
-            <button class="btn-chat" onclick="event.stopPropagation();window.location.href='23-chat.html'"><i class="ti ti-messages"></i>مراسلة</button>
-          </div>
-        </div>
-      </div>
-    </div>
- 
-    <div class="app-card" data-status="pending" data-name="أحمد حسن">
-      <div class="app-card-inner">
-        <div class="trainee-avatar" style="background:#22C55E">أح</div>
-        <div style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div><div class="trainee-name">أحمد حسن</div><div class="trainee-meta"><i class="ti ti-building-bank" style="font-size:11px"></i>الجامعة الإسلامية <i class="ti ti-book" style="font-size:11px"></i>CS — السنة 4 <i class="ti ti-star" style="font-size:11px;color:var(--warning)"></i>GPA: 3.9</div></div>
-            <span class="status-badge" style="background:rgba(245,158,11,0.15);color:var(--warning)">⏳ جديد</span>
-          </div>
-          <div class="trainee-tags"><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">React</span><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">Node.js</span><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">TypeScript</span></div>
-          <div class="match-section"><span class="match-label">🤖 مطابقة AI:</span><div class="match-bar-track"><div class="match-bar-fill" style="width:88%;background:var(--warning)"></div></div><span class="match-pct" style="color:var(--warning)">88%</span></div>
-          <div class="action-row">
-            <button class="btn-accept" onclick="event.stopPropagation();acceptApp(this)"><i class="ti ti-check"></i>قبول</button>
-            <button class="btn-reject" onclick="event.stopPropagation();openRejectModal(this)"><i class="ti ti-x"></i>رفض</button>
-            <button class="btn-view-cv"><i class="ti ti-file-cv"></i>عرض CV</button>
-          </div>
-        </div>
-      </div>
-    </div>
- 
-    <div class="app-card" data-status="accepted" data-name="منى ناصر">
-      <div class="app-card-inner">
-        <div class="trainee-avatar" style="background:#FF6B6B">من</div>
-        <div style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div><div class="trainee-name">منى ناصر</div><div class="trainee-meta"><i class="ti ti-building-bank" style="font-size:11px"></i>جامعة الأقصى <i class="ti ti-book" style="font-size:11px"></i>SE — السنة 3 <i class="ti ti-star" style="font-size:11px;color:var(--warning)"></i>GPA: 3.4</div></div>
-            <span class="status-badge" style="background:rgba(34,197,94,0.15);color:var(--success)">✓ مقبول</span>
-          </div>
-          <div class="trainee-tags"><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">HTML/CSS</span><span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">JavaScript</span></div>
-          <div class="match-section"><span class="match-label">🤖 مطابقة AI:</span><div class="match-bar-track"><div class="match-bar-fill" style="width:79%;background:var(--primary)"></div></div><span class="match-pct" style="color:#A89CFF">79%</span></div>
-          <div class="action-row">
-            <button class="btn-chat" onclick="event.stopPropagation();window.location.href='23-chat.html'"><i class="ti ti-messages"></i>مراسلة</button>
-            <button class="btn-view-cv"><i class="ti ti-file-cv"></i>عرض CV</button>
-            <button class="btn-view-cv" onclick="window.location.href='21-trainees-progress.html'"><i class="ti ti-chart-line"></i>متابعة الأداء</button>
-          </div>
-        </div>
-      </div>
-    </div>
- 
-    <div class="app-card" data-status="rejected" data-name="خالد عمر">
-      <div class="app-card-inner">
-        <div class="trainee-avatar" style="background:#F59E0B">خل</div>
-        <div style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start">
-            <div><div class="trainee-name">خالد عمر</div><div class="trainee-meta"><i class="ti ti-building-bank" style="font-size:11px"></i>جامعة فلسطين <i class="ti ti-book" style="font-size:11px"></i>IT — السنة 2 <i class="ti ti-star" style="font-size:11px;color:var(--warning)"></i>GPA: 3.1</div></div>
-            <span class="status-badge" style="background:rgba(255,107,107,0.15);color:var(--accent)">✗ مرفوض</span>
-          </div>
-          <div style="background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;color:rgba(255,107,107,0.8);margin-bottom:10px;display:flex;gap:8px">
-            <i class="ti ti-info-circle" style="flex-shrink:0;margin-top:1px"></i><span>سبب الرفض: مستوى الخبرة لا يتناسب مع متطلبات الفرصة حالياً</span>
-          </div>
-          <div class="match-section"><span class="match-label">🤖 مطابقة AI:</span><div class="match-bar-track"><div class="match-bar-fill" style="width:65%;background:rgba(255,255,255,0.3)"></div></div><span class="match-pct" style="color:rgba(255,255,255,0.4)">65%</span></div>
-        </div>
-      </div>
-    </div>
+    <div class="empty-state" id="emptyState"><i class="ti ti-clipboard-off"></i><p>لا توجد طلبات بعد</p></div>
   </div>
 </div>
- 
+
 <div class="modal-overlay" id="rejectModal">
   <div class="modal">
     <div class="modal-title">رفض الطلب</div>
     <div class="modal-sub">يرجى ذكر سبب الرفض لإشعار المتدرب</div>
     <label class="form-label">سبب الرفض <span style="color:var(--accent)">*</span></label>
-    <textarea class="form-textarea" id="rejectReason" placeholder="مثال: نحتاج خبرة أكثر في React. ننصحك بأخذ دورة قبل التقديم مجدداً."></textarea>
+    <textarea class="form-textarea" id="rejectReason" placeholder="مثال: نحتاج خبرة أكثر في React."></textarea>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="document.getElementById('rejectModal').classList.remove('open')">إلغاء</button>
       <button class="btn-confirm-reject" onclick="confirmReject()"><i class="ti ti-x"></i>تأكيد الرفض</button>
     </div>
   </div>
 </div>
- 
+
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
- 
+
 <script>
-const API_BASE='/api';
-function getToken(){return localStorage.getItem('trainlink_token');}
-function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
-function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
+const API='http://127.0.0.1:8000';
+let authToken=localStorage.getItem('access_token');
+let allApplications=[];
+let currentRejectAppId=null;
 
-async function loadCompanyProfile(){try{var res=await fetch(API_BASE+'/auth/profile/',{headers:authHeaders()});if(!res.ok)return;var d=await res.json();var name=d.company_name||d.name||d.username;if(name){var cn=document.getElementById('chipName');if(cn)cn.textContent=name;var ca=document.getElementById('chipAvatar');if(ca)ca.textContent=name.substring(0,2);var nn=document.getElementById('navCompanyName');if(nn)nn.textContent=name;}}catch(e){}}
+(function init(){
+  if(!authToken){window.location.href='../public/02-login.html';return;}
+  loadProfile();loadApplications();
+})();
 
-function toggleMenu(){var d=document.getElementById('userDropdown');var n=document.getElementById('notifPanel');if(n)n.style.display='none';d.style.display=d.style.display==='none'?'block':'none';}
-function toggleNotifPanel(){var d=document.getElementById('notifPanel');var m=document.getElementById('userDropdown');if(m)m.style.display='none';d.style.display=d.style.display==='none'?'block':'none';if(d.style.display==='block')loadNotifs();}
-document.addEventListener('click',function(e){var chip=document.getElementById('companyChip');var dd=document.getElementById('userDropdown');var nb=document.getElementById('notifBtn');var np=document.getElementById('notifPanel');if(chip&&dd&&!chip.contains(e.target)&&!dd.contains(e.target))dd.style.display='none';if(nb&&np&&!nb.contains(e.target)&&!np.contains(e.target))np.style.display='none';});
-async function loadNotifs(){try{var res=await fetch(API_BASE+'/chat/notifications/',{headers:authHeaders()});if(!res.ok)throw new Error();var d=await res.json();var list=d.notifications||[];var container=document.getElementById('notifList');var dot=document.getElementById('notifDot');if(dot)dot.style.display=d.unread_count>0?'block':'none';if(list.length===0){container.innerHTML='<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">لا توجد اشعارات</div>';return;}container.innerHTML='';list.forEach(function(n){var icon='ti-bell';if(n.type==='message')icon='ti-message';if(n.type==='application')icon='ti-clipboard';if(n.type==='report')icon='ti-file-text';if(n.type==='alert')icon='ti-alert-circle';var item=document.createElement('div');item.style.cssText='padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04);cursor:pointer;'+(n.is_read?'opacity:0.5':'');item.innerHTML='<div style="display:flex;align-items:center;gap:8px"><i class="ti '+icon+'" style="color:var(--primary);font-size:16px;flex-shrink:0"></i><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:white;margin-bottom:2px">'+n.title+'</div><div style="font-size:12px;color:rgba(255,255,255,0.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+n.message+'</div></div></div>';item.addEventListener('click',function(){markNotifRead(n.id);item.style.opacity='0.5';});container.appendChild(item);});}catch(e){}}
-async function markAllRead(){try{await fetch(API_BASE+'/chat/notifications/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({mark_all_read:true})});var dot=document.getElementById('notifDot');if(dot)dot.style.display='none';document.querySelectorAll('#notifList > div').forEach(function(el){el.style.opacity='0.5';});}catch(e){}}
-async function markNotifRead(id){try{await fetch(API_BASE+'/chat/notifications/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({notification_id:id})});}catch(e){}}
-
-const statusMap={
-  pending:{bg:'rgba(245,158,11,0.15)',color:'var(--warning)',text:'⏳ جديد'},
-  applied:{bg:'rgba(245,158,11,0.15)',color:'var(--warning)',text:'⏳ جديد'},
-  accepted:{bg:'rgba(34,197,94,0.15)',color:'var(--success)',text:'✓ مقبول'},
-  rejected:{bg:'rgba(255,107,107,0.15)',color:'var(--accent)',text:'✗ مرفوض'}
-};
-const avatarColors=['#5B4FCF','#22C55E','#FF6B6B','#F59E0B','#3B82F6','#EC4899'];
-let allApps=[];
-let currentCard=null;
-let currentAppId=null;
-
-document.addEventListener('DOMContentLoaded',()=>{
-  loadApplications();
-  loadCompanyProfile();
-});
+async function loadProfile(){
+  try{
+    const res=await fetch(`${API}/api/auth/profile/`,{headers:{'Authorization':`Bearer ${authToken}`}});
+    if(!res.ok){window.location.href='../public/02-login.html';return;}
+    const data=await res.json();
+    const name=data.company_name||data.full_name||'الشركة';
+    document.getElementById('navCompanyName').textContent=name;
+    document.getElementById('navCompanyAvatar').textContent=name.substring(0,2);
+  }catch(e){}
+}
 
 async function loadApplications(){
   try{
-    const res=await fetch(API_BASE+'/internships/applications/',{headers:authHeaders()});
-    if(!res.ok)throw new Error('Failed');
-    const data=await res.json();
-    allApps=Array.isArray(data)?data:(data.results||[]);
-    updateStats();renderApps(allApps);
-  }catch(e){showToast('⚠️ خطأ في تحميل الطلبات');}
+    const res=await fetch(`${API}/api/internships/applications/`,{headers:{'Authorization':`Bearer ${authToken}`}});
+    if(!res.ok)return;
+    allApplications=await res.json();
+    if(!Array.isArray(allApplications))allApplications=[];
+    updateStats();renderApplications(allApplications);
+  }catch(e){}
 }
 
 function updateStats(){
-  document.querySelectorAll('.mini-stat-num')[0].textContent=allApps.length;
-  document.querySelectorAll('.mini-stat-num')[1].textContent=allApps.filter(a=>a.status==='pending'||a.status==='applied'||(!a.status)).length;
-  document.querySelectorAll('.mini-stat-num')[2].textContent=allApps.filter(a=>a.status==='accepted').length;
-  document.querySelectorAll('.mini-stat-num')[3].textContent=allApps.filter(a=>a.status==='rejected').length;
+  const total=allApplications.length;
+  const pending=allApplications.filter(a=>a.status==='pending').length;
+  const accepted=allApplications.filter(a=>a.status==='accepted').length;
+  const rejected=allApplications.filter(a=>a.status==='rejected').length;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('statPending').textContent=pending;
+  document.getElementById('statAccepted').textContent=accepted;
+  document.getElementById('statRejected').textContent=rejected;
 }
 
-function renderApps(apps){
+function renderApplications(apps){
   const container=document.getElementById('appsList');
-  container.innerHTML='';
-  apps.forEach((app,i)=>{
-    const st=app.status||'pending';
-    const s=statusMap[st]||statusMap.pending;
-    const name=app.trainee_name||app.user_name||app.applicant_name||'متقدم';
+  const empty=document.getElementById('emptyState');
+  if(apps.length===0){container.innerHTML='';container.appendChild(empty);empty.style.display='block';return;}
+  empty.style.display='none';
+  container.innerHTML=apps.map(app=>{
+    const name=app.trainee?.full_name||'متدرب';
     const initials=name.substring(0,2);
-    const color=avatarColors[i%avatarColors.length];
-    const university=app.university||'';
-    const major=app.department||app.major||'';
-    const year=app.year||'';
-    const gpa=app.gpa||app.trainee_gpa||'-';
-    const skills=app.skills||app.trainee_skills||[];
-    const skillsHtml=Array.isArray(skills)?skills.slice(0,4).map(s=>'<span class="ttag" style="background:rgba(91,79,207,0.15);color:#A89CFF">'+s+'</span>').join(''):'';
-    const match=app.ai_match||app.match_score||Math.floor(Math.random()*30+70);
-    const barColor=match>=85?'var(--success)':match>=70?'var(--warning)':'rgba(255,255,255,0.3)';
-
-    let actionsHtml='';
-    if(st==='accepted'){
-      actionsHtml='<button class="btn-chat" onclick="window.location.href=\'23-chat.html\'"><i class="ti ti-messages"></i>مراسلة</button><button class="btn-view-cv"><i class="ti ti-file-cv"></i>عرض CV</button>';
-    }else if(st==='rejected'){
-      const reason=app.rejection_reason||'';
-      actionsHtml=reason?'<div style="background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;color:rgba(255,107,107,0.8);margin-bottom:10px;display:flex;gap:8px"><i class="ti ti-info-circle" style="flex-shrink:0;margin-top:1px"></i><span>سبب الرفض: '+reason+'</span></div>':'';
-    }else{
-      actionsHtml='<button class="btn-accept" onclick="event.stopPropagation();acceptApp(this,\''+app.id+'\')"><i class="ti ti-check"></i>قبول</button><button class="btn-reject" onclick="event.stopPropagation();openRejectModal(this,\''+app.id+'\')"><i class="ti ti-x"></i>رفض</button><button class="btn-view-cv"><i class="ti ti-file-cv"></i>عرض CV</button>';
-    }
-    if(st==='accepted'){
-      actionsHtml+='<button class="btn-view-cv" onclick="window.location.href=\'21-trainees-progress.html\'"><i class="ti ti-chart-line"></i>متابعة الأداء</button>';
-    }
-
-    const card=document.createElement('div');
-    card.className='app-card';
-    card.dataset.status=st;
-    card.dataset.name=name;
-    card.innerHTML='<div class="app-card-inner"><div class="trainee-avatar" style="background:'+color+'">'+initials+'</div>'+
-      '<div style="flex:1"><div style="display:flex;justify-content:space-between;align-items:flex-start">'+
-      '<div><div class="trainee-name">'+name+'</div><div class="trainee-meta"><i class="ti ti-building-bank" style="font-size:11px"></i>'+university+' <i class="ti ti-book" style="font-size:11px"></i>'+major+' — '+year+' <i class="ti ti-star" style="font-size:11px;color:var(--warning)"></i>GPA: '+gpa+'</div></div>'+
-      '<span class="status-badge" style="background:'+s.bg+';color:'+s.color+'">'+s.text+'</span></div>'+
-      '<div class="trainee-tags">'+skillsHtml+'</div>'+
-      '<div class="match-section"><span class="match-label">🤖 مطابقة AI:</span><div class="match-bar-track"><div class="match-bar-fill" style="width:'+match+'%;background:'+barColor+'"></div></div><span class="match-pct" style="color:'+barColor+'">'+match+'%</span></div>'+
-      '<div class="action-row">'+actionsHtml+'</div></div></div>';
-    container.appendChild(card);
-  });
-  updateTabCounts();
-}
-
-function updateTabCounts(){
-  const tabs=document.querySelectorAll('.tab');
-  tabs[0].textContent='الكل ('+allApps.length+')';
-  tabs[1].textContent='⏳ انتظار ('+allApps.filter(a=>a.status==='pending'||a.status==='applied'||(!a.status)).length+')';
-  tabs[2].textContent='✓ مقبول ('+allApps.filter(a=>a.status==='accepted').length+')';
-  tabs[3].textContent='✗ مرفوض ('+allApps.filter(a=>a.status==='rejected').length+')';
+    const colors=['#5B4FCF','#22C55E','#FF6B6B','#F59E0B','#3B82F6'];
+    const color=colors[app.id%colors.length];
+    const statusMap={pending:{label:'⏳ جديد',bg:'rgba(245,158,11,0.15)',color:'var(--warning)'},accepted:{label:'✓ مقبول',bg:'rgba(34,197,94,0.15)',color:'var(--success)'},rejected:{label:'✗ مرفوض',bg:'rgba(255,107,107,0.15)',color:'var(--accent)'}};
+    const st=statusMap[app.status]||statusMap.pending;
+    const actions=app.status==='pending'?`
+      <button class="btn-accept" onclick="acceptApp(${app.id})"><i class="ti ti-check"></i>قبول</button>
+      <button class="btn-reject" onclick="openRejectModal(${app.id})"><i class="ti ti-x"></i>رفض</button>`:
+      app.status==='accepted'?`<button class="btn-chat" onclick="window.location.href='23-company-chat.html'"><i class="ti ti-messages"></i>مراسلة</button>`:'';
+    return`<div class="app-card" data-status="${app.status}" data-id="${app.id}">
+      <div class="app-card-inner">
+        <div class="trainee-avatar" style="background:${color}">${initials}</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div><div class="trainee-name">${name}</div>
+            <div class="trainee-meta">${app.internship?.title?'<span>📂 '+app.internship.title+'</span>':''}</div></div>
+            <span class="status-badge" style="background:${st.bg};color:${st.color}">${st.label}</span>
+          </div>
+          <div class="action-row">${actions}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function filterApps(btn,status){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.app-card').forEach(c=>{
-    c.style.display=(status==='all'||c.dataset.status===status)?'block':'none';
-  });
-}
-function searchApps(q){
-  document.querySelectorAll('.app-card').forEach(c=>{
-    c.style.display=c.dataset.name?.toLowerCase().includes(q.toLowerCase())?'block':'none';
-  });
+  const filtered=status==='all'?allApplications:allApplications.filter(a=>a.status===status);
+  renderApplications(filtered);
 }
 
-async function acceptApp(btn,id){
+function searchApps(q){
+  const filtered=allApplications.filter(a=>a.trainee?.full_name?.toLowerCase().includes(q.toLowerCase()));
+  renderApplications(filtered);
+}
+
+async function acceptApp(id){
   try{
-    const res=await fetch(API_BASE+'/internships/applications/'+id+'/',{
-      method:'PATCH',headers:authHeaders(),
+    const res=await fetch(`${API}/api/internships/applications/${id}/`,{
+      method:'PATCH',headers:{'Content-Type':'application/json','Authorization':`Bearer ${authToken}`},
       body:JSON.stringify({status:'accepted'})
     });
-    if(!res.ok)throw new Error('Failed');
-    const card=btn.closest('.app-card');
-    card.dataset.status='accepted';
-    card.querySelector('.status-badge').style.background='rgba(34,197,94,0.15)';
-    card.querySelector('.status-badge').style.color='var(--success)';
-    card.querySelector('.status-badge').textContent='✓ مقبول';
-    card.querySelector('.action-row').innerHTML='<button class="btn-chat" onclick="window.location.href=\'23-chat.html\'"><i class="ti ti-messages"></i>مراسلة</button><button class="btn-view-cv"><i class="ti ti-file-cv"></i>عرض CV</button>';
-    const app=allApps.find(a=>String(a.id)===String(id));
-    if(app)app.status='accepted';
-    updateStats();updateTabCounts();
-    showToast('✅ تم قبول المتدرب وإشعاره!');
-  }catch(e){showToast('❌ خطأ في قبول الطلب');}
+    if(res.ok){showToast('✅ تم قبول المتدرب!');loadApplications();}
+    else{showToast('❌ فشل القبول');}
+  }catch(e){showToast('❌ خطأ');}
 }
 
-function openRejectModal(btn,id){currentCard=btn.closest('.app-card');currentAppId=id;document.getElementById('rejectModal').classList.add('open');}
+function openRejectModal(id){currentRejectAppId=id;document.getElementById('rejectModal').classList.add('open');}
 
 async function confirmReject(){
   const reason=document.getElementById('rejectReason').value.trim();
   if(!reason){showToast('⚠️ يرجى ذكر سبب الرفض');return;}
   try{
-    const res=await fetch(API_BASE+'/internships/applications/'+currentAppId+'/',{
-      method:'PATCH',headers:authHeaders(),
+    const res=await fetch(`${API}/api/internships/applications/${currentRejectAppId}/`,{
+      method:'PATCH',headers:{'Content-Type':'application/json','Authorization':`Bearer ${authToken}`},
       body:JSON.stringify({status:'rejected',rejection_reason:reason})
     });
-    if(!res.ok)throw new Error('Failed');
     document.getElementById('rejectModal').classList.remove('open');
-    if(currentCard){
-      currentCard.dataset.status='rejected';
-      currentCard.querySelector('.status-badge').style.background='rgba(255,107,107,0.15)';
-      currentCard.querySelector('.status-badge').style.color='var(--accent)';
-      currentCard.querySelector('.status-badge').textContent='✗ مرفوض';
-      const actionRow=currentCard.querySelector('.action-row');
-      if(actionRow)actionRow.innerHTML='<div style="background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;color:rgba(255,107,107,0.8);display:flex;gap:8px"><i class="ti ti-info-circle" style="flex-shrink:0;margin-top:1px"></i><span>سبب الرفض: '+reason+'</span></div>';
-    }
-    const app=allApps.find(a=>String(a.id)===String(currentAppId));
-    if(app){app.status='rejected';app.rejection_reason=reason;}
-    updateStats();updateTabCounts();
-    showToast('تم رفض الطلب وإشعار المتدرب بالسبب');
-  }catch(e){showToast('❌ خطأ في رفض الطلب');}
-  document.getElementById('rejectReason').value='';
+    document.getElementById('rejectReason').value='';
+    if(res.ok){showToast('تم رفض الطلب');loadApplications();}
+  }catch(e){showToast('❌ خطأ');}
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  document.getElementById('toastMsg').textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
-}
+function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
 </body>
 </html>

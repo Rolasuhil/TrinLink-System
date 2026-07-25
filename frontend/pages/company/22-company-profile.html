@@ -8,9 +8,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--dark:#0F0E1A;--dark-2:#1A1827;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--topbar:60px}
+:root{--primary:#5B4FCF;--accent:#FF6B6B;--success:#22C55E;--warning:#F59E0B;--dark:#0F0E1A;--dark-2:#1A1827;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif}
 body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh;display:flex;flex-direction:column}
-.topbar{background:#1A1827;border-bottom:1px solid rgba(255,255,255,0.08);height:var(--topbar);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100}
+.topbar{background:#1A1827;border-bottom:1px solid rgba(255,255,255,0.08);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100}
 .top-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
 .top-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .top-logo-icon i{color:white;font-size:15px}
@@ -19,212 +19,260 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 .top-nav-item{padding:7px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);cursor:pointer;border:none;background:transparent;font-family:var(--font);transition:all 0.15s;display:flex;align-items:center;gap:6px;text-decoration:none}
 .top-nav-item:hover{background:rgba(255,255,255,0.06);color:white}
 .top-nav-item.active{background:var(--primary);color:white}
-.top-right{display:flex;align-items:center;gap:10px;position:relative}
-.icon-btn{width:34px;height:34px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
-.icon-btn i{color:rgba(255,255,255,0.6);font-size:16px}
-.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid #1A1827}
-.company-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:6px 12px;cursor:pointer}
+.chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:6px 12px}
 .chip-avatar{width:26px;height:26px;border-radius:6px;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white}
 .chip-name{font-size:12px;font-weight:600;color:white}
-.content{padding:20px 24px;flex:1;max-width:800px}
-.profile-header{background:#1A1827;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px;text-align:center;position:relative}
-.cover-bg{height:100px;background:linear-gradient(135deg,var(--primary),#7C3AED);border-radius:var(--radius-lg) var(--radius-lg) 0 0;margin:-24px -24px 0 -24px}
-.profile-avatar{width:80px;height:80px;border-radius:50%;background:var(--primary);border:4px solid #1A1827;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:white;margin:-40px auto 12px;position:relative;z-index:1;box-shadow:0 4px 12px rgba(91,79,207,0.3)}
-.profile-name{font-size:20px;font-weight:800;color:white}
-.profile-type{font-size:13px;color:rgba(255,255,255,0.4);margin-top:2px}
-.profile-rating{margin:8px 0;font-size:16px;color:var(--warning)}
-.form-card{background:#1A1827;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
-.form-title{font-size:15px;font-weight:700;color:white;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.form-title i{color:var(--primary);font-size:18px}
-.form-group{margin-bottom:12px}
-.form-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);display:block;margin-bottom:4px}
-.form-input{width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none;background:rgba(255,255,255,0.04);color:white;transition:all 0.15s}
-.form-input:focus{border-color:var(--primary);background:rgba(255,255,255,0.08)}
-textarea.form-input{resize:vertical;min-height:70px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.btn{padding:10px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
-.btn-primary{background:var(--primary);color:white}
-.btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.stat-item{background:#1A1827;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:14px;text-align:center}
-.stat-num{font-size:22px;font-weight:800;color:var(--primary)}
-.stat-label{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
+.content{padding:0;flex:1}
+.cover{height:180px;background:linear-gradient(135deg,var(--primary),#7C3AED);position:relative}
+.cover-edit{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.4);color:white;border:none;border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:5px}
+.profile-section{padding:0 24px;margin-top:-36px;margin-bottom:20px}
+.profile-row{display:flex;align-items:flex-end;gap:16px;margin-bottom:16px}
+.company-logo{width:80px;height:80px;border-radius:var(--radius-lg);background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:white;border:4px solid var(--dark);flex-shrink:0}
+.company-name{font-size:22px;font-weight:800;color:white;margin-bottom:4px}
+.company-sub{font-size:13px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.verified{color:var(--success);display:flex;align-items:center;gap:3px;font-size:12px}
+.profile-actions{margin-right:auto;display:flex;gap:8px;padding-bottom:4px}
+.btn-edit{padding:9px 20px;background:var(--primary);color:white;border:none;border-radius:var(--radius-md);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px}
+.btn-preview{padding:9px 16px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:13px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px}
+.stats-row{display:flex;gap:20px;padding:14px 0;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:20px}
+.stat-item{text-align:center;flex:1}
+.stat-num{font-size:24px;font-weight:900;color:white}
+.stat-label{font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px}
+.layout{display:grid;grid-template-columns:1fr 320px;gap:20px;padding:0 24px 24px}
+.card{background:#1A1827;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
+.card-title{font-size:14px;font-weight:700;color:white;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.card-title-left{display:flex;align-items:center;gap:6px}
+.card-title-left i{color:#A89CFF;font-size:16px}
+.edit-btn{font-size:12px;color:#A89CFF;cursor:pointer;background:none;border:none;font-family:var(--font);font-weight:600;display:flex;align-items:center;gap:4px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.info-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.info-label{font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:3px}
+.info-val{font-size:13px;font-weight:600;color:white}
+.desc-text{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.8}
+.tech-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tech-tag{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(91,79,207,0.15);color:#A89CFF;border:1px solid rgba(91,79,207,0.2)}
+.intern-item{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer}
+.intern-item:last-child{border-bottom:none}
+.intern-title{font-size:13px;font-weight:600;color:white;margin-bottom:5px}
+.intern-meta{display:flex;gap:8px;align-items:center}
+.intern-tag{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
+.review-summary{display:flex;gap:20px;align-items:center;background:rgba(255,255,255,0.03);border-radius:var(--radius-md);padding:14px;margin-bottom:14px}
+.review-big{font-size:40px;font-weight:900;color:white;text-align:center}
+.review-stars{color:var(--warning);font-size:14px;text-align:center}
+.review-count{font-size:11px;color:rgba(255,255,255,0.3);text-align:center}
+.rbar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.rbar-track{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.rbar-fill{height:100%;background:var(--warning);border-radius:3px}
+.review-item{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.review-item:last-child{border-bottom:none}
+.reviewer-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.reviewer-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0}
+.reviewer-name{font-size:12px;font-weight:700;color:white}
+.reviewer-date{font-size:10px;color:rgba(255,255,255,0.3)}
+.review-text{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2D2B3E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;border:1px solid rgba(255,255,255,0.1)}
 .toast.show{display:flex}
 </style>
 </head>
 <body>
-
 <div class="topbar">
   <a href="#" class="top-logo"><div class="top-logo-icon"><i class="ti ti-briefcase"></i></div><span class="top-logo-text">TrainLink</span></a>
   <div class="top-nav">
     <a href="18-company-dashboard.html" class="top-nav-item"><i class="ti ti-layout-dashboard"></i>لوحة التحكم</a>
+    <a href="19-post-internship.html" class="top-nav-item"><i class="ti ti-plus-circle"></i>نشر فرصة</a>
     <a href="20-manage-applications.html" class="top-nav-item"><i class="ti ti-clipboard-list"></i>الطلبات</a>
     <a href="21-trainees-progress.html" class="top-nav-item"><i class="ti ti-chart-line"></i>المتدربون</a>
-    <a href="23-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
-    <a href="22-company-profile.html" class="top-nav-item active"><i class="ti ti-building"></i><span id="navCompanyName">ملف الشركة</span></a>
+    <a href="23-company-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
+    <a href="#" class="top-nav-item active"><i class="ti ti-building"></i>ملف الشركة</a>
   </div>
-  <div class="top-right">
-    <div class="icon-btn" onclick="toggleNotifPanel()" id="notifBtn"><i class="ti ti-bell"></i><div class="notif-dot" id="notifDot"></div></div>
-    <div class="icon-btn" onclick="window.location.href='23-chat.html'" title="الدردشة"><i class="ti ti-messages"></i></div>
-    <div class="company-chip" onclick="toggleMenu()" id="companyChip" style="cursor:pointer">
-      <div class="chip-avatar" id="chipAvatar">TP</div>
-      <div class="chip-name" id="chipName">TechPal</div>
-      <i class="ti ti-chevron-down" style="font-size:12px;color:rgba(255,255,255,0.4)"></i>
-    </div>
-    <div id="userDropdown" style="display:none;position:absolute;top:50px;left:16px;background:#2D2B3E;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);box-shadow:0 8px 24px rgba(0,0,0,0.4);min-width:180px;z-index:200;padding:8px 0">
-      <a href="#" onclick="localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user');window.location.href='../public/02-login.html'" style="display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:#FF6B6B;text-decoration:none"><i class="ti ti-logout"></i> تسجيل الخروج</a>
-    </div>
-    <div id="notifPanel" style="display:none;position:absolute;top:50px;left:50px;background:#2D2B3E;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);box-shadow:0 8px 24px rgba(0,0,0,0.4);min-width:320px;max-height:400px;overflow-y:auto;z-index:200;padding:0">
-      <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:14px;font-weight:700;color:white">الاشعارات</span>
-        <button onclick="markAllRead()" style="background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;font-family:var(--font)">تحديد الكل كمقروء</button>
-      </div>
-      <div id="notifList" style="padding:8px 0"><div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">جاري التحميل...</div></div>
-    </div>
-  </div>
+  <div class="chip"><div class="chip-avatar" id="navAvatar">TP</div><span class="chip-name" id="navName">TechPal</span></div>
 </div>
 
 <div class="content">
-  <div class="profile-header">
-    <div class="cover-bg"></div>
-    <div class="profile-avatar">TP</div>
-    <div class="profile-name">TechPal</div>
-    <div class="profile-type">تقنية المعلومات · غزة · منذ 2023</div>
-    <div class="profile-rating">★★★★★ 4.8 <span style="font-size:12px;color:rgba(255,255,255,0.4)">(24 تقييم)</span></div>
-  </div>
-
-  <div class="stats-row">
-    <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">فرص نشطة</div></div>
-    <div class="stat-item"><div class="stat-num">45</div><div class="stat-label">متدربين إجمالي</div></div>
-    <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">متدربين حاليين</div></div>
-    <div class="stat-item"><div class="stat-num">92%</div><div class="stat-label">نسبة الرضا</div></div>
-  </div>
-
-  <div class="form-card">
-    <div class="form-title"><i class="ti ti-info-circle"></i>المعلومات الأساسية</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">اسم الشركة</label><input class="form-input" value="TechPal" id="compName"></div>
-      <div class="form-group"><label class="form-label">البريد الإلكتروني</label><input class="form-input" value="info@techpal.com" id="compEmail"></div>
+  <div class="cover"><button class="cover-edit"><i class="ti ti-camera"></i>تغيير الغلاف</button></div>
+  <div class="profile-section">
+    <div class="profile-row">
+      <div class="company-logo" id="logoText">TP</div>
+      <div style="flex:1">
+        <div class="company-name" id="companyNameDisplay">-- <i class="ti ti-shield-check" style="color:var(--success);font-size:18px"></i></div>
+        <div class="company-sub">
+          <span id="companyIndustry">--</span>
+          <span style="color:rgba(255,255,255,0.2)">·</span>
+          <span><i class="ti ti-map-pin" style="font-size:12px"></i> <span id="companyLocation">--</span></span>
+          <span style="color:rgba(255,255,255,0.2)">·</span>
+          <span class="verified"><i class="ti ti-shield-check"></i>موثّقة</span>
+        </div>
+        <div style="color:var(--warning);font-size:16px" id="ratingDisplay">--</div>
+      </div>
+      <div class="profile-actions">
+        <button class="btn-edit" onclick="showToast('جارٍ فتح نموذج التعديل...')"><i class="ti ti-edit"></i>تعديل الملف</button>
+        <button class="btn-preview"><i class="ti ti-eye"></i>معاينة</button>
+      </div>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">رقم الهاتف</label><input class="form-input" value="+972 59 123 4567" id="compPhone"></div>
-      <div class="form-group"><label class="form-label">الموقع</label><input class="form-input" value="غزة، شارع الشجاعة" id="compLocation"></div>
-    </div>
-    <div class="form-group"><label class="form-label">نبذة عن الشركة</label><textarea class="form-input" id="compDesc">شركة TechPal متخصصة في تطوير تطبيقات الويب والموبايل. نقدم فرص تدريب مميزة للمتدربيين الفلسطينيين مع فريق عمل محترف ومتعاون.</textarea></div>
-  </div>
-
-  <div class="form-card">
-    <div class="form-title"><i class="ti ti-link"></i>روابط التواصل</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">الموقع الإلكتروني</label><input class="form-input" value="https://techpal.com" id="compWebsite"></div>
-      <div class="form-group"><label class="form-label">LinkedIn</label><input class="form-input" value="linkedin.com/company/techpal" id="compLinkedin"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Twitter/X</label><input class="form-input" value="@techpal_ps" id="compTwitter"></div>
-      <div class="form-group"><label class="form-label">GitHub</label><input class="form-input" value="github.com/techpal" id="compGithub"></div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="stat-num" id="statTrainees">--</div><div class="stat-label">متدرب سابق</div></div>
+      <div class="stat-item"><div class="stat-num" id="statActive">--</div><div class="stat-label">فرص نشطة</div></div>
+      <div class="stat-item"><div class="stat-num" id="statRating">--</div><div class="stat-label">متوسط التقييم</div></div>
+      <div class="stat-item"><div class="stat-num" id="statSatisfaction">--</div><div class="stat-label">نسبة الرضا</div></div>
+      <div class="stat-item"><div class="stat-num" id="statFounded">--</div><div class="stat-label">تأسست</div></div>
     </div>
   </div>
 
-  <div class="form-card">
-    <div class="form-title"><i class="ti ti-star"></i>آخر التقييمات</div>
-    <div style="padding:12px;background:rgba(255,255,255,0.04);border-radius:var(--radius-md);margin-bottom:8px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="width:28px;height:28px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white">سم</div><span style="font-size:12px;font-weight:700;color:white">سارة محمود</span><span style="color:var(--warning);font-size:12px">★★★★★</span></div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6">تجربة رائعة! تعلمت الكثير من فريق TechPal. المشرف متعاون والبيئة محفزة للعمل.</div>
-    </div>
-    <div style="padding:12px;background:rgba(255,255,255,0.04);border-radius:var(--radius-md)">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div style="width:28px;height:28px;border-radius:50%;background:#22C55E;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white">أح</div><span style="font-size:12px;font-weight:700;color:white">أحمد حسن</span><span style="color:var(--warning);font-size:12px">★★★★☆</span></div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6">التدريب ممتاز والأعمال تفاعلية. أتمنى لو كان التدريب أطول.</div>
-    </div>
-  </div>
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="ti ti-info-circle"></i>عن الشركة</div><button class="edit-btn"><i class="ti ti-edit"></i>تعديل</button></div>
+        <div class="desc-text" id="companyDesc" style="margin-bottom:16px">--</div>
+        <div class="info-grid">
+          <div class="info-item"><div class="info-label">المجال</div><div class="info-val" id="infoIndustry">--</div></div>
+          <div class="info-item"><div class="info-label">الحجم</div><div class="info-val" id="infoSize">--</div></div>
+          <div class="info-item"><div class="info-label">الموقع</div><div class="info-val" id="infoLocation">--</div></div>
+          <div class="info-item"><div class="info-label">نوع العمل</div><div class="info-val" id="infoWorkType">--</div></div>
+          <div class="info-item"><div class="info-label">الموقع الإلكتروني</div><div class="info-val" id="infoWebsite" style="color:#A89CFF">--</div></div>
+          <div class="info-item"><div class="info-label">البريد الإلكتروني</div><div class="info-val" id="infoEmail">--</div></div>
+        </div>
+      </div>
 
-  <div style="display:flex;gap:10px;margin-top:8px">
-    <button class="btn btn-primary" onclick="saveProfile()"><i class="ti ti-device-floppy" style="margin-left:4px"></i>حفظ التعديلات</button>
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="ti ti-code"></i>التقنيات المستخدمة</div><button class="edit-btn"><i class="ti ti-edit"></i>تعديل</button></div>
+        <div class="tech-tags" id="techTags"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="ti ti-star"></i>تقييمات المتدربين</div></div>
+        <div class="review-summary">
+          <div><div class="review-big" id="revAvg">--</div><div class="review-stars" id="revStars">--</div><div class="review-count" id="revCount">--</div></div>
+          <div style="flex:1" id="revBars"></div>
+        </div>
+        <div id="reviewsList"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="ti ti-briefcase"></i>الفرص النشطة</div><a href="19-post-internship.html" style="font-size:12px;color:#A89CFF;font-weight:700;text-decoration:none">+ إضافة</a></div>
+        <div id="internshipsList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><div class="card-title-left"><i class="ti ti-chart-bar"></i>إحصائيات الملف</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--primary)" id="statViews">--</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">مشاهدة هذا الشهر</div></div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--success)" id="statApps">--</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">متقدم هذا الشهر</div></div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--warning)" id="statAccept">--</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">نسبة القبول</div></div>
+          <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:#A89CFF" id="statAvg">--</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">متوسط التقييم</div></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
-const API_BASE='/api';
-function getToken(){return localStorage.getItem('trainlink_token');}
-function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
-function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
+const API='http://127.0.0.1:8000';
+let token=localStorage.getItem('access_token');
 
-function toggleMenu(){var d=document.getElementById('userDropdown');var n=document.getElementById('notifPanel');if(n)n.style.display='none';d.style.display=d.style.display==='none'?'block':'none';}
-function toggleNotifPanel(){var d=document.getElementById('notifPanel');var m=document.getElementById('userDropdown');if(m)m.style.display='none';d.style.display=d.style.display==='none'?'block':'none';if(d.style.display==='block')loadNotifs();}
-document.addEventListener('click',function(e){var d=document.getElementById('userDropdown');var c=document.getElementById('companyChip');var nb=document.getElementById('notifBtn');var np=document.getElementById('notifPanel');if(c&&!c.contains(e.target)&&!d.contains(e.target))d.style.display='none';if(nb&&np&&!nb.contains(e.target)&&!np.contains(e.target))np.style.display='none';});
-async function loadNotifs(){try{var res=await fetch(API_BASE+'/chat/notifications/',{headers:authHeaders()});if(!res.ok)throw new Error();var d=await res.json();var list=d.notifications||[];var container=document.getElementById('notifList');var dot=document.getElementById('notifDot');if(dot)dot.style.display=d.unread_count>0?'block':'none';if(list.length===0){container.innerHTML='<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px">لا توجد اشعارات</div>';return;}container.innerHTML='';list.forEach(function(n){var icon='ti-bell';if(n.type==='message')icon='ti-message';if(n.type==='application')icon='ti-clipboard';if(n.type==='report')icon='ti-file-text';if(n.type==='alert')icon='ti-alert-circle';var item=document.createElement('div');item.style.cssText='padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04);cursor:pointer;'+(n.is_read?'opacity:0.5':'');item.innerHTML='<div style="display:flex;align-items:center;gap:8px"><i class="ti '+icon+'" style="color:var(--primary);font-size:16px;flex-shrink:0"></i><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:white;margin-bottom:2px">'+n.title+'</div><div style="font-size:12px;color:rgba(255,255,255,0.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+n.message+'</div></div></div>';item.addEventListener('click',function(){markNotifRead(n.id);item.style.opacity='0.5';});container.appendChild(item);});}catch(e){}}
-async function markAllRead(){try{await fetch(API_BASE+'/chat/notifications/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({mark_all_read:true})});var dot=document.getElementById('notifDot');if(dot)dot.style.display='none';document.querySelectorAll('#notifList > div').forEach(function(el){el.style.opacity='0.5';});}catch(e){}}
-async function markNotifRead(id){try{await fetch(API_BASE+'/chat/notifications/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({notification_id:id})});}catch(e){}}
-
-let editing=false;
-
-document.addEventListener('DOMContentLoaded',()=>{
-  loadProfile();
-  document.querySelectorAll('.form-input').forEach(el=>{el.disabled=true;el.style.opacity='0.8'});
-});
+(function init(){
+  if(!token){window.location.href='../public/02-login.html';return;}
+  loadProfile();loadInternships();loadReviews();
+})();
 
 async function loadProfile(){
   try{
-    const res=await fetch(API_BASE+'/auth/profile/',{headers:authHeaders()});
-    if(!res.ok)throw new Error('Failed to load profile');
+    const res=await fetch(`${API}/api/auth/profile/`,{headers:{'Authorization':`Bearer ${token}`}});
+    if(!res.ok){window.location.href='../public/02-login.html';return;}
     const data=await res.json();
-    const name=data.company_name||data.name||data.username||'TechPal';
+    const name=data.company_name||data.full_name||'الشركة';
     const initials=name.substring(0,2);
-    document.querySelector('.profile-avatar').textContent=initials;
-    document.querySelector('.profile-name').textContent=name;
-    document.getElementById('chipAvatar').textContent=initials;
-    document.getElementById('chipName').textContent=name;
-    var nn=document.getElementById('navCompanyName');if(nn)nn.textContent=name;
-    if(data.email)document.getElementById('compEmail').value=data.email;
-    if(data.phone||data.phone_number)document.getElementById('compPhone').value=data.phone||data.phone_number;
-    if(data.location||data.address)document.getElementById('compLocation').value=data.location||data.address;
-    if(data.description||data.about||data.bio)document.getElementById('compDesc').value=data.description||data.about||data.bio;
-    if(data.website)document.getElementById('compWebsite').value=data.website;
-    if(data.linkedin)document.getElementById('compLinkedin').value=data.linkedin;
-    if(data.twitter)document.getElementById('compTwitter').value=data.twitter;
-    if(data.github)document.getElementById('compGithub').value=data.github;
-    if(data.company_name||data.name){
-      document.getElementById('compName').value=name;
+    document.getElementById('navName').textContent=name;
+    document.getElementById('navAvatar').textContent=initials;
+    document.getElementById('logoText').textContent=initials;
+    document.getElementById('companyNameDisplay').innerHTML=name+' <i class="ti ti-shield-check" style="color:var(--success);font-size:18px"></i>';
+    document.getElementById('companyIndustry').textContent=data.industry||'تطوير برمجيات';
+    document.getElementById('companyLocation').textContent=data.location||'غزة، فلسطين';
+    document.getElementById('companyDesc').textContent=data.about||'لا يوجد وصف بعد.';
+    document.getElementById('infoIndustry').textContent=data.industry||'تطوير برمجيات';
+    document.getElementById('infoSize').textContent=data.company_size||'15-30 موظف';
+    document.getElementById('infoLocation').textContent=data.location||'غزة، فلسطين';
+    document.getElementById('infoWorkType').textContent=data.work_type||'داخل وعن بُعد';
+    document.getElementById('infoWebsite').textContent=data.website||'--';
+    document.getElementById('infoEmail').textContent=data.user?.email||'--';
+    const rating=data.avg_rating||4.8;
+    const stars='★'.repeat(Math.floor(rating))+'☆'.repeat(5-Math.floor(rating));
+    document.getElementById('ratingDisplay').innerHTML=stars+' <span style="font-size:13px;color:rgba(255,255,255,0.3)">'+rating+'</span>';
+    document.getElementById('statTrainees').textContent=data.total_trainees||'--';
+    document.getElementById('statRating').textContent=rating;
+    document.getElementById('statSatisfaction').textContent=(data.satisfaction_rate||'--')+'%';
+    document.getElementById('statFounded').textContent=data.founded_year||'2018';
+    document.getElementById('statActive').textContent='--';
+    document.getElementById('statAvg').textContent=rating+'★';
+    if(data.technologies){
+      const techs=Array.isArray(data.technologies)?data.technologies:data.technologies.split(',');
+      document.getElementById('techTags').innerHTML=techs.map(t=>`<span class="tech-tag">${t.trim()}</span>`).join('');
+    }else{
+      document.getElementById('techTags').innerHTML='<span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">Python</span><span class="tech-tag">Django</span>';
     }
-  }catch(e){showToast('⚠️ خطأ في تحميل الملف الشخصي');}
+  }catch(e){}
 }
 
-function toggleEdit(){
-  editing=!editing;
-  document.querySelectorAll('.form-input').forEach(el=>{el.disabled=!editing;el.style.opacity=editing?'1':'0.8'});
-  if(!editing)saveProfile();
-}
-
-async function saveProfile(){
-  const body={
-    company_name:document.getElementById('compName').value,
-    email:document.getElementById('compEmail').value,
-    phone:document.getElementById('compPhone').value,
-    location:document.getElementById('compLocation').value,
-    description:document.getElementById('compDesc').value,
-    website:document.getElementById('compWebsite').value,
-    linkedin:document.getElementById('compLinkedin').value,
-    twitter:document.getElementById('compTwitter').value,
-    github:document.getElementById('compGithub').value
-  };
+async function loadInternships(){
   try{
-    const res=await fetch(API_BASE+'/auth/profile/',{
-      method:'PUT',headers:authHeaders(),
-      body:JSON.stringify(body)
-    });
-    if(!res.ok)throw new Error('Failed to save');
-    showToast('تم حفظ التعديلات بنجاح ✓');
-  }catch(e){showToast('❌ خطأ في حفظ التعديلات');}
+    const res=await fetch(`${API}/api/internships/`,{headers:{'Authorization':`Bearer ${token}`}});
+    if(!res.ok)return;
+    const data=await res.json();
+    const list=Array.isArray(data)?data:(data.results||[]);
+    document.getElementById('statActive').textContent=list.length;
+    if(list.length===0){
+      document.getElementById('internshipsList').innerHTML='<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.3);font-size:12px">لا توجد فرص نشطة</div>';
+      return;
+    }
+    document.getElementById('internshipsList').innerHTML=list.map(item=>{
+      const paid=item.is_paid;
+      return`<div class="intern-item" onclick="window.location.href='20-manage-applications.html'">
+        <div class="intern-title">${item.title||'فرصة'}</div>
+        <div class="intern-meta">
+          <span class="intern-tag" style="background:rgba(${paid?'245,158,11,0.15':'34,197,94,0.15'});color:var(--${paid?'warning':'success'})">${paid?'💰 مدفوع':'🆓 مجاني'}</span>
+          <span class="intern-tag" style="background:rgba(91,79,207,0.15);color:#A89CFF">${item.applications_count||0} متقدم</span>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){}
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  document.getElementById('toastMsg').textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+async function loadReviews(){
+  try{
+    const res=await fetch(`${API}/api/community/ratings/`,{headers:{'Authorization':`Bearer ${token}`}});
+    if(!res.ok)return;
+    const data=await res.json();
+    const list=Array.isArray(data)?data:(data.results||[]);
+    if(list.length===0){
+      document.getElementById('revAvg').textContent='--';
+      document.getElementById('revStars').innerHTML='<span style="color:rgba(255,255,255,0.2)">لا توجد تقييمات</span>';
+      document.getElementById('revCount').textContent='';
+      document.getElementById('reviewsList').innerHTML='';
+      return;
+    }
+    const avg=(list.reduce((s,r)=>s+(r.rating||0),0)/list.length).toFixed(1);
+    const stars='★'.repeat(Math.floor(avg))+'☆'.repeat(5-Math.floor(avg));
+    document.getElementById('revAvg').textContent=avg;
+    document.getElementById('revStars').innerHTML=stars;
+    document.getElementById('revCount').textContent=list.length+' تقييم';
+    document.getElementById('reviewsList').innerHTML=list.slice(0,5).map(r=>{
+      const name=r.reviewer_name||r.user_name||'متدرب';
+      const initials=name.substring(0,2);
+      const colors=['#5B4FCF','#FF6B6B','#22C55E','#F59E0B','#EC4899'];
+      const color=colors[Math.floor(Math.random()*colors.length)];
+      const rStars='★'.repeat(Math.floor(r.rating||0))+'☆'.repeat(5-Math.floor(r.rating||0));
+      return`<div class="review-item">
+        <div class="reviewer-row"><div class="reviewer-avatar" style="background:${color}">${initials}</div><div><div class="reviewer-name">${name}</div><div class="reviewer-date">${r.created_at?new Date(r.created_at).toLocaleDateString('ar-EG'):''}</div></div><div style="margin-right:auto;color:var(--warning);font-size:12px">${rStars}</div></div>
+        <div class="review-text">${r.comment||r.text||''}</div>
+      </div>`;
+    }).join('');
+  }catch(e){}
 }
+
+function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
 </body>
 </html>
