@@ -44,7 +44,7 @@ class RegisterTraineeSerializer(serializers.Serializer):
     is_graduate = serializers.BooleanField(required=False)
     gender = serializers.ChoiceField(choices=Trainee.GENDER_CHOICES, required=False)
     date_of_birth = serializers.DateField(required=False)
-    supervisor_id = serializers.CharField(max_length=20, required=False)
+    supervisor_id = serializers.CharField(max_length=20, required=False, allow_blank=True)
 
     def validate_email(self, value):
         if Person.objects.filter(email=value).exists():
@@ -84,7 +84,7 @@ class RegisterTraineeSerializer(serializers.Serializer):
                     role='academic',
                     status='active',
                 )
-            except (SupervisorProfile.DoesNotExist, ValueError):
+            except SupervisorProfile.DoesNotExist:
                 pass
 
         OTPVerification.objects.create(
