@@ -187,6 +187,28 @@ class InternshipDetailView(APIView):
         return Response({'message': 'تم حذف الفرصة بنجاح'})
 
 
+def calc_match_percentage(trainee, internship):
+    trainee_skills = set()
+    if hasattr(trainee, 'trainee_profile') and trainee.trainee_profile.skills:
+        trainee_skills = {s.strip().lower() for s in trainee.trainee_profile.skills.split(',') if s.strip()}
+    required = set()
+    if internship.requirements:
+        required = {s.strip().lower() for s in internship.requirements.split(',') if s.strip()}
+    optional = set()
+    if internship.additional_skills:
+        optional = {s.strip().lower() for s in internship.additional_skills.split(',') if s.strip()}
+    all_needed = required | optional
+    if not all_needed:
+        return 0
+    matched = trainee_skills & all_needed
+    if not required:
+        return round(len(matched) / len(all_needed) * 100) if all_needed else 0
+    matched_req = trainee_skills & required
+    req_score = (len(matched_req) / len(required)) * 70 if required else 0
+    opt_score = (len(matched & optional) / len(optional)) * 30 if optional else 0
+    return round(req_score + opt_score)
+
+
 class ApplicationListView(APIView):
     def get(self, request):
         user = get_user(request)
@@ -202,6 +224,7 @@ class ApplicationListView(APIView):
 
         data = []
         for a in apps:
+            match = calc_match_percentage(a.trainee.person, a.internship) if user.person_type == 'trainee' else 0
             data.append({
                 'id': a.id,
                 'internship_id': a.internship.id,
@@ -221,6 +244,7 @@ class ApplicationListView(APIView):
                 'available_positions': a.internship.available_positions,
                 'has_certificate': a.internship.has_certificate,
                 'deadline': str(a.internship.deadline),
+                'match_percentage': match,
             })
         return Response(data)
 
