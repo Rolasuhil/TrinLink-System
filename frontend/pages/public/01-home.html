@@ -603,14 +603,17 @@ if(token && user) {
     btns.innerHTML = '<a href="'+dashUrl+'" class="btn-primary"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a><a href="#" class="btn-outline" onclick="localStorage.removeItem(\'trainlink_token\');localStorage.removeItem(\'trainlink_user\');window.location.reload();">تسجيل الخروج</a>';
   }
   // Fix hero buttons for logged-in users
-  var heroBtns = document.querySelectorAll('.hero-btns a, .cta-btn-trans');
-  heroBtns.forEach(function(btn){
-    if(user.person_type === 'company' && btn.textContent.indexOf('نشر') !== -1){
+  var allLinks = document.querySelectorAll('.hero-btns a, .cta-btn-trans, .cta-btn-white');
+  allLinks.forEach(function(btn){
+    var href = btn.getAttribute('href') || '';
+    if(user.person_type === 'company' && href.indexOf('register-company') !== -1){
       btn.setAttribute('href','../company/19-post-internship.html');
-    } else if(user.person_type === 'trainee' && btn.textContent.indexOf('بحث') !== -1){
+    } else if(user.person_type === 'trainee' && href.indexOf('register-trainee') !== -1){
       btn.setAttribute('href','../trainee/09-search.html');
-    } else if(user.person_type !== 'company'){
-      btn.setAttribute('href', dashUrl);
+    } else if(user.person_type === 'supervisor' && href.indexOf('register') !== -1){
+      btn.setAttribute('href','../supervisor/24-supervisor-dashboard.html');
+    } else if(user.person_type === 'admin' && href.indexOf('register') !== -1){
+      btn.setAttribute('href','../admin/28-admin-dashboard.html');
     }
   });
 }
