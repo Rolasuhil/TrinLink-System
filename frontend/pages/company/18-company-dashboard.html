@@ -85,7 +85,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
   <div class="top-right">
     <div class="icon-btn" onclick="toggleNotifPanel()" id="notifBtn"><i class="ti ti-bell"></i><div class="notif-dot" id="notifDot"></div></div>
     <div class="icon-btn" onclick="window.location.href='23-chat.html'" title="الدردشة"><i class="ti ti-messages"></i></div>
-    <div class="icon-btn" onclick="window.location.href='22-company-profile.html'" title="ملف الشركة" id="companyChip"><i class="ti ti-building" id="chipAvatar"></i></div>
+    <div class="icon-btn" onclick="toggleMenu()" title="ملف الشركة" id="companyChip"><i class="ti ti-building" id="chipAvatar"></i></div>
     <div id="userDropdown" style="display:none;position:absolute;top:50px;left:16px;background:#2D2B3E;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);box-shadow:0 8px 24px rgba(0,0,0,0.4);min-width:180px;z-index:200;padding:8px 0">
       <a href="#" onclick="localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user');window.location.href='../public/02-login.html'" style="display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:#FF6B6B;text-decoration:none"><i class="ti ti-logout"></i> تسجيل الخروج</a>
     </div>
@@ -240,6 +240,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
  
 <script>
+(function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token');}
 function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
@@ -272,7 +273,7 @@ async function loadProfile(){
     const data=await res.json();
     const name=data.company_name||data.name||data.username||'الشركة';
     const initials=name.substring(0,2);
-    document.querySelector('.chip-name').textContent=name;
+    var cn=document.querySelector('.chip-name');if(cn)cn.textContent=name;
     var nn=document.getElementById('navCompanyName');if(nn)nn.textContent=name;
     document.querySelector('.content > div:first-child > div:first-child').innerHTML=
       '<div style="font-size:20px;font-weight:800;color:white">مرحباً، '+name+'! 👋</div>'+

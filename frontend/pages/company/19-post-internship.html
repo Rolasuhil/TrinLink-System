@@ -78,10 +78,11 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
     <a href="#" class="top-nav-item active"><i class="ti ti-plus-circle"></i>نشر فرصة</a>
     <a href="20-manage-applications.html" class="top-nav-item"><i class="ti ti-clipboard-list"></i>الطلبات</a>
     <a href="21-trainees-progress.html" class="top-nav-item"><i class="ti ti-chart-line"></i>المتدربون</a>
-    <a href="23-company-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
+    <a href="23-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
     <a href="22-company-profile.html" class="top-nav-item"><i class="ti ti-building"></i>ملف الشركة</a>
   </div>
   <div class="icon-btn" onclick="window.location.href='22-company-profile.html'" title="ملف الشركة"><i class="ti ti-building"></i></div>
+  <a href="../public/02-login.html" onclick="localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user')" style="padding:6px 12px;border-radius:var(--radius-sm);font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;font-family:var(--font);font-weight:600;display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)"><i class="ti ti-logout"></i>تسجيل الخروج</a>
 </div>
 
 <div class="content">
@@ -147,12 +148,12 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
       <div class="card">
         <div class="card-title"><i class="ti ti-coin"></i>نوع التدريب</div>
         <div class="type-selector">
-          <div class="type-opt selected" onclick="selectType(this)">
+          <div class="type-opt selected" onclick="selectType(this,'free')">
             <div class="type-opt-icon">🆓</div>
             <div class="type-opt-label">مجاني</div>
             <div class="type-opt-sub">تدريب مجاني بدون مقابل مادي</div>
           </div>
-          <div class="type-opt" onclick="selectType(this)">
+          <div class="type-opt" onclick="selectType(this,'paid')">
             <div class="type-opt-icon">💰</div>
             <div class="type-opt-label">مدفوع</div>
             <div class="type-opt-sub">تدريب براتب شهري</div>
@@ -222,9 +223,11 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
-const API = 'http://127.0.0.1:8000';
+(function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+const API='/api';
 let authToken = localStorage.getItem('trainlink_token');
 let companyUser = null;
+let selectedInternType = 'free';
 
 (function init() {
   if (!authToken) { window.location.href = '../public/02-login.html'; return; }
@@ -233,7 +236,7 @@ let companyUser = null;
 
 async function loadProfile() {
   try {
-    const res = await fetch(`${API}/api/auth/profile/`, { headers: { 'Authorization': `Bearer ${authToken}` } });
+    const res = await fetch(`${API}/auth/profile/`, { headers: { 'Authorization': `Bearer ${authToken}` } });
     if (!res.ok) { window.location.href = '../public/02-login.html'; return; }
     const data = await res.json();
     companyUser = data;
@@ -246,9 +249,10 @@ async function loadProfile() {
 }
 
 function toggleSkill(btn){btn.classList.toggle('selected');}
-function selectType(opt){
+function selectType(opt,type){
   document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('selected'));
   opt.classList.add('selected');
+  selectedInternType=type||'free';
 }
 function updatePreview(){
   const title=document.getElementById('jobTitle').value||'عنوان الفرصة';
@@ -264,7 +268,7 @@ async function publishJob(){
   const description=document.getElementById('internDescription').value.trim();
   const requirements=document.getElementById('internRequirements').value.trim();
   const location=document.getElementById('internLocation').value;
-  const internship_type=document.getElementById('internLocation').value;
+  const internship_type=selectedInternType;
   const start_date=document.getElementById('internStartDate').value;
   const end_date=document.getElementById('internEndDate').value;
   const deadline=document.getElementById('internDeadline').value;
@@ -278,12 +282,12 @@ async function publishJob(){
   document.querySelectorAll('.skill-tag.selected').forEach(s=>selectedSkills.push(s.dataset.skill));
 
   try{
-    const res=await fetch(`${API}/api/internships/`,{
+    const res=await fetch(`${API}/internships/`,{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${authToken}`},
       body:JSON.stringify({
         title,description,requirements,location,internship_type,
-        start_date,end_date,deadline,available_positions
+        start_date,end_date,deadline,available_positions,skills:selectedSkills
       })
     });
     if(res.ok){
@@ -296,7 +300,32 @@ async function publishJob(){
   }catch(e){showToast('❌ خطأ في الاتصال بالخادم');}
 }
 
-function saveDraft(){showToast('💾 تم حفظ المسودة');}
+async function saveDraft(){
+  const title=document.getElementById('jobTitle').value.trim();
+  const description=document.getElementById('internDescription').value.trim();
+  if(!title||!description){showToast('⚠️ يرجى إدخال العنوان والوصف على الأقل');return;}
+  const requirements=document.getElementById('internRequirements').value.trim();
+  const location=document.getElementById('internLocation').value;
+  const internship_type=selectedInternType;
+  const start_date=document.getElementById('internStartDate').value;
+  const end_date=document.getElementById('internEndDate').value;
+  const deadline=document.getElementById('internDeadline').value;
+  const available_positions=parseInt(document.getElementById('internPositions').value)||1;
+  const selectedSkills=[];
+  document.querySelectorAll('.skill-tag.selected').forEach(s=>selectedSkills.push(s.dataset.skill));
+  try{
+    const res=await fetch(`${API}/internships/`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${authToken}`},
+      body:JSON.stringify({
+        title,description,requirements,location,internship_type,
+        start_date,end_date,deadline,available_positions,skills:selectedSkills,status:'draft'
+      })
+    });
+    if(res.ok){showToast('💾 تم حفظ المسودة');setTimeout(()=>window.location.href='18-company-dashboard.html',1500);}
+    else{showToast('⚠️ المسودة غير مدعومة حالياً');}
+  }catch(e){showToast('⚠️ المسودة غير مدعومة حالياً');}
+}
 function showToast(msg){
   const t=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;

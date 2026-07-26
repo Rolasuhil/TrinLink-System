@@ -35,6 +35,7 @@ class AdminDashboardView(APIView):
             'total_trainees': Trainee.objects.count(),
             'total_companies': CompanyProfile.objects.count(),
             'total_supervisors': SupervisorProfile.objects.count(),
+            'total_admins': Person.objects.filter(person_type='admin').count(),
             'total_internships': Internship.objects.count(),
             'open_internships': Internship.objects.filter(status='open').count(),
             'total_applications': Application.objects.count(),

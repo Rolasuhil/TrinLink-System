@@ -92,7 +92,7 @@ body{font-family:var(--font);background:var(--dark);color:white;display:flex;min
   <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span></a>
   <a href="30-manage-content.html" class="nav-item"><i class="ti ti-flag"></i><span>إدارة المحتوى</span></a>
   <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير</span></a>
-  <a href="32-assign-supervisor.html" class="nav-item"><i class="ti ti-link"></i><span>ربط المشرفين</span></a>
+   <a href="32-assign-trainee.html" class="nav-item"><i class="ti ti-link"></i><span>ربط المشرفين</span></a>
   <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
 </nav>
 
@@ -143,7 +143,7 @@ body{font-family:var(--font);background:var(--dark);color:white;display:flex;min
           <div class="card-header"><div class="card-title"><i class="ti ti-bolt"></i>إجراءات سريعة</div></div>
           <a href="29-manage-users.html" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.04);border-radius:var(--radius-md);text-decoration:none;margin-bottom:8px;transition:all 0.15s" onmouseover="this.style.background='rgba(255,107,107,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'"><i class="ti ti-users" style="color:var(--accent);font-size:18px"></i><span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.7)">إدارة المستخدمين</span></a>
           <a href="30-manage-content.html" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.04);border-radius:var(--radius-md);text-decoration:none;margin-bottom:8px;transition:all 0.15s"><i class="ti ti-flag" style="color:var(--accent);font-size:18px"></i><span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.7)">إدارة المحتوى</span></a>
-          <a href="32-assign-supervisor.html" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.04);border-radius:var(--radius-md);text-decoration:none"><i class="ti ti-link" style="color:var(--accent);font-size:18px"></i><span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.7)">ربط المتدرب بالمشرف</span></a>
+           <a href="32-assign-trainee.html" style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.04);border-radius:var(--radius-md);text-decoration:none"><i class="ti ti-link" style="color:var(--accent);font-size:18px"></i><span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.7)">ربط المتدرب بالمشرف</span></a>
         </div>
       </div>
     </div>
@@ -181,10 +181,10 @@ document.addEventListener('DOMContentLoaded',async()=>{
     document.getElementById('statInternships').textContent=d.total_internships||0;
     document.getElementById('statPending').textContent=d.pending_companies||0;
     document.getElementById('statApplications').textContent=d.total_applications||0;
-    document.getElementById('distTrainees').textContent=d.trainees||0;
-    document.getElementById('distCompanies').textContent=d.companies||0;
-    document.getElementById('distSupervisors').textContent=d.supervisors||0;
-    document.getElementById('distAdmins').textContent=d.admins||0;
+    document.getElementById('distTrainees').textContent=d.total_trainees||0;
+    document.getElementById('distCompanies').textContent=d.total_companies||0;
+    document.getElementById('distSupervisors').textContent=d.total_supervisors||0;
+    document.getElementById('distAdmins').textContent=d.total_admins || d.admins || 0;
   }catch(e){}
 
   try{
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
         return `<div class="pending-item">
           <div class="p-logo" style="background:${cColor}">${ini}</div>
           <div><div class="p-name">${c.company_name||c.name||'شركة'}</div><div class="p-meta">${c.industry||''} · ${c.location||''}</div></div>
-          <div class="p-actions"><button class="btn-tbl btn-tbl-success" onclick="showToast('✅ تم التفعيل!')">✓ تفعيل</button><button class="btn-tbl btn-tbl-danger">✗ رفض</button></div>
+           <div class="p-actions"><button class="btn-tbl btn-tbl-success" onclick="approveCompany(${c.id||''},'${(c.company_name||c.name||'شركة').replace(/'/g,"\\'")}')">✓ تفعيل</button><button class="btn-tbl btn-tbl-danger">✗ رفض</button></div>
         </div>`;
       }).join('');
     }

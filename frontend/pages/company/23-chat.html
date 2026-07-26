@@ -83,6 +83,7 @@ body{font-family:var(--font);background:var(--dark);color:white;height:100vh;dis
     <a href="22-company-profile.html" class="top-nav-item"><i class="ti ti-building"></i>ملف الشركة</a>
   </div>
   <div class="icon-btn" onclick="window.location.href='22-company-profile.html'" title="ملف الشركة"><i class="ti ti-building"></i></div>
+  <a href="../public/02-login.html" onclick="localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user')" style="padding:6px 12px;border-radius:var(--radius-sm);font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;font-family:var(--font);font-weight:600;display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)"><i class="ti ti-logout"></i>تسجيل الخروج</a>
 </div>
 
 <div class="chat-layout">
@@ -118,7 +119,7 @@ body{font-family:var(--font);background:var(--dark);color:white;height:100vh;dis
 </div>
 
 <script>
-const API='http://127.0.0.1:8000';
+const API='/api';
 let token=localStorage.getItem('trainlink_token');
 let channels=[];
 let currentChannelId=null;
@@ -133,7 +134,7 @@ function authHeaders(){return{'Content-Type':'application/json','Authorization':
 
 async function loadChannels(){
   try{
-    const res=await fetch(`${API}/api/chat/channels/`,{headers:authHeaders()});
+    const res=await fetch(`${API}/chat/channels/`,{headers:authHeaders()});
     if(!res.ok)return;
     const data=await res.json();
     channels=Array.isArray(data)?data:(data.results||[]);
@@ -180,7 +181,7 @@ async function loadMessages(channelId){
   const area=document.getElementById('messagesArea');
   area.innerHTML='<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:12px">جاري التحميل...</div>';
   try{
-    const res=await fetch(`${API}/api/chat/channels/${channelId}/messages/`,{headers:authHeaders()});
+    const res=await fetch(`${API}/chat/channels/${channelId}/messages/`,{headers:authHeaders()});
     if(!res.ok){area.innerHTML='<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);font-size:12px">لا توجد رسائل</div>';return;}
     const data=await res.json();
     const msgs=Array.isArray(data)?data:(data.results||[]);
@@ -213,11 +214,15 @@ async function sendMessage(){
   area.scrollTop=area.scrollHeight;
   input.value='';
   try{
-    await fetch(`${API}/api/chat/channels/${currentChannelId}/messages/`,{
+    await fetch(`${API}/chat/channels/${currentChannelId}/messages/`,{
       method:'POST',headers:authHeaders(),
       body:JSON.stringify({content:text})
     });
-  }catch(e){}
+  }catch(e){
+    showToast('فشل إرسال الرسالة');
+    var msgEls=area.querySelectorAll('.msg-wrap');
+    if(msgEls.length) msgEls[msgEls.length-1].remove();
+  }
 }
 
 function handleEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}

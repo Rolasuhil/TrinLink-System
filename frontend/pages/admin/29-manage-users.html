@@ -212,6 +212,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
+(function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token')}
 function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}

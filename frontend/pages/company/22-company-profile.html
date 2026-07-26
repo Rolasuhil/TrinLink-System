@@ -82,10 +82,11 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
     <a href="19-post-internship.html" class="top-nav-item"><i class="ti ti-plus-circle"></i>نشر فرصة</a>
     <a href="20-manage-applications.html" class="top-nav-item"><i class="ti ti-clipboard-list"></i>الطلبات</a>
     <a href="21-trainees-progress.html" class="top-nav-item"><i class="ti ti-chart-line"></i>المتدربون</a>
-    <a href="23-company-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
+    <a href="23-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
     <a href="#" class="top-nav-item active"><i class="ti ti-building"></i>ملف الشركة</a>
   </div>
   <div class="icon-btn" onclick="window.location.href='22-company-profile.html'" title="ملف الشركة"><i class="ti ti-building"></i></div>
+  <a href="../public/02-login.html" onclick="localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user')" style="padding:6px 12px;border-radius:var(--radius-sm);font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;font-family:var(--font);font-weight:600;display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)"><i class="ti ti-logout"></i>تسجيل الخروج</a>
 </div>
 
 <div class="content">
@@ -105,7 +106,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
         <div style="color:var(--warning);font-size:16px" id="ratingDisplay">--</div>
       </div>
       <div class="profile-actions">
-        <button class="btn-edit" onclick="showToast('جارٍ فتح نموذج التعديل...')"><i class="ti ti-edit"></i>تعديل الملف</button>
+        <button class="btn-edit" onclick="openEditModal()"><i class="ti ti-edit"></i>تعديل الملف</button>
         <button class="btn-preview"><i class="ti ti-eye"></i>معاينة</button>
       </div>
     </div>
@@ -170,7 +171,8 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
-const API='http://127.0.0.1:8000';
+(function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+const API='/api';
 let token=localStorage.getItem('trainlink_token');
 
 (function init(){
@@ -180,7 +182,7 @@ let token=localStorage.getItem('trainlink_token');
 
 async function loadProfile(){
   try{
-    const res=await fetch(`${API}/api/auth/profile/`,{headers:{'Authorization':`Bearer ${token}`}});
+    const res=await fetch(`${API}/auth/profile/`,{headers:{'Authorization':`Bearer ${token}`}});
     if(!res.ok){window.location.href='../public/02-login.html';return;}
     const data=await res.json();
     const name=data.company_name||data.full_name||'الشركة';
@@ -216,7 +218,7 @@ async function loadProfile(){
 
 async function loadInternships(){
   try{
-    const res=await fetch(`${API}/api/internships/`,{headers:{'Authorization':`Bearer ${token}`}});
+    const res=await fetch(`${API}/internships/`,{headers:{'Authorization':`Bearer ${token}`}});
     if(!res.ok)return;
     const data=await res.json();
     const list=Array.isArray(data)?data:(data.results||[]);
@@ -240,7 +242,7 @@ async function loadInternships(){
 
 async function loadReviews(){
   try{
-    const res=await fetch(`${API}/api/community/ratings/`,{headers:{'Authorization':`Bearer ${token}`}});
+    const res=await fetch(`${API}/community/ratings/`,{headers:{'Authorization':`Bearer ${token}`}});
     if(!res.ok)return;
     const data=await res.json();
     const list=Array.isArray(data)?data:(data.results||[]);
@@ -268,6 +270,19 @@ async function loadReviews(){
       </div>`;
     }).join('');
   }catch(e){}
+}
+
+function openEditModal(){
+  const name=prompt('الاسم:',document.querySelector('.company-name')?.textContent||'');
+  if(name){
+    fetch(API+'/auth/profile/',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({full_name:name})
+    }).then(function(r){return r.json();}).then(function(){
+      showToast('تم تحديث الملف بنجاح');loadProfile();
+    }).catch(function(){showToast('حدث خطأ');});
+  }
 }
 
 function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}

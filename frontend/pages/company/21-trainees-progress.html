@@ -85,10 +85,11 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
     <a href="19-post-internship.html" class="top-nav-item"><i class="ti ti-plus-circle"></i>نشر فرصة</a>
     <a href="20-manage-applications.html" class="top-nav-item"><i class="ti ti-clipboard-list"></i>الطلبات</a>
     <a href="#" class="top-nav-item active"><i class="ti ti-chart-line"></i>المتدربون</a>
-    <a href="23-company-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
+    <a href="23-chat.html" class="top-nav-item"><i class="ti ti-messages"></i>الدردشة</a>
     <a href="22-company-profile.html" class="top-nav-item"><i class="ti ti-building"></i>ملف الشركة</a>
   </div>
   <div class="icon-btn" onclick="window.location.href='22-company-profile.html'" title="ملف الشركة"><i class="ti ti-building"></i></div>
+  <a href="../public/02-login.html" onclick="localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user')" style="padding:6px 12px;border-radius:var(--radius-sm);font-size:12px;color:rgba(255,255,255,0.5);text-decoration:none;font-family:var(--font);font-weight:600;display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)"><i class="ti ti-logout"></i>تسجيل الخروج</a>
 </div>
 
 <div class="content">
@@ -115,7 +116,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
               <div class="detail-meta" id="dMeta">--</div>
             </div>
             <div class="detail-actions">
-              <button class="btn-sm btn-outline-sm" onclick="window.location.href='23-company-chat.html'"><i class="ti ti-messages"></i>مراسلة</button>
+              <button class="btn-sm btn-outline-sm" onclick="window.location.href='23-chat.html'"><i class="ti ti-messages"></i>مراسلة</button>
               <button class="btn-sm btn-primary-sm" onclick="scrollToReport()"><i class="ti ti-report"></i>رفع تقرير</button>
             </div>
           </div>
@@ -175,7 +176,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
-const API='http://127.0.0.1:8000';
+const API='/api';
 let token=localStorage.getItem('trainlink_token');
 let trainees=[];
 let selectedTraineeId=null;
@@ -189,7 +190,7 @@ let selectedAttend=4;
 
 async function loadProfile(){
   try{
-    const res=await fetch(`${API}/api/auth/profile/`,{headers:{'Authorization':`Bearer ${token}`}});
+    const res=await fetch(`${API}/auth/profile/`,{headers:{'Authorization':`Bearer ${token}`}});
     if(!res.ok){window.location.href='../public/02-login.html';return;}
     const data=await res.json();
     const name=data.company_name||data.full_name||'الشركة';
@@ -198,7 +199,7 @@ async function loadProfile(){
 
 async function loadTrainees(){
   try{
-    const res=await fetch(`${API}/api/internships/applications/`,{headers:{'Authorization':`Bearer ${token}`}});
+    const res=await fetch(`${API}/internships/applications/`,{headers:{'Authorization':`Bearer ${token}`}});
     if(!res.ok)return;
     const apps=await res.json();
     if(!Array.isArray(apps))return;
@@ -250,7 +251,7 @@ function selectTrainee(id,name,initials,color,role){
 
 async function loadDetail(traineeId){
   try{
-    const res=await fetch(`${API}/api/performance/reports/?trainee=${traineeId}`,{headers:{'Authorization':`Bearer ${token}`}});
+    const res=await fetch(`${API}/performance/reports/?trainee=${traineeId}`,{headers:{'Authorization':`Bearer ${token}`}});
     if(!res.ok)return;
     const reports=await res.json();
     if(!Array.isArray(reports)||reports.length===0){
@@ -295,9 +296,9 @@ async function submitReport(){
   if(!text){showToast('⚠️ يرجى كتابة ملخص الأداء');return;}
   if(!selectedTraineeId){showToast('⚠️ اختر متدرباً أولاً');return;}
   try{
-    const res=await fetch(`${API}/api/performance/reports/`,{
+    const res=await fetch(`${API}/performance/reports/`,{
       method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
-      body:JSON.stringify({trainee:selectedTraineeId,content:text,rating:selectedRating})
+      body:JSON.stringify({trainee:selectedTraineeId,content:text,rating:selectedRating,attendance_confirmed:selectedAttend})
     });
     if(res.ok){
       showToast('✅ تم رفع التقرير وإشعار المشرف الأكاديمي!');
