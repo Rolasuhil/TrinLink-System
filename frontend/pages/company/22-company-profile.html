@@ -61,9 +61,6 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 .review-big{font-size:40px;font-weight:900;color:white;text-align:center}
 .review-stars{color:var(--warning);font-size:14px;text-align:center}
 .review-count{font-size:11px;color:rgba(255,255,255,0.3);text-align:center}
-.rbar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.rbar-track{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
-.rbar-fill{height:100%;background:var(--warning);border-radius:3px}
 .review-item{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
 .review-item:last-child{border-bottom:none}
 .reviewer-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
@@ -73,33 +70,18 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 .review-text{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2D2B3E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;border:1px solid rgba(255,255,255,0.1)}
 .toast.show{display:flex}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.show{display:flex}
-.modal{background:var(--dark-2);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);width:100%;max-width:600px;max-height:85vh;overflow-y:auto}
-.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.08)}
-.modal-header h3{font-size:16px;font-weight:700;color:white;display:flex;align-items:center;gap:8px}
-.modal-header h3 i{color:var(--primary);font-size:18px}
-.modal-close{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.06);border:none;color:rgba(255,255,255,0.4);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
-.modal-close:hover{background:rgba(255,107,107,0.15);color:var(--accent)}
-.modal-body{padding:24px}
-.modal-section{margin-bottom:20px}
-.modal-section-title{font-size:13px;font-weight:700;color:rgba(255,255,255,0.4);margin-bottom:12px;display:flex;align-items:center;gap:6px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.05)}
-.modal-section-title i{font-size:14px;color:#A89CFF}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-group.full{grid-column:1/-1}
-.form-group label{font-size:12px;font-weight:600;color:rgba(255,255,255,0.5)}
-.form-group input,.form-group textarea,.form-group select{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);padding:10px 12px;color:white;font-size:13px;font-family:var(--font);transition:border-color 0.15s}
-.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--primary)}
-.form-group textarea{resize:vertical;min-height:80px}
-.form-group select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
-.form-group select option{background:var(--dark-2);color:white}
-.modal-footer{display:flex;gap:10px;padding:16px 24px;border-top:1px solid rgba(255,255,255,0.08);justify-content:flex-start}
-.btn-save{padding:10px 24px;background:var(--primary);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;transition:opacity 0.15s}
-.btn-save:hover{opacity:0.9}
-.btn-save:disabled{opacity:0.5;cursor:not-allowed}
-.btn-cancel{padding:10px 20px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-family:var(--font);transition:all 0.15s}
-.btn-cancel:hover{background:rgba(255,255,255,0.1)}
+.if{background:rgba(255,255,255,0.04);border:1px solid rgba(91,79,207,0.4);border-radius:var(--radius-sm);padding:8px 12px;color:white;font-size:13px;font-family:var(--font);width:100%;transition:border-color 0.15s}
+.if:focus{outline:none;border-color:var(--primary)}
+textarea.if{resize:vertical;min-height:60px;line-height:1.7}
+select.if{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
+select.if option{background:var(--dark-2);color:white}
+.ia{display:none;gap:8px;margin-top:12px}
+.ia.show{display:flex}
+.btn-si{padding:8px 18px;background:var(--primary);color:white;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:5px;transition:opacity 0.15s}
+.btn-si:hover{opacity:0.9}
+.btn-si:disabled{opacity:0.5;cursor:not-allowed}
+.btn-ci{padding:8px 16px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:var(--font);transition:all 0.15s}
+.btn-ci:hover{background:rgba(255,255,255,0.1)}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -135,7 +117,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
         <div style="color:var(--warning);font-size:16px" id="ratingDisplay">--</div>
       </div>
       <div class="profile-actions">
-        <button class="btn-edit" onclick="openEditModal()"><i class="ti ti-edit"></i>تعديل الملف</button>
+        <button class="btn-edit" onclick="toggleEditAbout()"><i class="ti ti-edit"></i>تعديل الملف</button>
         <button class="btn-preview"><i class="ti ti-eye"></i>معاينة</button>
       </div>
     </div>
@@ -151,15 +133,45 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
   <div class="layout">
     <div>
       <div class="card">
-        <div class="card-title"><div class="card-title-left"><i class="ti ti-info-circle"></i>عن الشركة</div><button class="edit-btn" onclick="openEditModal()"><i class="ti ti-edit"></i>تعديل</button></div>
-        <div class="desc-text" id="companyDesc" style="margin-bottom:16px">--</div>
-        <div class="info-grid">
-          <div class="info-item"><div class="info-label">المجال</div><div class="info-val" id="infoIndustry">--</div></div>
-          <div class="info-item"><div class="info-label">الحجم</div><div class="info-val" id="infoSize">--</div></div>
-          <div class="info-item"><div class="info-label">الموقع</div><div class="info-val" id="infoLocation">--</div></div>
-          <div class="info-item"><div class="info-label">نوع العمل</div><div class="info-val" id="infoWorkType">--</div></div>
-          <div class="info-item"><div class="info-label">الموقع الإلكتروني</div><div class="info-val" id="infoWebsite" style="color:#A89CFF">--</div></div>
-          <div class="info-item"><div class="info-label">البريد الإلكتروني</div><div class="info-val" id="infoEmail">--</div></div>
+        <div class="card-title">
+          <div class="card-title-left"><i class="ti ti-info-circle"></i>عن الشركة</div>
+          <button class="edit-btn" id="editAboutBtn" onclick="toggleEditAbout()"><i class="ti ti-edit"></i>تعديل</button>
+        </div>
+        <div id="aboutView">
+          <div class="desc-text" id="companyDesc" style="margin-bottom:16px">--</div>
+          <div class="info-grid">
+            <div class="info-item"><div class="info-label">المجال</div><div class="info-val" id="infoIndustry">--</div></div>
+            <div class="info-item"><div class="info-label">الحجم</div><div class="info-val" id="infoSize">--</div></div>
+            <div class="info-item"><div class="info-label">الموقع</div><div class="info-val" id="infoLocation">--</div></div>
+            <div class="info-item"><div class="info-label">نوع العمل</div><div class="info-val" id="infoWorkType">--</div></div>
+            <div class="info-item"><div class="info-label">الموقع الإلكتروني</div><div class="info-val" id="infoWebsite" style="color:#A89CFF">--</div></div>
+            <div class="info-item"><div class="info-label">البريد الإلكتروني</div><div class="info-val" id="infoEmail">--</div></div>
+          </div>
+        </div>
+        <div id="aboutEdit" style="display:none">
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px">نبذة عن الشركة</div>
+            <textarea class="if" id="e_about" rows="3"></textarea>
+          </div>
+          <div class="info-grid" style="gap:14px">
+            <div><div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px">المجال</div><input class="if" id="e_industry" type="text"></div>
+            <div><div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px">الحجم</div>
+              <select class="if" id="e_companySize">
+                <option value="">- اختر -</option>
+                <option value="1-10">1-10 موظفين</option>
+                <option value="11-50">11-50 موظف</option>
+                <option value="51-200">51-200 موظف</option>
+                <option value="201-500">201-500 موظف</option>
+                <option value="500+">more than 500</option>
+              </select>
+            </div>
+            <div><div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px">الموقع</div><input class="if" id="e_location" type="text"></div>
+            <div><div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px">الموقع الإلكتروني</div><input class="if" id="e_website" type="url" placeholder="https://..."></div>
+          </div>
+          <div class="inline-actions show" id="aboutActions">
+            <button class="btn-si" id="saveAboutBtn" onclick="saveAbout()"><i class="ti ti-device-floppy"></i>حفظ</button>
+            <button class="btn-ci" onclick="cancelAbout()">الغاء</button>
+          </div>
         </div>
       </div>
 
@@ -175,12 +187,11 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 
     <div>
       <div class="card">
-        <div class="card-title"><div class="card-title-left"><i class="ti ti-briefcase"></i>الفرص النشطة</div><a href="19-post-internship.html" style="font-size:12px;color:#A89CFF;font-weight:700;text-decoration:none">+ إضافة</a></div>
+        <div class="card-title"><div class="card-title-left"><i class="ti ti-briefcase"></i>الفرص النشطة</div><a href="19-post-internship.html" style="font-size:12px;color:#A89CFF;font-weight:700;text-decoration:none">+ اضافة</a></div>
         <div id="internshipsList"></div>
       </div>
-
       <div class="card">
-        <div class="card-title"><div class="card-title-left"><i class="ti ti-chart-bar"></i>إحصائيات الملف</div></div>
+        <div class="card-title"><div class="card-title-left"><i class="ti ti-chart-bar"></i>احصائيات الملف</div></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--primary)" id="statViews">--</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">مشاهدة هذا الشهر</div></div>
           <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--success)" id="statApps">--</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">متقدم هذا الشهر</div></div>
@@ -192,73 +203,22 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
   </div>
 </div>
 
-<div class="modal-overlay" id="editModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3><i class="ti ti-edit"></i>تعديل الملف</h3>
-      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-section">
-        <div class="modal-section-title"><i class="ti ti-building"></i>معلومات الشركة</div>
-        <div class="form-row">
-          <div class="form-group full"><label>اسم الشركة</label><input id="m_companyName" type="text"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>مجال العمل</label><input id="m_industry" type="text"></div>
-          <div class="form-group"><label>حجم الشركة</label>
-            <select id="m_companySize">
-              <option value="">- اختر -</option>
-              <option value="1-10">1-10 موظفين</option>
-              <option value="11-50">11-50 موظف</option>
-              <option value="51-200">51-200 موظف</option>
-              <option value="201-500">201-500 موظف</option>
-              <option value="500+">more than 500</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>الموقع</label><input id="m_location" type="text"></div>
-          <div class="form-group"><label>الموقع الإلكتروني</label><input id="m_website" type="url" placeholder="https://..."></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group full"><label>نبذة عن الشركة</label><textarea id="m_about" rows="4"></textarea></div>
-        </div>
-      </div>
-      <div class="modal-section">
-        <div class="modal-section-title"><i class="ti ti-user"></i>المعلومات الشخصية</div>
-        <div class="form-row">
-          <div class="form-group"><label>الاسم الكامل</label><input id="m_fullName" type="text"></div>
-          <div class="form-group"><label>الهاتف</label><input id="m_phone" type="tel"></div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-save" id="btnSave" onclick="saveProfile()"><i class="ti ti-device-floppy"></i>حفظ التعديلات</button>
-      <button class="btn-cancel" onclick="closeModal()">الغاء</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
-const API='/api';
-let token=localStorage.getItem('trainlink_token');
-let profileData={};
+var API='/api';
+var token=localStorage.getItem('trainlink_token');
+var profileData={};
 
 (function init(){
   if(!token){window.location.href='../public/02-login.html';return;}
   loadProfile();loadInternships();loadReviews();
 })();
 
-document.getElementById('editModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
-
 function applyProfile(data){
   var name=data.company_name||data.full_name||'الشركة';
-  var initials=name.substring(0,2);
-  document.getElementById('logoText').textContent=initials;
+  document.getElementById('logoText').textContent=name.substring(0,2);
   document.getElementById('companyNameDisplay').innerHTML=name+' <i class="ti ti-shield-check" style="color:var(--success);font-size:18px"></i>';
   document.getElementById('companyIndustry').textContent=data.industry||'--';
   document.getElementById('companyLocation').textContent=data.location||'--';
@@ -269,19 +229,14 @@ function applyProfile(data){
   document.getElementById('infoWorkType').textContent=data.work_type||'--';
   document.getElementById('infoWebsite').textContent=data.website||'--';
   document.getElementById('infoEmail').textContent=data.email||'--';
-  var rating=data.avg_rating||0;
-  var fullStars=Math.floor(rating);
-  var stars='★'.repeat(fullStars)+'☆'.repeat(5-fullStars);
-  document.getElementById('ratingDisplay').innerHTML=stars+' <span style="font-size:13px;color:rgba(255,255,255,0.3)">'+rating+'</span>';
+  var r=data.avg_rating||0;
+  var s='★'.repeat(Math.floor(r))+'☆'.repeat(5-Math.floor(r));
+  document.getElementById('ratingDisplay').innerHTML=s+' <span style="font-size:13px;color:rgba(255,255,255,0.3)">'+r+'</span>';
   document.getElementById('statTrainees').textContent=data.total_trainees||'--';
-  document.getElementById('statRating').textContent=rating||'--';
+  document.getElementById('statRating').textContent=r||'--';
   document.getElementById('statSatisfaction').textContent=(data.satisfaction_rate||'--')+'%';
   document.getElementById('statFounded').textContent=data.founded_year||'--';
-  document.getElementById('statAvg').textContent=rating+'★';
-  if(data.technologies){
-    var techs=Array.isArray(data.technologies)?data.technologies:data.technologies.split(',');
-    document.getElementById('techTags').innerHTML=techs.map(function(t){return '<span class="tech-tag">'+t.trim()+'</span>';}).join('');
-  }
+  document.getElementById('statAvg').textContent=r+'★';
 }
 
 async function loadProfile(){
@@ -306,17 +261,13 @@ async function loadInternships(){
       return;
     }
     document.getElementById('internshipsList').innerHTML=list.map(function(item){
-      var paid=item.is_paid;
-      var typeLabel=paid?'مدفوع':'مجاني';
-      var typeColor=paid?'245,158,11':'34,197,94';
-      var typeVar=paid?'warning':'success';
+      var p=item.is_paid;
       return '<div class="intern-item" onclick="window.location.href=\'edit-internship.html?id='+item.id+'\'">'+
         '<div class="intern-title">'+(item.title||'فرصة')+'</div>'+
         '<div class="intern-meta">'+
-          '<span class="intern-tag" style="background:rgba('+typeColor+',0.15);color:var(--'+typeVar+')">'+typeLabel+'</span>'+
+          '<span class="intern-tag" style="background:rgba('+(p?'245,158,11':'34,197,94')+',0.15);color:var(--'+(p?'warning':'success')+')">'+(p?'مدفوع':'مجاني')+'</span>'+
           '<span class="intern-tag" style="background:rgba(91,79,207,0.15);color:#A89CFF">'+(item.applications_count||0)+' متقدم</span>'+
-        '</div>'+
-      '</div>';
+        '</div></div>';
     }).join('');
   }catch(e){}
 }
@@ -335,53 +286,48 @@ async function loadReviews(){
       return;
     }
     var avg=(list.reduce(function(s,r){return s+(r.rating||0);},0)/list.length).toFixed(1);
-    var fullStars=Math.floor(avg);
-    var stars='★'.repeat(fullStars)+'☆'.repeat(5-fullStars);
+    var fs=Math.floor(avg);
     document.getElementById('revAvg').textContent=avg;
-    document.getElementById('revStars').innerHTML=stars;
+    document.getElementById('revStars').innerHTML='★'.repeat(fs)+'☆'.repeat(5-fs);
     document.getElementById('revCount').textContent=list.length+' تقييم';
+    var colors=['#5B4FCF','#FF6B6B','#22C55E','#F59E0B','#EC4899'];
     document.getElementById('reviewsList').innerHTML=list.slice(0,5).map(function(r){
       var name=r.reviewer_name||r.user_name||'متدرب';
-      var initials=name.substring(0,2);
-      var colors=['#5B4FCF','#FF6B6B','#22C55E','#F59E0B','#EC4899'];
-      var color=colors[Math.floor(Math.random()*colors.length)];
-      var rFullStars=Math.floor(r.rating||0);
-      var rStars='★'.repeat(rFullStars)+'☆'.repeat(5-rFullStars);
-      return '<div class="review-item">'+
-        '<div class="reviewer-row"><div class="reviewer-avatar" style="background:'+color+'">'+initials+'</div><div><div class="reviewer-name">'+name+'</div><div class="reviewer-date">'+(r.created_at?new Date(r.created_at).toLocaleDateString('ar-EG'):'')+'</div></div><div style="margin-right:auto;color:var(--warning);font-size:12px">'+rStars+'</div></div>'+
-        '<div class="review-text">'+(r.comment||r.text||'')+'</div>'+
-      '</div>';
+      var ini=name.substring(0,2);
+      var c=colors[Math.floor(Math.random()*colors.length)];
+      var rs='★'.repeat(Math.floor(r.rating||0))+'☆'.repeat(5-Math.floor(r.rating||0));
+      return '<div class="review-item"><div class="reviewer-row"><div class="reviewer-avatar" style="background:'+c+'">'+ini+'</div><div><div class="reviewer-name">'+name+'</div><div class="reviewer-date">'+(r.created_at?new Date(r.created_at).toLocaleDateString('ar-EG'):'')+'</div></div><div style="margin-right:auto;color:var(--warning);font-size:12px">'+rs+'</div></div><div class="review-text">'+(r.comment||r.text||'')+'</div></div>';
     }).join('');
   }catch(e){}
 }
 
-function openEditModal(){
-  document.getElementById('m_companyName').value=profileData.company_name||'';
-  document.getElementById('m_industry').value=profileData.industry||'';
-  document.getElementById('m_companySize').value=profileData.company_size||'';
-  document.getElementById('m_location').value=profileData.location||'';
-  document.getElementById('m_website').value=profileData.website||'';
-  document.getElementById('m_about').value=profileData.about||'';
-  document.getElementById('m_fullName').value=profileData.full_name||'';
-  document.getElementById('m_phone').value=profileData.phone_number||'';
-  document.getElementById('editModal').classList.add('show');
+function toggleEditAbout(){
+  document.getElementById('aboutView').style.display='none';
+  document.getElementById('aboutEdit').style.display='block';
+  document.getElementById('editAboutBtn').style.display='none';
+  document.getElementById('e_about').value=profileData.about||'';
+  document.getElementById('e_industry').value=profileData.industry||'';
+  document.getElementById('e_companySize').value=profileData.company_size||'';
+  document.getElementById('e_location').value=profileData.location||'';
+  document.getElementById('e_website').value=profileData.website||'';
 }
 
-function closeModal(){document.getElementById('editModal').classList.remove('show');}
+function cancelAbout(){
+  document.getElementById('aboutView').style.display='block';
+  document.getElementById('aboutEdit').style.display='none';
+  document.getElementById('editAboutBtn').style.display='flex';
+}
 
-async function saveProfile(){
-  var btn=document.getElementById('btnSave');
+async function saveAbout(){
+  var btn=document.getElementById('saveAboutBtn');
   btn.disabled=true;
   btn.innerHTML='<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i>جاري الحفظ...';
   var payload={
-    company_name:document.getElementById('m_companyName').value.trim(),
-    industry:document.getElementById('m_industry').value.trim(),
-    company_size:document.getElementById('m_companySize').value,
-    location:document.getElementById('m_location').value.trim(),
-    website:document.getElementById('m_website').value.trim(),
-    about:document.getElementById('m_about').value.trim(),
-    full_name:document.getElementById('m_fullName').value.trim(),
-    phone_number:document.getElementById('m_phone').value.trim()
+    about:document.getElementById('e_about').value.trim(),
+    industry:document.getElementById('e_industry').value.trim(),
+    company_size:document.getElementById('e_companySize').value,
+    location:document.getElementById('e_location').value.trim(),
+    website:document.getElementById('e_website').value.trim()
   };
   try{
     var res=await fetch(API+'/auth/profile/',{method:'PUT',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(payload)});
@@ -389,15 +335,15 @@ async function saveProfile(){
       var data=await res.json();
       profileData=data;
       applyProfile(data);
-      closeModal();
-      showToast('تم تحديث الملف بنجاح');
+      cancelAbout();
+      showToast('تم تحديث معلومات الشركة بنجاح');
     }else{
       var err=await res.json();
-      showToast(err.error||err.detail||'حدث خطأ اثناء الحفظ');
+      showToast(err.error||err.detail||'حدث خطأ');
     }
   }catch(e){showToast('خطأ في الاتصال بالخادم');}
   btn.disabled=false;
-  btn.innerHTML='<i class="ti ti-device-floppy"></i>حفظ التعديلات';
+  btn.innerHTML='<i class="ti ti-device-floppy"></i>حفظ';
 }
 
 function showToast(msg){var t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
