@@ -260,6 +260,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
     <div class="modal-title">التقديم على الفرصة</div>
     <div class="modal-sub" id="modalSub">--</div>
     <div class="form-group"><label class="form-label">رسالة التقديم</label><textarea id="coverLetter" class="form-textarea" placeholder="اكتب رسالة مختصرة تشرح سبب اهتمامك بهذه الفرصة..."></textarea></div>
+    <div class="form-group">
+      <label class="form-label">السيرة الذاتية (PDF)</label>
+      <div class="upload-area" onclick="document.getElementById('cvInput').click()">
+        <input type="file" id="cvInput" accept=".pdf,.doc,.docx,image/*" style="display:none" onchange="onCvSelected(this)">
+        <i class="ti ti-upload" style="font-size:24px;color:var(--text-mid);display:block;margin-bottom:6px"></i>
+        <div id="cvLabel" style="font-size:13px;color:var(--text-mid)">اضغط لرفع CV أو اسحبه هنا</div>
+      </div>
+    </div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal()">الغاء</button>
       <button class="btn-confirm" id="btnSubmitApp" onclick="submitApp()">ارسال الطلب</button>
@@ -298,6 +306,7 @@ function toggleSave(){
 
 function openModal(){document.getElementById('applyModal').classList.add('open');}
 function closeModal(){document.getElementById('applyModal').classList.remove('open');}
+function onCvSelected(input){if(input.files&&input.files[0]){document.getElementById('cvLabel').innerHTML='<span style="color:var(--success)"><i class="ti ti-check"></i> '+input.files[0].name+'</span>';}}
 
 async function submitApp(){
   var id=getUrlId();
@@ -307,8 +316,10 @@ async function submitApp(){
   var fd=new FormData();
   fd.append('internship_id',id);
   fd.append('cover_letter',document.getElementById('coverLetter').value);
+  var cvFile=document.getElementById('cvInput').files[0];
+  if(cvFile)fd.append('resume',cvFile);
   try{
-    var res=await fetch(API+'/internships/applications/',{method:'POST',headers:authHeaders(),body:fd});
+    var res=await fetch(API+'/internships/applications/',{method:'POST',headers:{'Authorization':'Bearer '+token},body:fd});
     if(!res.ok){var err=await res.json().catch(function(){});throw new Error(err.detail||err.error||'Failed');}
     closeModal();showToast('تم ارسال طلبك بنجاح!');
   }catch(e){closeModal();showToast('حدث خطأ: '+(e.message||'لم يتم الارسال'));}
