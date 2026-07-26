@@ -102,7 +102,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 <div class="content">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
     <div>
-      <div style="font-size:20px;font-weight:800;color:white">مرحباً، TechPal! 👋</div>
+      <div style="font-size:20px;font-weight:800;color:white">مرحباً، TechPal! <i class="ti ti-hand-back-right" style="font-size:22px;color:var(--primary)"></i></div>
       <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:3px">لديك 8 طلبات جديدة تنتظر مراجعتك</div>
     </div>
     <a href="19-post-internship.html" style="padding:10px 20px;background:var(--primary);color:white;border-radius:var(--radius-md);font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:7px"><i class="ti ti-plus"></i>نشر فرصة جديدة</a>
@@ -205,17 +205,8 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
  
       <div class="card">
         <div class="card-header"><div class="card-title"><i class="ti ti-users"></i>المتدربون النشطون</div><a href="21-trainees-progress.html" class="card-action">عرض الكل</a></div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm)">
-            <div style="width:32px;height:32px;border-radius:50%;background:#FF6B6B;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white">من</div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:600;color:white">منى ناصر</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">مصمم UI/UX — أسبوع 3</div></div>
-            <span style="font-size:11px;color:var(--success);font-weight:700">4.5★</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm)">
-            <div style="width:32px;height:32px;border-radius:50%;background:#22C55E;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white">رم</div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:600;color:white">رامي سالم</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">مطور Frontend — أسبوع 1</div></div>
-            <span style="font-size:11px;color:var(--warning);font-weight:700">4.0★</span>
-          </div>
+        <div style="display:flex;flex-direction:column;gap:10px" id="activeTrainees">
+          <div style="padding:16px;text-align:center;color:rgba(255,255,255,0.3);font-size:12px">جاري التحميل...</div>
         </div>
       </div>
  
@@ -264,6 +255,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   loadProfile();
   loadInternships();
   loadApplications();
+  loadActiveTrainees();
 });
 
 async function loadProfile(){
@@ -276,7 +268,7 @@ async function loadProfile(){
     var cn=document.querySelector('.chip-name');if(cn)cn.textContent=name;
     var nn=document.getElementById('navCompanyName');if(nn)nn.textContent=name;
     document.querySelector('.content > div:first-child > div:first-child').innerHTML=
-      '<div style="font-size:20px;font-weight:800;color:white">مرحباً، '+name+'! 👋</div>'+
+      '<div style="font-size:20px;font-weight:800;color:white">مرحباً، '+name+'! <i class="ti ti-hand-back-right" style="font-size:22px;color:var(--primary)"></i></div>'+
       '<div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:3px" id="pendingCountLabel">جاري التحميل...</div>';
   }catch(e){showToast('⚠️ خطأ في تحميل الملف الشخصي');}
 }
@@ -385,6 +377,34 @@ async function rejectApp(btn){
     actions.innerHTML='<button class="btn-view">عرض</button>';
     showToast('تم رفض الطلب وإشعار المتدرب');
   }catch(e){showToast('❌ خطأ في رفض الطلب');}
+}
+
+async function loadActiveTrainees(){
+  try{
+    const res=await fetch(API_BASE+'/internships/applications/',{headers:authHeaders()});
+    if(!res.ok)throw new Error();
+    const data=await res.json();
+    const apps=Array.isArray(data)?data:(data.results||[]);
+    const accepted=apps.filter(a=>a.status==='accepted');
+    const container=document.getElementById('activeTrainees');
+    if(!container)return;
+    if(accepted.length===0){
+      container.innerHTML='<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.3);font-size:12px">لا يوجد متدربون نشطون بعد</div>';
+      return;
+    }
+    container.innerHTML='';
+    accepted.slice(0,5).forEach((app,i)=>{
+      const name=app.trainee_name||app.user_name||app.applicant_name||'متدرب';
+      const initials=name.substring(0,2);
+      const color=avatarColors[i%avatarColors.length];
+      const dept=app.department||app.major||app.internship_title||'';
+      const item=document.createElement('div');
+      item.style.cssText='display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);cursor:pointer';
+      item.onclick=function(){window.location.href='21-trainees-progress.html';};
+      item.innerHTML='<div style="width:32px;height:32px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white">'+initials+'</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:white">'+name+'</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">'+dept+'</div></div><span style="font-size:10px;padding:3px 8px;border-radius:20px;background:rgba(34,197,94,0.15);color:var(--success);font-weight:600">نشط</span>';
+      container.appendChild(item);
+    });
+  }catch(e){}
 }
 
 function showToast(msg){
