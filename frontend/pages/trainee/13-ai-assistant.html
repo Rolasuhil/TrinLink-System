@@ -200,6 +200,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE = '/api';
 function getToken(){ return localStorage.getItem('trainlink_token'); }
 function authHeaders(){ return { 'Authorization': 'Bearer ' + getToken() }; }
@@ -359,7 +364,8 @@ function loadMatches(){
       const pctColor = m.match_score >= 80 ? 'var(--success-light);color:#15803D' : m.match_score >= 60 ? 'var(--warning-light);color:#B45309' : 'var(--primary-light);color:var(--primary)';
       const fillBg = m.match_score >= 80 ? 'var(--success)' : m.match_score >= 60 ? 'var(--warning)' : 'var(--primary)';
       const priceTag = m.is_paid ? '<span class="match-tag" style="background:#FFF0F0;color:#DC2626">'+m.salary+'$/شهر</span>' : '<span class="match-tag" style="background:var(--success-light);color:#15803D">مجاني</span>';
-      return '<div class="match-card" onclick="window.location.href=\'10-internship-details.html\'">'
+      const matchId = m.internship_id || m.id || '';
+      return '<div class="match-card" onclick="window.location.href=\'10-internship-details.html?id='+matchId+'\'">'
         +'<div class="match-header"><div class="match-logo" style="background:'+color+'">'+(m.company_initials||'??')+'</div>'
         +'<span class="match-pct-badge" style="background:'+pctColor+'">'+m.match_score+'%</span></div>'
         +'<div class="match-title">'+m.title+'</div>'
@@ -367,7 +373,7 @@ function loadMatches(){
         +'<div class="match-tags">'+priceTag+'<span class="match-tag" style="background:var(--primary-light);color:var(--primary)">'+(m.duration||'—')+'</span></div>'
         +'<div class="match-bar"><div class="match-fill" style="width:'+m.match_score+'%;background:'+fillBg+'"></div></div>'
         +'<div class="match-label">'+m.reason+'</div>'
-        +'<button class="btn-apply-sm" onclick="event.stopPropagation();window.location.href=\'10-internship-details.html\'">تقدّم الآن</button>'
+        +'<button class="btn-apply-sm" onclick="event.stopPropagation();window.location.href=\'10-internship-details.html?id='+matchId+'\'">تقدّم الآن</button>'
         +'</div>';
     }).join('');
   })

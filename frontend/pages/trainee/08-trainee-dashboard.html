@@ -107,6 +107,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .notif-text{font-size:12px;color:var(--text-dark);line-height:1.5}
 .notif-time{font-size:10px;color:var(--text-mid);margin-top:3px}
 .notif-unread{width:6px;height:6px;border-radius:50%;background:var(--primary);margin-right:auto;flex-shrink:0;margin-top:4px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:12px;font-size:13px;display:none;z-index:9999;font-family:'Cairo',sans-serif;border:1px solid rgba(255,255,255,0.1)}
+.toast.show{display:block}
 </style>
 </head>
 <body>
@@ -196,17 +198,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
             <button class="tab">مدفوع</button>
             <button class="tab">داخل غزة</button>
           </div>
-          <div class="rec-item" onclick="window.location.href='10-internship-details.html'">
+          <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=1'">
             <div class="rec-icon" style="background:var(--primary-light)"><i class="ti ti-code" style="color:var(--primary)"></i></div>
             <div style="flex:1"><div class="rec-title">مطور ويب Frontend</div><div class="rec-sub">TechPal · داخل غزة · مجاني</div></div>
             <div class="rec-match" style="background:var(--success-light);color:#15803D">🤖 95%</div>
           </div>
-          <div class="rec-item" onclick="window.location.href='10-internship-details.html'">
+          <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=2'">
             <div class="rec-icon" style="background:#FFF0F0"><i class="ti ti-palette" style="color:var(--accent)"></i></div>
             <div style="flex:1"><div class="rec-title">مصمم UI/UX</div><div class="rec-sub">DesignHub · عن بُعد · 50$/شهر</div></div>
             <div class="rec-match" style="background:var(--warning-light);color:#B45309">🤖 88%</div>
           </div>
-          <div class="rec-item" onclick="window.location.href='10-internship-details.html'">
+          <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=3'">
             <div class="rec-icon" style="background:#F0FFF4"><i class="ti ti-database" style="color:var(--success)"></i></div>
             <div style="flex:1"><div class="rec-title">مطور قواعد بيانات</div><div class="rec-sub">DataSoft · عن بُعد · مجاني</div></div>
             <div class="rec-match" style="background:var(--success-light);color:#15803D">🤖 82%</div>
@@ -297,19 +299,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </div>
 
+<div id="toast" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:12px;font-size:13px;display:none;z-index:9999;font-family:'Cairo',sans-serif;border:1px solid rgba(255,255,255,0.1)"><span id="toastMsg"></span></div>
+
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE = '/api';
 function getToken() { return localStorage.getItem('trainlink_token'); }
 function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
 function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
 function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  if (!toast) { alert(msg); return; }
-  document.getElementById('toastMsg').textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3000);
-}
+function showToast(msg){var t=document.getElementById('toast');if(!t)return;document.getElementById('toastMsg').textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none'},3000);}
 function getInitials(name) {
   if (!name) return '';
   const parts = name.trim().split(' ');

@@ -325,6 +325,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </div>
 
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE = '/api';
 function getToken() { return localStorage.getItem('trainlink_token'); }
 function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }

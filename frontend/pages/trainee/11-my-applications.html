@@ -121,7 +121,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 
     <div id="appsList">
       <!-- PENDING -->
-      <div class="app-card" data-status="pending" onclick="openDetail()">
+      <div class="app-card" data-status="pending" data-id="1" onclick="openDetail()">
         <div class="app-card-top">
           <div class="company-logo" style="background:#5B4FCF">TP</div>
           <div style="flex:1">
@@ -270,12 +270,31 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </div>
 
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE = '/api';
 function getToken() { return localStorage.getItem('trainlink_token'); }
 function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
 function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
 function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
-function showToast(msg) { alert(msg); }
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:12px;font-size:13px;display:block;z-index:9999;font-family:Cairo,sans-serif';
+    var s = document.createElement('span');
+    s.id = 'toastMsg';
+    t.appendChild(s);
+    document.body.appendChild(t);
+  }
+  document.getElementById('toastMsg').textContent = msg;
+  t.style.display = 'block';
+  setTimeout(function() { t.style.display = 'none'; }, 3000);
+}
 
 const COLORS = ['#5B4FCF','#22C55E','#FF6B6B','#F59E0B','#7C3AED','#EC4899'];
 let allApps = [];
@@ -388,12 +407,21 @@ function filterApps(btn, status) {
 
 function openDetail(id) { document.getElementById('detailModal').classList.add('open'); }
 
-function withdrawApp(btn) {
-  if (confirm('هل أنت متأكد من سحب الطلب؟')) {
-    btn.closest('.app-card').style.opacity = '0.5';
-    btn.textContent = 'تم السحب';
+async function withdrawApp(btn) {
+  if (!confirm('هل أنت متأكد من سحب الطلب؟')) return;
+  const id = btn.closest('.app-card')?.dataset?.id;
+  if (!id) return;
+  try {
+    const token = localStorage.getItem('trainlink_token');
+    await fetch('/api/internships/applications/' + id + '/', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ status: 'withdrawn' })
+    });
     btn.disabled = true;
-  }
+    btn.textContent = 'تم السحب';
+    showToast('تم سحب الطلب بنجاح');
+  } catch(e) { showToast('حدث خطأ'); }
 }
 
 document.addEventListener('DOMContentLoaded', async function() {

@@ -158,8 +158,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
           <div class="card-header">
             <div class="card-title"><i class="ti ti-calendar"></i>سجل الحضور — يوليو 2025</div>
             <div style="display:flex;gap:8px">
-              <button style="width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-chevron-right" style="font-size:14px;color:var(--text-mid)"></i></button>
-              <button style="width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-chevron-left" style="font-size:14px;color:var(--text-mid)"></i></button>
+              <button onclick="nextMonth()" style="width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-chevron-right" style="font-size:14px;color:var(--text-mid)"></i></button>
+              <button onclick="prevMonth()" style="width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-chevron-left" style="font-size:14px;color:var(--text-mid)"></i></button>
             </div>
           </div>
           <div class="cal-grid">
@@ -209,6 +209,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
           <div class="form-group">
             <label class="form-label">مرفق (اختياري)</label>
             <div class="upload-mini" id="uploadArea" onclick="simulateUpload()">
+              <input type="file" id="reportFileInput" style="display:none" onchange="handleFileUpload(this)">
               <i class="ti ti-upload" style="font-size:22px;color:var(--text-mid);display:block;margin-bottom:5px"></i>
               <div style="font-size:12px;color:var(--text-mid)">ارفع صورة أو ملف يثبت عملك</div>
             </div>
@@ -293,6 +294,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
  
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token');}
 function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
@@ -324,10 +330,19 @@ function selectRating(el){
   el.classList.add('selected');
 }
 function countChars(el){document.getElementById('charCount').textContent=el.value.length;}
-function simulateUpload(){
-  const a=document.getElementById('uploadArea');
-  a.classList.add('has-file');
-  a.innerHTML='<i class="ti ti-file-check" style="font-size:22px;color:var(--success);display:block;margin-bottom:5px"></i><div style="font-size:12px;color:var(--success);font-weight:700">work_screenshot.png</div>';
+function simulateUpload() {
+  var input = document.getElementById('reportFileInput');
+  if (input) input.click();
+}
+function handleFileUpload(input) {
+  if (input.files && input.files[0]) {
+    var area = document.getElementById('uploadArea');
+    if (area) {
+      area.classList.add('has-file');
+      area.innerHTML = '<input type="file" id="reportFileInput" style="display:none" onchange="handleFileUpload(this)"><i class="ti ti-file-check" style="font-size:22px;color:var(--success);display:block;margin-bottom:5px"></i><div style="font-size:12px;color:var(--success);font-weight:700">' + input.files[0].name + '</div><div style="font-size:11px;color:var(--text-mid);margin-top:4px">اضغط للتغيير</div>';
+      area.onclick = function() { simulateUpload(); };
+    }
+  }
 }
 function submitReport(){
   const title=document.getElementById('reportTitle').value.trim();
@@ -354,6 +369,11 @@ function showToast(msg){
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 }
+
+let currentCalMonth = new Date().getMonth();
+let currentCalYear = new Date().getFullYear();
+function prevMonth() { currentCalMonth--; if(currentCalMonth<0){currentCalMonth=11;currentCalYear--;} loadAttendanceCalendar(); }
+function nextMonth() { currentCalMonth++; if(currentCalMonth>11){currentCalMonth=0;currentCalYear++;} loadAttendanceCalendar(); }
 
 function loadAttendanceCalendar(){
   fetch(API_BASE+'/performance/attendance/',{headers:authHeaders()})

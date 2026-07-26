@@ -96,7 +96,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
         <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ ساعتين</div>
         <div class="notif-action">
           <button class="btn-notif-action btn-primary-action" onclick="event.stopPropagation();window.location.href='15-chat.html'">تواصل مع الشركة</button>
-          <button class="btn-notif-action btn-outline-action" onclick="event.stopPropagation()">عرض الطلب</button>
+          <button class="btn-notif-action btn-outline-action" onclick="event.stopPropagation();showToast('تفاصيل الطلب - قيد التطوير')">عرض الطلب</button>
         </div>
       </div>
     </div>
@@ -173,7 +173,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
         <div class="notif-body">تم إنشاء تقرير أدائك الأسبوعي بواسطة Gemini AI. تقييم الأسبوع: <strong>4.5/5 ⭐</strong> — ممتاز!</div>
         <div class="notif-time"><i class="ti ti-clock" style="font-size:11px"></i>منذ 4 أيام</div>
         <div class="notif-action">
-          <button class="btn-notif-action btn-outline-action" onclick="event.stopPropagation()">عرض التقرير</button>
+          <button class="btn-notif-action btn-outline-action" onclick="event.stopPropagation();showToast('عرض التقرير - قيد التطوير')">عرض التقرير</button>
         </div>
       </div>
     </div>
@@ -190,6 +190,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </div>
  
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token');}
 function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}

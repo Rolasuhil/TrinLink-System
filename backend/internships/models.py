@@ -80,6 +80,7 @@ class Application(models.Model):
         ('pending', 'معلق'),
         ('accepted', 'مقبول'),
         ('rejected', 'مرفوض'),
+        ('withdrawn', 'مسحوب'),
     ]
 
     id = models.AutoField(primary_key=True)

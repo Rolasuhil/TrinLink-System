@@ -135,3 +135,42 @@ class CompanyRatingView(APIView):
             review=request.data.get('review', ''),
         )
         return Response({'message': 'تم التقييم بنجاح'}, status=status.HTTP_201_CREATED)
+
+
+class PostLikeView(APIView):
+    def post(self, request, post_id):
+        user = get_user(request)
+        if not user:
+            return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            post = CommunityPost.objects.get(id=post_id)
+        except CommunityPost.DoesNotExist:
+            return Response({'error': 'المنشور غير موجود'}, status=status.HTTP_404_NOT_FOUND)
+        post.likes_count += 1
+        post.save(update_fields=['likes_count'])
+        return Response({'message': 'تم الإعجاب', 'likes_count': post.likes_count})
+
+
+class CompanyRatingFlatView(APIView):
+    def post(self, request):
+        user = get_user(request)
+        if not user or user.person_type != 'trainee':
+            return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        company_id = request.data.get('company_id')
+        if not company_id:
+            return Response({'error': 'company_id مطلوب'}, status=status.HTTP_400_BAD_REQUEST)
+
+        from accounts.models import CompanyProfile
+        try:
+            company = CompanyProfile.objects.get(id=company_id)
+        except CompanyProfile.DoesNotExist:
+            return Response({'error': 'الشركة غير موجودة'}, status=status.HTTP_404_NOT_FOUND)
+
+        rating = CompanyRating.objects.create(
+            company=company,
+            trainee=user.trainee_profile,
+            score=request.data.get('score', 5),
+            review=request.data.get('review', ''),
+        )
+        return Response({'message': 'تم التقييم بنجاح'}, status=status.HTTP_201_CREATED)

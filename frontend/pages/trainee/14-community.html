@@ -235,7 +235,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
             <div style="font-size:13px;color:var(--text-mid);margin-bottom:14px">ساعد زملاءك باختيار التدريب المناسب</div>
             <div style="margin-bottom:10px">
               <label style="font-size:13px;font-weight:600;color:var(--text-dark);display:block;margin-bottom:5px">الشركة</label>
-              <select style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none"><option>TechPal</option><option>DesignHub</option><option>DataSoft</option><option>NetSoft</option></select>
+              <select id="ratingCompany" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none"><option value="">اختر الشركة</option><option value="1">TechPal</option><option value="2">DesignHub</option><option value="3">DataSoft</option><option value="4">NetSoft</option></select>
             </div>
             <div style="margin-bottom:10px">
               <label style="font-size:13px;font-weight:600;color:var(--text-dark);display:block;margin-bottom:8px">التقييم</label>
@@ -245,7 +245,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
             </div>
             <div style="margin-bottom:14px">
               <label style="font-size:13px;font-weight:600;color:var(--text-dark);display:block;margin-bottom:5px">تعليقك</label>
-              <textarea style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);resize:none;min-height:70px;outline:none;background:var(--bg)" placeholder="شارك تجربتك مع هذه الشركة..."></textarea>
+              <textarea id="ratingComment" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);resize:none;min-height:70px;outline:none;background:var(--bg)" placeholder="شارك تجربتك مع هذه الشركة..."></textarea>
             </div>
             <button onclick="submitRating()" style="padding:10px 20px;background:var(--primary);color:white;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">نشر التقييم</button>
           </div>
@@ -296,6 +296,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
  
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token');}
 function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
@@ -308,12 +313,21 @@ function switchTab(btn,id){
   document.getElementById('ratings').style.display=id==='ratings'?'block':'none';
 }
 function toggleLike(btn){
+  const card = btn.closest('.post-card');
+  const id = card?.dataset?.id;
   btn.classList.toggle('liked');
   const span=btn.querySelector('span');
   const icon=btn.querySelector('i');
   const num=parseInt(span.textContent);
   if(btn.classList.contains('liked')){icon.style.color='var(--accent)';span.textContent=(num+1)+' إعجاب';}
   else{icon.style.color='';span.textContent=(num-1)+' إعجاب';}
+  if (id) {
+    const token = localStorage.getItem('trainlink_token');
+    fetch('/api/community/posts/' + id + '/like/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+    }).catch(()=>{});
+  }
 }
 function toggleComments(btn){
   const section=btn.closest('.post-card').querySelector('.comments-section');
@@ -407,11 +421,20 @@ function setRating(n){
     s.classList.toggle('filled',i<n);
   });
 }
-function submitRating(){
-  if(!currentRating){showToast('يرجى اختيار تقييم أولاً');return;}
-  showToast('تم نشر تقييمك بنجاح ⭐');
-  currentRating=0;
-  document.querySelectorAll('#ratingStars .star').forEach(s=>s.classList.remove('filled'));
+async function submitRating(){
+  const company = document.getElementById('ratingCompany')?.value;
+  const score = currentRating;
+  const review = document.getElementById('ratingComment')?.value;
+  if (!company || !score) { showToast('يرجى ملء جميع الحقول'); return; }
+  try {
+    const token = localStorage.getItem('trainlink_token');
+    await fetch('/api/community/ratings/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ company_id: company, score, review })
+    });
+    showToast('تم نشر التقييم بنجاح');
+  } catch(e) { showToast('حدث خطأ'); }
 }
 function showToast(msg){
   const t=document.getElementById('toast');

@@ -267,6 +267,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE = '/api';
 function getToken() { return localStorage.getItem('trainlink_token'); }
 function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
@@ -293,6 +298,7 @@ function toggleSkill(el) {
   const active = el.style.background === 'rgb(91, 79, 207)';
   el.style.background = active ? 'var(--primary-light)' : 'var(--primary)';
   el.style.color = active ? 'var(--primary)' : 'white';
+  el.classList.toggle('selected');
 }
 
 async function saveEdit() {
@@ -319,9 +325,22 @@ async function saveEdit() {
   }
 }
 
-function saveSkills() {
-  document.getElementById('skillsModal').classList.remove('open');
-  showToast('تم تحديث المهارات');
+async function saveSkills() {
+  const skills = [...document.querySelectorAll('#skillsModal .skill-tag.selected')].map(t => t.textContent.trim()).join(',');
+  try {
+    const token = localStorage.getItem('trainlink_token');
+    await fetch('/api/auth/profile/', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ skills: skills })
+    });
+    const skillsSection = document.querySelector('.skills-wrap');
+    if (skillsSection) {
+      skillsSection.innerHTML = skills.split(',').filter(Boolean).map(s => '<span class="skill-tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-check" style="font-size:12px"></i>' + s.trim() + '</span>').join('') + '<button onclick="openSkillsModal()" style="padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;color:var(--text-mid);background:var(--bg);border:1.5px dashed var(--border);cursor:pointer;font-family:var(--font)">+ إضافة مهارة</button>';
+    }
+    document.getElementById('skillsModal').classList.remove('open');
+    showToast('تم حفظ المهارات بنجاح');
+  } catch(e) { showToast('حدث خطأ في الحفظ'); }
 }
 
 function applyProfile(p) {

@@ -170,24 +170,63 @@ class ApplicationListView(APIView):
 
 
 class ApplicationDetailView(APIView):
-    def patch(self, request, pk):
+    def get(self, request, pk):
         user = get_user(request)
-        if not user or user.person_type != 'company':
+        if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            app = Application.objects.get(id=pk, internship__company=user.company_profile)
+            if user.person_type == 'trainee':
+                app = Application.objects.get(id=pk, trainee=user.trainee_profile)
+            elif user.person_type == 'company':
+                app = Application.objects.get(id=pk, internship__company=user.company_profile)
+            else:
+                return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
         except Application.DoesNotExist:
             return Response({'error': 'الطلب غير موجود'}, status=status.HTTP_404_NOT_FOUND)
 
-        new_status = request.data.get('status')
-        if new_status in ['accepted', 'rejected']:
-            app.status = new_status
-            app.rejection_reason = request.data.get('rejection_reason', '')
-            app.save()
-            app.internship.update_acceptance_rate()
+        return Response({
+            'id': app.id,
+            'internship_title': app.internship.title,
+            'trainee_name': app.trainee.person.full_name,
+            'status': app.status,
+            'status_display': app.get_status_display(),
+            'application_date': str(app.application_date),
+            'rejection_reason': app.rejection_reason,
+            'cover_letter': app.cover_letter,
+        })
 
-        return Response({'message': 'تم تحديث الحالة بنجاح'})
+    def patch(self, request, pk):
+        user = get_user(request)
+        if not user:
+            return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        new_status = request.data.get('status')
+
+        if user.person_type == 'company':
+            try:
+                app = Application.objects.get(id=pk, internship__company=user.company_profile)
+            except Application.DoesNotExist:
+                return Response({'error': 'الطلب غير موجود'}, status=status.HTTP_404_NOT_FOUND)
+            if new_status in ['accepted', 'rejected']:
+                app.status = new_status
+                app.rejection_reason = request.data.get('rejection_reason', '')
+                app.save()
+                app.internship.update_acceptance_rate()
+            return Response({'message': 'تم تحديث الحالة بنجاح'})
+
+        elif user.person_type == 'trainee':
+            try:
+                app = Application.objects.get(id=pk, trainee=user.trainee_profile)
+            except Application.DoesNotExist:
+                return Response({'error': 'الطلب غير موجود'}, status=status.HTTP_404_NOT_FOUND)
+            if new_status == 'withdrawn':
+                app.status = 'withdrawn'
+                app.save()
+                app.internship.update_acceptance_rate()
+            return Response({'message': 'تم تحديث الحالة بنجاح'})
+
+        return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class SavedInternshipView(APIView):

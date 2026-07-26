@@ -112,7 +112,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   <div class="chat-layout">
     <!-- CONVERSATIONS -->
     <div class="conv-list">
-      <div class="conv-search"><input class="search-input" placeholder="🔍 بحث في المحادثات..."></div>
+      <div class="conv-search"><input class="search-input" placeholder="🔍 بحث في المحادثات..." oninput="filterConversations(this.value)"></div>
       <div class="conv-items">
         <div class="conv-item active" onclick="openChat('TechPal','TP','#5B4FCF','شركة')">
           <div class="conv-avatar" style="background:#5B4FCF">TP<div class="online-dot"></div></div>
@@ -163,9 +163,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
           <div class="chat-header-status"><span style="width:7px;height:7px;border-radius:50%;background:var(--success);display:inline-block"></span>متصل الآن</div>
         </div>
         <div class="chat-header-actions">
-          <div class="icon-btn"><i class="ti ti-phone"></i></div>
-          <div class="icon-btn"><i class="ti ti-video"></i></div>
-          <div class="icon-btn"><i class="ti ti-info-circle"></i></div>
+          <div class="icon-btn" onclick="showToast('مكالمة صوتية - قيد التطوير')"><i class="ti ti-phone"></i></div>
+          <div class="icon-btn" onclick="showToast('مكالمة فيديو - قيد التطوير')"><i class="ti ti-video"></i></div>
+          <div class="icon-btn" onclick="showToast('معلومات جهة الاتصال')"><i class="ti ti-info-circle"></i></div>
         </div>
       </div>
  
@@ -211,8 +211,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
       </div>
  
       <div class="chat-input-area">
-        <div class="attach-btn"><i class="ti ti-paperclip"></i></div>
-        <div class="attach-btn"><i class="ti ti-photo"></i></div>
+        <div class="attach-btn" onclick="showToast('إرفاق ملف - قيد التطوير')"><i class="ti ti-paperclip"></i></div>
+        <div class="attach-btn" onclick="showToast('إرسال صورة - قيد التطوير')"><i class="ti ti-photo"></i></div>
         <textarea class="msg-input" id="msgInput" placeholder="اكتب رسالتك هنا..." rows="1" onkeydown="handleEnter(event)"></textarea>
         <button class="send-btn" onclick="sendMessage()"><i class="ti ti-send"></i></button>
       </div>
@@ -221,6 +221,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </div>
  
 <script>
+(function(){
+  var token = localStorage.getItem('trainlink_token');
+  if(!token){ window.location.href = '../public/02-login.html'; return; }
+})();
+
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token');}
 function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null;}
@@ -325,6 +330,13 @@ function loadChannels(){
     }
   })
   .catch(()=>{container.innerHTML='<div style="text-align:center;padding:40px;color:var(--accent)">حدث خطأ في تحميل المحادثات</div>';});
+}
+function filterConversations(q) {
+  const items = document.querySelectorAll('.conv-item');
+  items.forEach(item => {
+    const name = item.querySelector('.conv-name')?.textContent || '';
+    item.style.display = name.includes(q) ? '' : 'none';
+  });
 }
 function showToast(msg){
   const t=document.createElement('div');
