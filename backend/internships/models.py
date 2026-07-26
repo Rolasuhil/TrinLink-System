@@ -42,6 +42,7 @@ class Internship(models.Model):
     end_date = models.DateField(verbose_name='تاريخ الانتهاء')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open', verbose_name='الحالة')
     acceptance_rate = models.FloatField(default=0.0, verbose_name='نسبة القبول')
+    is_paid = models.BooleanField(default=False, verbose_name='مدفوع')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ النشر')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='آخر تحديث')
 

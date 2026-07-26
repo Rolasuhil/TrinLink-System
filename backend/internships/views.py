@@ -34,6 +34,11 @@ class InternshipListView(APIView):
             qs = qs.filter(location__icontains=location)
         if internship_type:
             qs = qs.filter(internship_type=internship_type)
+        is_paid = request.query_params.get('is_paid', '')
+        if is_paid == 'true':
+            qs = qs.filter(is_paid=True)
+        elif is_paid == 'false':
+            qs = qs.filter(is_paid=False)
 
         data = []
         for i in qs:
@@ -52,6 +57,7 @@ class InternshipListView(APIView):
                 'deadline': str(i.deadline),
                 'available_positions': i.available_positions,
                 'acceptance_rate': i.acceptance_rate,
+                'is_paid': i.is_paid,
                 'created_at': str(i.created_at),
             })
         return Response(data)
@@ -85,6 +91,7 @@ class InternshipListView(APIView):
             internship_type=request.data.get('internship_type', 'onsite'),
             start_date=request.data.get('start_date'),
             end_date=request.data.get('end_date'),
+            is_paid=request.data.get('is_paid', False),
         )
         return Response({'message': 'تم نشر الفرصة بنجاح', 'id': internship.id}, status=status.HTTP_201_CREATED)
 
@@ -101,18 +108,63 @@ class InternshipDetailView(APIView):
             'title': i.title,
             'company': i.company.company_name,
             'company_id': i.company.id,
-            'category': i.category.name if i.category else '',
+            'category': i.category.id if i.category else None,
+            'category_name': i.category.name if i.category else '',
             'description': i.description,
             'requirements': i.requirements,
             'location': i.location,
-            'internship_type': i.get_internship_type_display(),
+            'internship_type': i.internship_type,
+            'internship_type_display': i.get_internship_type_display(),
             'start_date': str(i.start_date),
             'end_date': str(i.end_date),
             'deadline': str(i.deadline),
             'available_positions': i.available_positions,
             'acceptance_rate': i.acceptance_rate,
+            'is_paid': i.is_paid,
             'status': i.status,
         })
+
+    def put(self, request, pk):
+        user = get_user(request)
+        if not user or user.person_type != 'company':
+            return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            i = Internship.objects.get(id=pk, company=user.company_profile)
+        except Internship.DoesNotExist:
+            return Response({'error': 'الفرصة غير موجودة أو ليس لديك صلاحية'}, status=status.HTTP_404_NOT_FOUND)
+
+        category = i.category
+        if request.data.get('category_id'):
+            try:
+                category = Category.objects.get(id=request.data['category_id'])
+            except Category.DoesNotExist:
+                pass
+
+        i.title = request.data.get('title', i.title)
+        i.description = request.data.get('description', i.description)
+        i.requirements = request.data.get('requirements', i.requirements)
+        i.location = request.data.get('location', i.location)
+        i.internship_type = request.data.get('internship_type', i.internship_type)
+        i.category = category
+        i.start_date = request.data.get('start_date', i.start_date)
+        i.end_date = request.data.get('end_date', i.end_date)
+        i.deadline = request.data.get('deadline', i.deadline)
+        i.available_positions = request.data.get('available_positions', i.available_positions)
+        i.is_paid = request.data.get('is_paid', i.is_paid)
+        i.status = request.data.get('status', i.status)
+        i.save()
+        return Response({'message': 'تم تحديث الفرصة بنجاح'})
+
+    def delete(self, request, pk):
+        user = get_user(request)
+        if not user or user.person_type != 'company':
+            return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            i = Internship.objects.get(id=pk, company=user.company_profile)
+        except Internship.DoesNotExist:
+            return Response({'error': 'الفرصة غير موجودة أو ليس لديك صلاحية'}, status=status.HTTP_404_NOT_FOUND)
+        i.delete()
+        return Response({'message': 'تم حذف الفرصة بنجاح'})
 
 
 class ApplicationListView(APIView):

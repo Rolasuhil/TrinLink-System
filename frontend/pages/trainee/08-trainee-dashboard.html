@@ -109,6 +109,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .notif-unread{width:6px;height:6px;border-radius:50%;background:var(--primary);margin-right:auto;flex-shrink:0;margin-top:4px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:12px;font-size:13px;display:none;z-index:9999;font-family:'Cairo',sans-serif;border:1px solid rgba(255,255,255,0.1)}
 .toast.show{display:block}
+.msg-panel{display:none;position:absolute;top:calc(100% + 12px);left:0;width:280px;background:white;border-radius:14px;border:1px solid var(--border);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:100}
+.msg-panel.open{display:block}
+.msg-header{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--text-dark);display:flex;justify-content:space-between}
+.msg-item{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer}
+.msg-item:hover{background:var(--bg)}
+.msg-item:last-child{border-bottom:none}
+.msg-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700;color:white}
+.msg-content{flex:1;min-width:0}
+.msg-name{font-size:12px;font-weight:600;color:var(--text-dark)}
+.msg-last{font-size:11px;color:var(--text-mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.msg-time{font-size:10px;color:var(--text-mid);flex-shrink:0;margin-top:2px}
+.msg-dot{width:6px;height:6px;border-radius:50%;background:var(--primary);flex-shrink:0;margin-top:4px}
 </style>
 </head>
 <body>
@@ -129,14 +141,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
   <a href="#" class="nav-item active"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
   <a href="09-search.html" class="nav-item"><i class="ti ti-search"></i><span>البحث</span></a>
-  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span><span class="nav-badge">3</span></a>
+  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span><span class="nav-badge" id="appBadge">0</span></a>
   <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
-  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span><span class="nav-badge">2</span></a>
+  <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span><span class="nav-badge" id="chatBadge">0</span></a>
   <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
   <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
   <div class="nav-section">الحساب</div>
   <a href="12-my-profile.html" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
-  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge">5</span></a>
+  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge" id="notifBadge">0</span></a>
   <div class="sidebar-bottom">
     <a href="../public/02-login.html" class="nav-item" style="color:rgba(255,107,107,0.7)"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
   </div>
@@ -146,12 +158,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="main">
   <div class="topbar">
     <div>
-      <div class="topbar-title">مرحباً، سارة 👋</div>
+      <div class="topbar-title">مرحباً، سارة <i class="ti ti-mood-smile" style="font-size:20px;color:var(--primary)"></i></div>
       <div class="topbar-sub">لديك 5 فرص جديدة تناسبك اليوم!</div>
     </div>
     <div class="topbar-right" style="position:relative">
-      <div class="icon-btn" onclick="toggleNotif()"><i class="ti ti-bell"></i><div class="notif-dot"></div></div>
-      <div class="icon-btn"><i class="ti ti-search"></i></div>
+      <div class="icon-btn" onclick="toggleNotif()"><i class="ti ti-bell"></i><div class="notif-dot" style="display:none"></div></div>
+      <div class="icon-btn" onclick="toggleMsg()"><i class="ti ti-message"></i><div class="msg-dot" style="display:none" id="msgDot"></div></div>
+      <div class="icon-btn" onclick="window.location.href='09-search.html'" style="cursor:pointer"><i class="ti ti-search"></i></div>
       <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;cursor:pointer">سم</div>
       <!-- NOTIF PANEL -->
       <div class="notif-panel" id="notifPanel">
@@ -159,6 +172,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
         <div class="notif-item"><div class="notif-icon" style="background:var(--success-light)"><i class="ti ti-circle-check" style="color:var(--success)"></i></div><div style="flex:1"><div class="notif-text">تم قبول طلبك في DesignHub 🎉</div><div class="notif-time">منذ ساعتين</div></div><div class="notif-unread"></div></div>
         <div class="notif-item"><div class="notif-icon" style="background:var(--primary-light)"><i class="ti ti-robot" style="color:var(--primary)"></i></div><div style="flex:1"><div class="notif-text">الذكاء الاصطناعي وجد 3 فرص جديدة لك</div><div class="notif-time">منذ 5 ساعات</div></div><div class="notif-unread"></div></div>
         <div class="notif-item"><div class="notif-icon" style="background:var(--warning-light)"><i class="ti ti-calendar" style="color:var(--warning)"></i></div><div style="flex:1"><div class="notif-text">تذكير: آخر موعد تقديم TechPal غداً</div><div class="notif-time">منذ يوم</div></div></div>
+      </div>
+      <!-- MSG PANEL -->
+      <div class="msg-panel" id="msgPanel">
+        <div class="msg-header"><span>الرسائل</span><a href="15-chat.html" style="font-size:11px;color:var(--primary);text-decoration:none">عرض الكل</a></div>
+        <div id="msgList"></div>
       </div>
     </div>
   </div>
@@ -198,20 +216,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
             <button class="tab">مدفوع</button>
             <button class="tab">داخل غزة</button>
           </div>
-          <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=1'">
-            <div class="rec-icon" style="background:var(--primary-light)"><i class="ti ti-code" style="color:var(--primary)"></i></div>
-            <div style="flex:1"><div class="rec-title">مطور ويب Frontend</div><div class="rec-sub">TechPal · داخل غزة · مجاني</div></div>
-            <div class="rec-match" style="background:var(--success-light);color:#15803D">🤖 95%</div>
-          </div>
-          <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=2'">
-            <div class="rec-icon" style="background:#FFF0F0"><i class="ti ti-palette" style="color:var(--accent)"></i></div>
-            <div style="flex:1"><div class="rec-title">مصمم UI/UX</div><div class="rec-sub">DesignHub · عن بُعد · 50$/شهر</div></div>
-            <div class="rec-match" style="background:var(--warning-light);color:#B45309">🤖 88%</div>
-          </div>
-          <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=3'">
-            <div class="rec-icon" style="background:#F0FFF4"><i class="ti ti-database" style="color:var(--success)"></i></div>
-            <div style="flex:1"><div class="rec-title">مطور قواعد بيانات</div><div class="rec-sub">DataSoft · عن بُعد · مجاني</div></div>
-            <div class="rec-match" style="background:var(--success-light);color:#15803D">🤖 82%</div>
+          <div id="recsContainer">
+            <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=1'">
+              <div class="rec-icon" style="background:var(--primary-light)"><i class="ti ti-code" style="color:var(--primary)"></i></div>
+              <div style="flex:1"><div class="rec-title">مطور ويب Frontend</div><div class="rec-sub">TechPal · داخل غزة · مجاني</div></div>
+              <div class="rec-match" style="background:var(--success-light);color:#15803D">🤖 95%</div>
+            </div>
+            <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=2'">
+              <div class="rec-icon" style="background:#FFF0F0"><i class="ti ti-palette" style="color:var(--accent)"></i></div>
+              <div style="flex:1"><div class="rec-title">مصمم UI/UX</div><div class="rec-sub">DesignHub · عن بُعد · 50$/شهر</div></div>
+              <div class="rec-match" style="background:var(--warning-light);color:#B45309">🤖 88%</div>
+            </div>
+            <div class="rec-item" onclick="window.location.href='10-internship-details.html?id=3'">
+              <div class="rec-icon" style="background:#F0FFF4"><i class="ti ti-database" style="color:var(--success)"></i></div>
+              <div style="flex:1"><div class="rec-title">مطور قواعد بيانات</div><div class="rec-sub">DataSoft · عن بُعد · مجاني</div></div>
+              <div class="rec-match" style="background:var(--success-light);color:#15803D">🤖 82%</div>
+            </div>
           </div>
         </div>
 
@@ -221,20 +241,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
             <div class="card-title"><i class="ti ti-clipboard-list"></i>آخر الطلبات</div>
             <a href="11-my-applications.html" class="card-action">عرض الكل</a>
           </div>
-          <div class="app-item" onclick="window.location.href='11-my-applications.html'">
-            <div class="app-avatar" style="background:#5B4FCF">TP</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مطور Frontend — TechPal</div><div style="font-size:11px;color:var(--text-mid)">منذ 3 أيام</div></div>
-            <span class="status-badge" style="background:var(--warning-light);color:#B45309">⏳ قيد المراجعة</span>
-          </div>
-          <div class="app-item" onclick="window.location.href='11-my-applications.html'">
-            <div class="app-avatar" style="background:#22C55E">DH</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مصمم UI — DesignHub</div><div style="font-size:11px;color:var(--text-mid)">منذ أسبوع</div></div>
-            <span class="status-badge" style="background:var(--success-light);color:#15803D">✓ مقبول</span>
-          </div>
-          <div class="app-item" onclick="window.location.href='11-my-applications.html'">
-            <div class="app-avatar" style="background:#FF6B6B">NS</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مطور Python — NetSoft</div><div style="font-size:11px;color:var(--text-mid)">منذ أسبوعين</div></div>
-            <span class="status-badge" style="background:#FEE2E2;color:#DC2626">✗ مرفوض</span>
+          <div id="appsContainer">
+            <div class="app-item" onclick="window.location.href='11-my-applications.html'">
+              <div class="app-avatar" style="background:#5B4FCF">TP</div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مطور Frontend — TechPal</div><div style="font-size:11px;color:var(--text-mid)">منذ 3 أيام</div></div>
+              <span class="status-badge" style="background:var(--warning-light);color:#B45309">⏳ قيد المراجعة</span>
+            </div>
+            <div class="app-item" onclick="window.location.href='11-my-applications.html'">
+              <div class="app-avatar" style="background:#22C55E">DH</div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مصمم UI — DesignHub</div><div style="font-size:11px;color:var(--text-mid)">منذ أسبوع</div></div>
+              <span class="status-badge" style="background:var(--success-light);color:#15803D">✓ مقبول</span>
+            </div>
+            <div class="app-item" onclick="window.location.href='11-my-applications.html'">
+              <div class="app-avatar" style="background:#FF6B6B">NS</div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مطور Python — NetSoft</div><div style="font-size:11px;color:var(--text-mid)">منذ أسبوعين</div></div>
+              <span class="status-badge" style="background:#FEE2E2;color:#DC2626">✗ مرفوض</span>
+            </div>
           </div>
         </div>
       </div>
@@ -281,17 +303,19 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
         <!-- CALENDAR -->
         <div class="card">
           <div class="card-header"><div class="card-title"><i class="ti ti-calendar"></i>المواعيد القادمة</div></div>
-          <div class="cal-item">
-            <div class="cal-date"><div class="cal-day">18</div><div class="cal-month">يوليو</div></div>
-            <div><div class="cal-title">آخر موعد — TechPal</div><div class="cal-sub">انتهاء التقديم</div></div>
-          </div>
-          <div class="cal-item">
-            <div class="cal-date"><div class="cal-day">22</div><div class="cal-month">يوليو</div></div>
-            <div><div class="cal-title">مقابلة — DesignHub</div><div class="cal-sub">10:00 ص · Zoom</div></div>
-          </div>
-          <div class="cal-item">
-            <div class="cal-date"><div class="cal-day">25</div><div class="cal-month">يوليو</div></div>
-            <div><div class="cal-title">آخر موعد — DataSoft</div><div class="cal-sub">انتهاء التقديم</div></div>
+          <div id="calendarContainer">
+            <div class="cal-item">
+              <div class="cal-date"><div class="cal-day">18</div><div class="cal-month">يوليو</div></div>
+              <div><div class="cal-title">آخر موعد — TechPal</div><div class="cal-sub">انتهاء التقديم</div></div>
+            </div>
+            <div class="cal-item">
+              <div class="cal-date"><div class="cal-day">22</div><div class="cal-month">يوليو</div></div>
+              <div><div class="cal-title">مقابلة — DesignHub</div><div class="cal-sub">10:00 ص · Zoom</div></div>
+            </div>
+            <div class="cal-item">
+              <div class="cal-date"><div class="cal-day">25</div><div class="cal-month">يوليو</div></div>
+              <div><div class="cal-title">آخر موعد — DataSoft</div><div class="cal-sub">انتهاء التقديم</div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -308,60 +332,312 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 })();
 
 const API_BASE = '/api';
-function getToken() { return localStorage.getItem('trainlink_token'); }
-function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
-function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
-function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
-function showToast(msg){var t=document.getElementById('toast');if(!t)return;document.getElementById('toastMsg').textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none'},3000);}
-function getInitials(name) {
-  if (!name) return '';
+function getToken(){ return localStorage.getItem('trainlink_token'); }
+function getUser(){ const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
+function authHeaders(){ return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
+function getInitials(name){
+  if(!name) return '';
   const parts = name.trim().split(' ');
-  if (parts.length >= 2) return (parts[0][0] + parts[1][0]);
-  return parts[0][0];
+  if(parts.length >= 2) return (parts[0][0] + parts[1][0]);
+  return parts[0].substring(0,2);
 }
+function showToast(msg){var t=document.getElementById('toast');if(!t)return;document.getElementById('toastMsg').textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none'},3000);}
 
-function toggleNotif(){
-  document.getElementById('notifPanel').classList.toggle('open');
-}
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.topbar-right'))document.getElementById('notifPanel').classList.remove('open');
+function toggleNotif(){ document.getElementById('notifPanel').classList.toggle('open'); document.getElementById('msgPanel').classList.remove('open'); }
+function toggleMsg(){ document.getElementById('msgPanel').classList.toggle('open'); document.getElementById('notifPanel').classList.remove('open'); }
+document.addEventListener('click',function(e){ if(!e.target.closest('.topbar-right')){ document.getElementById('notifPanel').classList.remove('open'); document.getElementById('msgPanel').classList.remove('open'); } });
+
+const avatarColors = ['#5B4FCF','#22C55E','#FF6B6B','#F59E0B','#3B82F6','#EC4899'];
+const statusStyles = {
+  pending: {bg:'var(--warning-light)', color:'#B45309', text:'⏳ قيد المراجعة'},
+  accepted: {bg:'var(--success-light)', color:'#15803D', text:'✓ مقبول'},
+  rejected: {bg:'#FEE2E2', color:'#DC2626', text:'✗ مرفوض'},
+  withdrawn: {bg:'var(--bg)', color:'var(--text-mid)', text:'↩ مسحوب'}
+};
+
+let allInternships = [];
+let allApplications = [];
+
+document.addEventListener('DOMContentLoaded', async function(){
+  if(!getToken()){ window.location.href='../public/02-login.html'; return; }
+
+  loadProfile();
+  loadApplications();
+  loadInternships();
+  loadNotifications();
+  loadMessages();
+  setupTabs();
+  var searchBtn = document.querySelector('.icon-btn[onclick]');
+  if(!searchBtn || !searchBtn.getAttribute('onclick')){
+    var iconBtns = document.querySelectorAll('.icon-btn');
+    iconBtns.forEach(function(btn){
+      if(btn.querySelector('.ti-search') && !btn.closest('.notif-panel')){
+        btn.style.cursor='pointer';
+        btn.onclick=function(){ window.location.href='09-search.html'; };
+      }
+    });
+  }
 });
 
-document.addEventListener('DOMContentLoaded', async function() {
-  if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
-
-  try {
-    const res = await fetch(API_BASE + '/auth/profile/', { headers: authHeaders() });
-    if (!res.ok) throw new Error('Failed to load profile');
-    const profile = await res.json();
+async function loadProfile(){
+  try{
+    const res = await fetch(API_BASE+'/auth/profile/', {headers:authHeaders()});
+    if(!res.ok) throw new Error();
+    const p = await res.json();
     const user = getUser();
-    const fullName = profile.full_name || (user && user.full_name) || '';
+    const fullName = p.full_name || (user && user.full_name) || '';
     const firstName = fullName.split(' ')[0] || fullName;
     const initials = getInitials(fullName);
 
-    document.querySelector('.topbar-title').textContent = 'مرحباً، ' + firstName + ' 👋';
+    var greeting = document.querySelector('.topbar-title');
+    if(greeting) greeting.innerHTML = 'مرحباً، ' + firstName + ' <i class="ti ti-mood-smile" style="font-size:20px;color:var(--primary)"></i>';
 
-    const sidebarAvatar = document.querySelector('.sidebar-user .user-avatar');
-    const sidebarName = document.querySelector('.sidebar-user .user-name');
-    const sidebarRole = document.querySelector('.sidebar-user .user-role');
-    if (sidebarAvatar) sidebarAvatar.textContent = initials;
-    if (sidebarName) sidebarName.textContent = fullName;
-    if (sidebarRole && profile.person_type) sidebarRole.textContent = profile.person_type;
-    if (profile.trainee_id) {
-      const idEl = document.querySelector('.sidebar-user .user-id');
-      if (idEl) idEl.textContent = profile.trainee_id;
+    var sAvatar = document.querySelector('.sidebar-user .user-avatar');
+    var sName = document.querySelector('.sidebar-user .user-name');
+    var sRole = document.querySelector('.sidebar-user .user-role');
+    var sId = document.querySelector('.sidebar-user .user-id');
+    if(sAvatar) sAvatar.textContent = initials;
+    if(sName) sName.textContent = fullName;
+    if(sRole) sRole.textContent = (p.major||'') + (p.year_of_study ? ' — السنة '+p.year_of_study : '');
+    if(sId && p.trainee_id) sId.textContent = p.trainee_id;
+
+    var pAvatar = document.querySelector('.profile-avatar');
+    var pName = document.querySelector('.profile-name');
+    var pMeta = document.querySelector('.profile-meta');
+    if(pAvatar) pAvatar.textContent = initials;
+    if(pName) pName.textContent = fullName;
+    if(pMeta) pMeta.textContent = (p.major||'') + (p.year_of_study ? ' — السنة '+p.year_of_study : '') + (p.university ? ' · '+p.university : '');
+
+    var pStats = document.querySelectorAll('.pstat-num');
+    if(pStats[0] && p.gpa) pStats[0].textContent = p.gpa;
+  }catch(e){}
+}
+
+async function loadApplications(){
+  try{
+    const res = await fetch(API_BASE+'/internships/applications/', {headers:authHeaders()});
+    if(!res.ok) throw new Error();
+    const data = await res.json();
+    allApplications = Array.isArray(data) ? data : (data.results||[]);
+
+    const total = allApplications.length;
+    const accepted = allApplications.filter(a=>a.status==='accepted').length;
+    const pending = allApplications.filter(a=>a.status==='pending').length;
+    const statNums = document.querySelectorAll('.stat-num');
+    if(statNums[0]) statNums[0].textContent = total;
+    if(statNums[1]) statNums[1].textContent = accepted;
+    if(statNums[2]) statNums[2].textContent = pending;
+
+    var appBadge = document.getElementById('appBadge');
+    if(appBadge) appBadge.textContent = total;
+    var chatBadge = document.getElementById('chatBadge');
+    if(chatBadge) chatBadge.textContent = '0';
+
+    var pStats = document.querySelectorAll('.pstat-num');
+    if(pStats[1]) pStats[1].textContent = total;
+    if(pStats[2]) pStats[2].textContent = accepted;
+
+    const container = document.getElementById('appsContainer');
+    if(container){
+      container.innerHTML = '';
+      if(allApplications.length === 0){
+        container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-mid);font-size:13px">لم تقدّم على أي فرصة بعد</div>';
+        return;
+      }
+      allApplications.slice(0,4).forEach(function(app,i){
+        const st = app.status || 'pending';
+        const s = statusStyles[st] || statusStyles.pending;
+        const title = app.internship_title || app.title || 'فرصة تدريب';
+        const company = app.company_name || app.company || '';
+        const dateStr = app.created_at || app.application_date || '';
+        let timeAgo = '';
+        if(dateStr){
+          const diff = Date.now() - new Date(dateStr).getTime();
+          const days = Math.floor(diff/86400000);
+          if(days===0) timeAgo='اليوم';
+          else if(days===1) timeAgo='منذ يوم';
+          else if(days<7) timeAgo='منذ '+days+' أيام';
+          else timeAgo='منذ '+Math.floor(days/7)+' أسابيع';
+        }
+        const initials = getInitials(company) || 'فر';
+        const color = avatarColors[i%avatarColors.length];
+        const item = document.createElement('div');
+        item.className = 'app-item';
+        item.onclick = function(){ window.location.href='11-my-applications.html'; };
+        item.innerHTML = '<div class="app-avatar" style="background:'+color+'">'+initials+'</div><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">'+title+' — '+company+'</div><div style="font-size:11px;color:var(--text-mid)">'+timeAgo+'</div></div><span class="status-badge" style="background:'+s.bg+';color:'+s.color+'">'+s.text+'</span>';
+        container.appendChild(item);
+      });
     }
+  }catch(e){}
+}
 
-    document.querySelector('.profile-avatar').textContent = initials;
-    document.querySelector('.profile-name').textContent = fullName;
-    const metaParts = [];
-    if (profile.person_type) metaParts.push(profile.person_type);
-    const metaEl = document.querySelector('.profile-meta');
-    if (metaEl && metaParts.length) metaEl.textContent = metaParts.join(' · ');
-  } catch (err) {
-    showToast('حدث خطأ في تحميل البيانات');
+async function loadInternships(){
+  try{
+    const res = await fetch(API_BASE+'/internships/', {headers:authHeaders()});
+    if(!res.ok) throw new Error();
+    const data = await res.json();
+    allInternships = Array.isArray(data) ? data : (data.results||[]);
+    var statNums = document.querySelectorAll('.stat-num');
+    if(statNums[3]) statNums[3].textContent = allInternships.length;
+    renderRecs(allInternships);
+    renderCalendar(allInternships);
+  }catch(e){}
+}
+
+const arMonths = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+function renderCalendar(list){
+  const container = document.getElementById('calendarContainer');
+  if(!container) return;
+  const now = new Date();
+  const upcoming = list
+    .filter(function(i){ return i.deadline && new Date(i.deadline) > now; })
+    .sort(function(a,b){ return new Date(a.deadline) - new Date(b.deadline); })
+    .slice(0,3);
+  if(upcoming.length === 0){
+    container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-mid);font-size:13px">لا توجد مواعيد قادمة</div>';
+    return;
   }
-});
+  container.innerHTML = '';
+  upcoming.forEach(function(item){
+    const d = new Date(item.deadline);
+    const day = d.getDate();
+    const month = arMonths[d.getMonth()];
+    const el = document.createElement('div');
+    el.className = 'cal-item';
+    el.onclick = function(){ window.location.href='10-internship-details.html?id='+item.id; };
+    el.style.cursor = 'pointer';
+    el.innerHTML = '<div class="cal-date"><div class="cal-day">'+day+'</div><div class="cal-month">'+month+'</div></div><div><div class="cal-title">آخر موعد — '+(item.company||'')+'</div><div class="cal-sub">'+item.title+'</div></div>';
+    container.appendChild(el);
+  });
+}
+
+function renderRecs(list){
+  const container = document.getElementById('recsContainer');
+  if(!container) return;
+  container.innerHTML = '';
+  if(list.length === 0){
+    container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-mid);font-size:13px">لا توجد فرص متاحة</div>';
+    return;
+  }
+  list.slice(0,6).forEach(function(item,i){
+    const isFree = !item.is_paid;
+    const iconBg = isFree ? 'var(--success-light)' : 'var(--warning-light)';
+    const iconColor = isFree ? 'var(--success)' : 'var(--warning)';
+    const icons = ['ti-code','ti-palette','ti-database','ti-device-mobile','ti-robot','ti-chart-bar'];
+    const color = avatarColors[i%avatarColors.length];
+    const el = document.createElement('div');
+    el.className = 'rec-item';
+    el.onclick = function(){ window.location.href='10-internship-details.html?id='+item.id; };
+    el.innerHTML = '<div class="rec-icon" style="background:'+iconBg+'"><i class="ti '+(icons[i%icons.length])+'" style="color:'+iconColor+'"></i></div><div style="flex:1"><div class="rec-title">'+item.title+'</div><div class="rec-sub">'+(item.company||'')+' · '+(item.location||'')+' · '+(isFree?'مجاني':(item.is_paid||'مدفوع'))+'</div></div><div class="rec-match" style="background:var(--primary-light);color:var(--primary)">فرصة</div>';
+    container.appendChild(el);
+  });
+}
+
+function setupTabs(){
+  var tabs = document.querySelectorAll('.tab-bar .tab');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      var label = tab.textContent.trim();
+      var filtered = [];
+      if(label === 'مجاني'){
+        filtered = allInternships.filter(function(i){ return !i.is_paid; });
+      } else if(label === 'مدفوع'){
+        filtered = allInternships.filter(function(i){ return i.is_paid; });
+      } else if(label === 'داخل غزة'){
+        filtered = allInternships.filter(function(i){ return (i.location||'').indexOf('غزة') !== -1; });
+      } else {
+        filtered = allInternships;
+      }
+      renderRecs(filtered);
+    });
+  });
+}
+
+async function loadNotifications(){
+  try{
+    const res = await fetch(API_BASE+'/chat/notifications/', {headers:authHeaders()});
+    if(!res.ok) throw new Error();
+    const data = await res.json();
+    const list = data.notifications || [];
+    const dot = document.querySelector('.notif-dot');
+    if(dot) dot.style.display = (data.unread_count||0) > 0 ? 'block' : 'none';
+    var notifBadge = document.getElementById('notifBadge');
+    if(notifBadge) notifBadge.textContent = data.unread_count || 0;
+
+    const panel = document.getElementById('notifPanel');
+    if(!panel) return;
+    const header = panel.querySelector('.notif-header');
+    panel.innerHTML = '';
+    if(header) panel.appendChild(header);
+    if(list.length === 0){
+      panel.innerHTML += '<div style="padding:20px;text-align:center;color:var(--text-mid);font-size:13px">لا توجد اشعارات</div>';
+      return;
+    }
+    list.slice(0,5).forEach(function(n){
+      var icon = 'ti-bell';
+      if(n.type==='message') icon='ti-message';
+      if(n.type==='application') icon='ti-clipboard';
+      if(n.type==='report') icon='ti-file-text';
+      var item = document.createElement('div');
+      item.className = 'notif-item';
+      if(n.is_read) item.style.opacity='0.5';
+      var dateStr = n.created_at||n.date||'';
+      var timeAgo = '';
+      if(dateStr){
+        var diff = Date.now() - new Date(dateStr).getTime();
+        var hours = Math.floor(diff/3600000);
+        if(hours<1) timeAgo='الآن';
+        else if(hours<24) timeAgo='منذ '+hours+' ساعات';
+        else timeAgo='منذ '+Math.floor(hours/24)+' أيام';
+      }
+      item.innerHTML = '<div class="notif-icon" style="background:var(--primary-light)"><i class="ti '+icon+'" style="color:var(--primary)"></i></div><div style="flex:1"><div class="notif-text">'+n.title+'</div><div class="notif-time">'+timeAgo+'</div></div>'+(n.is_read?'':'<div class="notif-unread"></div>');
+      panel.appendChild(item);
+    });
+  }catch(e){}
+}
+
+async function loadMessages(){
+  try{
+    const res = await fetch(API_BASE+'/chat/channels/', {headers:authHeaders()});
+    if(!res.ok) throw new Error();
+    const data = await res.json();
+    const channels = Array.isArray(data) ? data : (data.results||[]);
+    const list = document.getElementById('msgList');
+    const dot = document.getElementById('msgDot');
+    if(!list) return;
+
+    const unread = channels.filter(function(c){ return c.last_message && c.last_message.content; }).length;
+    if(dot) dot.style.display = channels.length > 0 ? 'block' : 'none';
+
+    if(channels.length === 0){
+      list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-mid);font-size:13px">لا توجد رسائل بعد</div>';
+      return;
+    }
+    list.innerHTML = '';
+    channels.slice(0,5).forEach(function(ch,i){
+      const name = ch.name || 'محادثة';
+      const lastMsg = (ch.last_message && ch.last_message.content) ? ch.last_message.content : 'لا توجد رسائل';
+      const timeStr = (ch.last_message && ch.last_message.sent_at) ? ch.last_message.sent_at : '';
+      let timeAgo = '';
+      if(timeStr){
+        var diff = Date.now() - new Date(timeStr).getTime();
+        var hours = Math.floor(diff/3600000);
+        if(hours<1) timeAgo='الآن';
+        else if(hours<24) timeAgo='منذ '+hours+' س';
+        else timeAgo='منذ '+Math.floor(hours/24)+' ي';
+      }
+      const initials = getInitials(name);
+      const color = avatarColors[i%avatarColors.length];
+      const item = document.createElement('div');
+      item.className = 'msg-item';
+      item.onclick = function(){ window.location.href='15-chat.html?channel='+ch.id; };
+      item.innerHTML = '<div class="msg-avatar" style="background:'+color+'">'+initials+'</div><div class="msg-content"><div class="msg-name">'+name+'</div><div class="msg-last">'+lastMsg+'</div></div><div class="msg-time">'+timeAgo+'</div>';
+      list.appendChild(item);
+    });
+  }catch(e){}
+}
 </script>
 </body>
 </html>
