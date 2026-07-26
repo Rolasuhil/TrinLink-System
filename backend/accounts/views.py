@@ -204,6 +204,46 @@ class ProfileView(APIView):
                 setattr(user, field, request.data[field])
         user.save()
 
+        if user.person_type == 'trainee':
+            try:
+                profile = user.trainee_profile
+            except Exception:
+                from .models import Trainee
+                profile = Trainee.objects.create(person=user)
+            for field in ['university', 'major', 'gpa', 'year_of_study', 'is_graduate', 'gender', 'skills', 'location']:
+                if field in request.data:
+                    val = request.data[field]
+                    if field in ['gpa']:
+                        val = float(val) if val else 0.0
+                    elif field in ['year_of_study']:
+                        val = int(val) if val else 1
+                    elif field in ['is_graduate']:
+                        val = bool(val)
+                    setattr(profile, field, val)
+            profile.save()
+
+        elif user.person_type == 'company':
+            try:
+                profile = user.company_profile
+            except Exception:
+                from .models import CompanyProfile
+                profile = CompanyProfile.objects.create(person=user, company_name=user.full_name)
+            for field in ['company_name', 'industry', 'company_size', 'location', 'website', 'about']:
+                if field in request.data:
+                    setattr(profile, field, request.data[field])
+            profile.save()
+
+        elif user.person_type == 'supervisor':
+            try:
+                profile = user.supervisor_profile
+            except Exception:
+                from .models import SupervisorProfile
+                profile = SupervisorProfile.objects.create(person=user)
+            for field in ['university', 'department', 'job_title', 'professional_experience']:
+                if field in request.data:
+                    setattr(profile, field, request.data[field])
+            profile.save()
+
         return Response(PersonSerializer(user).data)
 
 

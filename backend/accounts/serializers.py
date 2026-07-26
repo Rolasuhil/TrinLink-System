@@ -37,6 +37,7 @@ class RegisterTraineeSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(min_length=8)
     phone_number = serializers.CharField(max_length=20, required=False, allow_blank=True)
+    address = serializers.CharField(max_length=300, required=False, allow_blank=True)
     university = serializers.CharField(max_length=200, required=False, allow_blank=True)
     major = serializers.CharField(max_length=200, required=False, allow_blank=True)
     gpa = serializers.FloatField(required=False)
@@ -44,6 +45,7 @@ class RegisterTraineeSerializer(serializers.Serializer):
     is_graduate = serializers.BooleanField(required=False)
     gender = serializers.ChoiceField(choices=Trainee.GENDER_CHOICES, required=False)
     date_of_birth = serializers.DateField(required=False)
+    skills = serializers.CharField(required=False, allow_blank=True)
     supervisor_id = serializers.CharField(max_length=20, required=False, allow_blank=True)
 
     def validate_email(self, value):
@@ -58,6 +60,7 @@ class RegisterTraineeSerializer(serializers.Serializer):
             full_name=validated_data['full_name'],
             email=validated_data['email'],
             phone_number=validated_data.get('phone_number', ''),
+            address=validated_data.get('address', ''),
             person_type='trainee',
         )
         person.set_password(validated_data['password'])
@@ -72,6 +75,7 @@ class RegisterTraineeSerializer(serializers.Serializer):
             is_graduate=validated_data.get('is_graduate', False),
             gender=validated_data.get('gender', ''),
             date_of_birth=validated_data.get('date_of_birth'),
+            skills=validated_data.get('skills', ''),
         )
 
         if supervisor_id:
@@ -131,6 +135,7 @@ class RegisterCompanySerializer(serializers.Serializer):
             company_name=company_name,
             industry=validated_data.get('industry', ''),
             location=validated_data.get('location', ''),
+            company_size=validated_data.get('company_size', ''),
             website=validated_data.get('website', ''),
             about=validated_data.get('description', ''),
         )
@@ -171,6 +176,7 @@ class RegisterSupervisorSerializer(serializers.Serializer):
 
         SupervisorProfile.objects.create(
             person=person,
+            university=validated_data.get('university', ''),
             department=validated_data.get('department', ''),
             job_title=validated_data.get('specialization', ''),
         )
@@ -258,34 +264,78 @@ class PersonSerializer(serializers.ModelSerializer):
     company_id = serializers.SerializerMethodField()
     supervisor_id = serializers.SerializerMethodField()
     company_name = serializers.SerializerMethodField()
+    skills = serializers.SerializerMethodField()
+    university = serializers.SerializerMethodField()
+    major = serializers.SerializerMethodField()
+    gpa = serializers.SerializerMethodField()
+    year_of_study = serializers.SerializerMethodField()
+    is_graduate = serializers.SerializerMethodField()
+    industry = serializers.SerializerMethodField()
+    company_size = serializers.SerializerMethodField()
+    department = serializers.SerializerMethodField()
 
     class Meta:
         model = Person
         fields = ['id', 'user_id', 'full_name', 'email', 'phone_number', 'address',
                   'profile_picture', 'person_type', 'is_verified', 'created_at',
-                  'trainee_id', 'company_id', 'supervisor_id', 'company_name']
+                  'trainee_id', 'company_id', 'supervisor_id', 'company_name',
+                  'skills', 'university', 'major', 'gpa', 'year_of_study', 'is_graduate',
+                  'industry', 'company_size', 'department']
         read_only_fields = ['id', 'user_id', 'person_type', 'is_verified', 'created_at']
 
     def get_trainee_id(self, obj):
-        try:
-            return obj.trainee_profile.id
-        except Exception:
-            return None
+        try: return obj.trainee_profile.id
+        except Exception: return None
 
     def get_company_id(self, obj):
-        try:
-            return obj.company_profile.id
-        except Exception:
-            return None
+        try: return obj.company_profile.id
+        except Exception: return None
 
     def get_supervisor_id(self, obj):
-        try:
-            return obj.supervisor_profile.id
-        except Exception:
-            return None
+        try: return obj.supervisor_profile.id
+        except Exception: return None
 
     def get_company_name(self, obj):
+        try: return obj.company_profile.company_name
+        except Exception: return None
+
+    def get_skills(self, obj):
+        try: return obj.trainee_profile.skills
+        except Exception: return None
+
+    def get_university(self, obj):
         try:
-            return obj.company_profile.company_name
-        except Exception:
-            return None
+            if obj.person_type == 'trainee':
+                return obj.trainee_profile.university
+            elif obj.person_type == 'supervisor':
+                return obj.supervisor_profile.university
+        except Exception: pass
+        return None
+
+    def get_major(self, obj):
+        try: return obj.trainee_profile.major
+        except Exception: return None
+
+    def get_gpa(self, obj):
+        try: return obj.trainee_profile.gpa
+        except Exception: return None
+
+    def get_year_of_study(self, obj):
+        try: return obj.trainee_profile.year_of_study
+        except Exception: return None
+
+    def get_is_graduate(self, obj):
+        try: return obj.trainee_profile.is_graduate
+        except Exception: return None
+
+    def get_industry(self, obj):
+        try: return obj.company_profile.industry
+        except Exception: return None
+
+    def get_company_size(self, obj):
+        try: return obj.company_profile.company_size
+        except Exception: return None
+
+    def get_department(self, obj):
+        try: return obj.supervisor_profile.department
+        except Exception: return None

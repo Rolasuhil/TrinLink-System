@@ -79,6 +79,9 @@ class Trainee(models.Model):
     date_of_birth = models.DateField(null=True, blank=True, verbose_name='تاريخ الميلاد')
     nationality = models.CharField(max_length=100, blank=True, verbose_name='الجنسية')
     bio = models.TextField(blank=True, verbose_name='نبذة تعريفية')
+    skills = models.TextField(blank=True, verbose_name='المهارات')
+    location = models.CharField(max_length=200, blank=True, verbose_name='الموقع')
+    id_document = models.FileField(upload_to='id_documents/', blank=True, null=True, verbose_name='وثيقة الهوية')
     assignment = models.ForeignKey('performance.SupervisionAssignment', on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_trainees', verbose_name='سجل الإشراف')
 
     class Meta:
@@ -96,6 +99,7 @@ class CompanyProfile(models.Model):
     commercial_id = models.CharField(max_length=50, blank=True, verbose_name='السجل التجاري')
     industry = models.CharField(max_length=200, blank=True, verbose_name='مجال العمل')
     location = models.CharField(max_length=200, blank=True, verbose_name='الموقع')
+    company_size = models.CharField(max_length=50, blank=True, verbose_name='حجم الشركة')
     website = models.URLField(blank=True, verbose_name='الموقع الإلكتروني')
     about = models.TextField(blank=True, verbose_name='نبذة عن الشركة')
     logo = models.ImageField(upload_to='company_logos/', blank=True, null=True, verbose_name='شعار الشركة')
@@ -112,6 +116,7 @@ class CompanyProfile(models.Model):
 class SupervisorProfile(models.Model):
     id = models.AutoField(primary_key=True)
     person = models.OneToOneField(Person, on_delete=models.CASCADE, related_name='supervisor_profile', verbose_name='المستخدم')
+    university = models.CharField(max_length=200, blank=True, verbose_name='الجامعة')
     department = models.CharField(max_length=200, blank=True, verbose_name='القسم')
     job_title = models.CharField(max_length=200, blank=True, verbose_name='المسمى الوظيفي')
     professional_experience = models.TextField(blank=True, verbose_name='الخبرة العملية')

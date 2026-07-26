@@ -327,6 +327,7 @@ async function doRegister() {
   const lastName = document.getElementById('regLastName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const phone = document.getElementById('regPhone').value.trim();
+  const location = document.querySelector('#step1 .form-select').value;
   const pw = document.getElementById('pw1').value;
   const confirmPw = document.getElementById('regConfirmPw').value;
   const university = document.getElementById('regUniversity').value;
@@ -335,6 +336,7 @@ async function doRegister() {
   const gpa = document.getElementById('regGPA').value;
   const supervisorId = document.getElementById('regSupervisor').value.trim();
   const isGraduate = document.getElementById('regAccountType').value === 'graduate';
+  const skills = [...document.querySelectorAll('#step3 .skill-tag.selected')].map(t => t.textContent.trim()).join(',');
   if (!firstName || !lastName || !email || !pw) { showRegError('يرجى ملء جميع الحقول المطلوبة'); return; }
   if (pw !== confirmPw) { showRegError('كلمتا المرور غير متطابقتين'); return; }
   if (pw.length < 8) { showRegError('كلمة المرور يجب أن تكون 8 أحرف على الأقل'); return; }
@@ -342,11 +344,13 @@ async function doRegister() {
     full_name: firstName + ' ' + lastName,
     email, password: pw,
     phone_number: phone,
+    address: location,
     university, major,
     year_of_study: parseInt(year),
     gpa: gpa ? parseFloat(gpa) : 0,
     is_graduate: isGraduate,
-    supervisor_id: supervisorId
+    supervisor_id: supervisorId,
+    skills: skills
   };
   const btn = document.querySelector('#step3 .btn-next');
   btn.disabled = true;
