@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TrainLink — متدربي</title>
+<title>TrainLink — متدربيّ</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+:root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
 .sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
@@ -17,9 +17,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
-.nav-item.active{background:var(--primary)}
+.nav-item.active i,.nav-item.active span{color:var(--warning)!important}
 .nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
-.nav-item.active i,.nav-item.active span{color:white}
 .nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
 .nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
 .nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
@@ -29,225 +28,118 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .topbar-title{font-size:16px;font-weight:700}
 .topbar-sub{font-size:12px;color:var(--text-mid)}
 .content{padding:20px 24px;flex:1}
-.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
-.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text-mid);font-family:var(--font);font-weight:600;transition:all 0.15s}
-.filter-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
-.search-bar{padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none;background:white;width:250px;margin-right:auto}
-.search-bar:focus{border-color:var(--primary)}
-.trainee-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
-.trainee-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;transition:all 0.2s;cursor:pointer}
-.trainee-card:hover{border-color:var(--primary);box-shadow:0 6px 20px rgba(91,79,207,0.1);transform:translateY(-2px)}
-.trainee-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.trainee-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;flex-shrink:0}
-.trainee-name{font-size:15px;font-weight:700;color:var(--text-dark)}
-.trainee-dept{font-size:12px;color:var(--text-mid);margin-top:2px}
-.trainee-status{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;margin-right:auto}
-.progress-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
-.progress-track{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;margin-bottom:8px}
-.progress-fill{height:100%;border-radius:3px}
-.trainee-info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
-.info-item{text-align:center}
-.info-num{font-size:16px;font-weight:800;color:var(--primary)}
-.info-label{font-size:10px;color:var(--text-mid)}
-.btn-row{display:flex;gap:6px;margin-top:12px}
-.btn-sm{padding:6px 14px;border-radius:var(--radius-sm);font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
+.filters-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-mid);font-size:16px}
+.search-input{width:100%;padding:9px 38px 9px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:var(--text-dark);background:white;outline:none}
+.search-input:focus{border-color:var(--primary)}
+.filter-select{padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:var(--text-mid);background:white;outline:none}
+.tab-bar{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:4px;margin-bottom:16px;width:fit-content}
+.tab{padding:7px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-mid);font-family:var(--font);transition:all 0.15s}
+.tab.active{background:var(--warning);color:white}
+.trainee-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.trainee-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;transition:all 0.2s}
+.trainee-card:hover{border-color:var(--warning);box-shadow:0 4px 16px rgba(245,158,11,0.1);transform:translateY(-2px)}
+.card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.t-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;flex-shrink:0}
+.t-name{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+.t-meta{font-size:12px;color:var(--text-mid);line-height:1.6}
+.card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.cs{background:var(--bg);border-radius:var(--radius-sm);padding:8px;text-align:center}
+.cs-num{font-size:16px;font-weight:800;color:var(--text-dark)}
+.cs-label{font-size:10px;color:var(--text-mid);margin-top:2px}
+.card-footer{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
+.btn-sm{padding:7px 12px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:5px;transition:all 0.15s;border:none}
+.btn-warning{background:var(--warning);color:white}
+.btn-warning:hover{background:#D97706}
+.btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-outline:hover{background:var(--primary-light)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-mid)}
+.empty-state i{font-size:48px;margin-bottom:12px;display:block;color:var(--border)}
+.empty-state p{font-size:14px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.toast.show{display:flex}
 </style>
 </head>
 <body>
-
 <nav class="sidebar">
   <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
-  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
-    <div style="width:36px;height:36px;border-radius:50%;background:#22C55E;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">مش</div>
-    <div style="color:white;font-size:11px;font-weight:600">د. محمد أبو سمرة</div>
-  </div>
-  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
-  <a href="24-supervisor-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
-  <a href="#" class="nav-item active"><i class="ti ti-school"></i><span>متدربي</span><span class="nav-badge">8</span></a>
-  <a href="26-progress-reports.html" class="nav-item"><i class="ti ti-file-text"></i><span>التقارير</span></a>
-  <a href="27-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span><span class="nav-badge">2</span></a>
-  <div class="nav-section">الحساب</div>
-  <a href="#" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
-  <a href="#" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span></a>
-  <div class="sidebar-bottom">
-    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
-  </div>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
 </nav>
 
 <div class="main">
   <div class="topbar">
-    <div>
-      <div class="topbar-title">متدربي 👨‍🎓</div>
-      <div class="topbar-sub">متابعة 8 متدربيين في 3 شركات</div>
-    </div>
+    <div><div class="topbar-title">متدربيّ 👨‍🎓</div><div class="topbar-sub" id="traineeCount">جاري التحميل...</div></div>
   </div>
-
   <div class="content">
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="filterTrainees(this,'all')">الكل (8)</button>
-      <button class="filter-btn" onclick="filterTrainees(this,'active')">نشط (3)</button>
-      <button class="filter-btn" onclick="filterTrainees(this,'pending')">جديد (2)</button>
-      <button class="filter-btn" onclick="filterTrainees(this,'completed')">منتهي (3)</button>
-      <input class="search-bar" placeholder="🔍 بحث بالاسم أو الشركة...">
+    <div class="filters-row">
+      <div class="search-wrap"><i class="ti ti-search search-icon"></i><input class="search-input" placeholder="بحث باسم المتدرب..." oninput="filterTrainees()"></div>
+      <select class="filter-select" id="sortSelect" onchange="renderTrainees()"><option>ترتيب: الاسم</option><option>ترتيب: الجامعة</option></select>
     </div>
-
-    <div class="trainee-grid">
-      <div class="trainee-card" data-status="active">
-        <div class="trainee-header">
-          <div class="trainee-avatar" style="background:var(--primary)">سم</div>
-          <div><div class="trainee-name">سارة محمود</div><div class="trainee-dept">IT — مطور Frontend</div></div>
-          <span class="trainee-status" style="background:var(--success-light);color:#15803D">نشط</span>
-        </div>
-        <div style="font-size:12px;color:var(--text-mid);margin-bottom:8px"><i class="ti ti-building" style="margin-left:4px"></i>TechPal · يوليو 2026</div>
-        <div class="progress-row"><span style="font-weight:600">تقدم المشروع</span><span style="font-weight:700;color:var(--primary)">85%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:85%;background:var(--primary)"></div></div>
-        <div class="progress-row"><span style="font-weight:600">الحضور</span><span style="font-weight:700;color:var(--success)">95%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:95%;background:var(--success)"></div></div>
-        <div class="trainee-info">
-          <div class="info-item"><div class="info-num">6</div><div class="info-label">تقارير</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--warning)">4.5</div><div class="info-label">تقييم</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--success)">3</div><div class="info-label">أسابيع</div></div>
-        </div>
-        <div class="btn-row">
-          <button class="btn-sm" style="background:var(--primary);color:white" onclick="window.location.href='26-progress-reports.html'">عرض التقارير</button>
-          <button class="btn-sm" style="background:var(--primary-light);color:var(--primary)" onclick="window.location.href='27-chat.html'">مراسلة</button>
-        </div>
-      </div>
-
-      <div class="trainee-card" data-status="active">
-        <div class="trainee-header">
-          <div class="trainee-avatar" style="background:#22C55E">أح</div>
-          <div><div class="trainee-name">أحمد حسن</div><div class="trainee-dept">CS — مطور Backend</div></div>
-          <span class="trainee-status" style="background:var(--success-light);color:#15803D">نشط</span>
-        </div>
-        <div style="font-size:12px;color:var(--text-mid);margin-bottom:8px"><i class="ti ti-building" style="margin-left:4px"></i>TechPal · يوليو 2026</div>
-        <div class="progress-row"><span style="font-weight:600">تقدم المشروع</span><span style="font-weight:700;color:var(--primary)">72%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:72%;background:var(--primary)"></div></div>
-        <div class="progress-row"><span style="font-weight:600">الحضور</span><span style="font-weight:700;color:var(--warning)">88%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:88%;background:var(--warning)"></div></div>
-        <div class="trainee-info">
-          <div class="info-item"><div class="info-num">4</div><div class="info-label">تقارير</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--warning)">4.2</div><div class="info-label">تقييم</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--success)">2</div><div class="info-label">أسابيع</div></div>
-        </div>
-        <div class="btn-row">
-          <button class="btn-sm" style="background:var(--primary);color:white" onclick="window.location.href='26-progress-reports.html'">عرض التقارير</button>
-          <button class="btn-sm" style="background:var(--primary-light);color:var(--primary)" onclick="window.location.href='27-chat.html'">مراسلة</button>
-        </div>
-      </div>
-
-      <div class="trainee-card" data-status="active">
-        <div class="trainee-header">
-          <div class="trainee-avatar" style="background:#FF6B6B">من</div>
-          <div><div class="trainee-name">منى ناصر</div><div class="trainee-dept">تصميم — مصممة UI/UX</div></div>
-          <span class="trainee-status" style="background:var(--success-light);color:#15803D">نشط</span>
-        </div>
-        <div style="font-size:12px;color:var(--text-mid);margin-bottom:8px"><i class="ti ti-building" style="margin-left:4px"></i>DesignHub · يوليو 2026</div>
-        <div class="progress-row"><span style="font-weight:600">تقدم المشروع</span><span style="font-weight:700;color:var(--success)">90%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:90%;background:var(--success)"></div></div>
-        <div class="progress-row"><span style="font-weight:600">الحضور</span><span style="font-weight:700;color:var(--success)">100%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
-        <div class="trainee-info">
-          <div class="info-item"><div class="info-num">7</div><div class="info-label">تقارير</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--success)">4.8</div><div class="info-label">تقييم</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--success)">3</div><div class="info-label">أسابيع</div></div>
-        </div>
-        <div class="btn-row">
-          <button class="btn-sm" style="background:var(--primary);color:white" onclick="window.location.href='26-progress-reports.html'">عرض التقارير</button>
-          <button class="btn-sm" style="background:var(--primary-light);color:var(--primary)" onclick="window.location.href='27-chat.html'">مراسلة</button>
-        </div>
-      </div>
-
-      <div class="trainee-card" data-status="pending">
-        <div class="trainee-header">
-          <div class="trainee-avatar" style="background:#7C3AED">خل</div>
-          <div><div class="trainee-name">خالد عمر</div><div class="trainee-dept">IT — مطور Mobile</div></div>
-          <span class="trainee-status" style="background:var(--warning-light);color:#B45309">جديد</span>
-        </div>
-        <div style="font-size:12px;color:var(--text-mid);margin-bottom:8px"><i class="ti ti-building" style="margin-left:4px"></i>TechPal · أغسطس 2026</div>
-        <div class="progress-row"><span style="font-weight:600">تقدم المشروع</span><span style="font-weight:700;color:var(--text-mid)">0%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:0%;background:var(--primary)"></div></div>
-        <div class="trainee-info">
-          <div class="info-item"><div class="info-num">0</div><div class="info-label">تقارير</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--text-mid)">—</div><div class="info-label">تقييم</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--text-mid)">0</div><div class="info-label">أسابيع</div></div>
-        </div>
-        <div class="btn-row">
-          <button class="btn-sm" style="background:var(--primary-light);color:var(--primary)" onclick="window.location.href='27-chat.html'">مراسلة</button>
-        </div>
-      </div>
-
-      <div class="trainee-card" data-status="completed">
-        <div class="trainee-header">
-          <div class="trainee-avatar" style="background:#6B7280">عب</div>
-          <div><div class="trainee-name">عبدالرحمن بدر</div><div class="trainee-dept">IT — مطور Frontend</div></div>
-          <span class="trainee-status" style="background:#FEE2E2;color:#DC2626">منتهي</span>
-        </div>
-        <div style="font-size:12px;color:var(--text-mid);margin-bottom:8px"><i class="ti ti-building" style="margin-left:4px"></i>TechPal · يونيو 2026</div>
-        <div class="progress-row"><span style="font-weight:600">تقدم المشروع</span><span style="font-weight:700;color:var(--success)">100%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div>
-        <div class="trainee-info">
-          <div class="info-item"><div class="info-num">12</div><div class="info-label">تقارير</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--warning)">4.6</div><div class="info-label">تقييم</div></div>
-          <div class="info-item"><div class="info-num" style="color:var(--success)">4</div><div class="info-label">أسابيع</div></div>
-        </div>
-        <div style="margin-top:10px;padding:8px;background:var(--success-light);border-radius:var(--radius-sm);text-align:center;font-size:12px;font-weight:700;color:#15803D">✓ شهادة صادرة</div>
-      </div>
+    <div class="tab-bar">
+      <button class="tab active" onclick="filterByTab(this,'all')">الكل</button>
     </div>
+    <div class="trainee-grid" id="grid"></div>
   </div>
 </div>
 
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 <script>
-const API_BASE='/api';
+const API='/api/performance';
+let allTrainees=[];
 function getToken(){return localStorage.getItem('trainlink_token')}
-function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null}
-function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
+function logout(){localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user');window.location.href='../public/02-login.html'}
+function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
 
-document.addEventListener('DOMContentLoaded',async function(){
-  var grid=document.querySelector('.trainee-grid');
-  if(grid)grid.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-mid)">جارٍ التحميل...</div>';
+function getInitials(name){if(!name)return'?';const p=name.split(' ');return p.length>1?(p[0][0]+p[1][0]):p[0].substring(0,2)}
+const colors=['#5B4FCF','#FF6B6B','#22C55E','#7C3AED','#F59E0B','#0EA5E9','#EC4899','#14B8A6'];
+
+function renderTrainees(){
+  const q=document.querySelector('.search-input').value.toLowerCase();
+  let list=allTrainees.filter(t=>!q||t.name.toLowerCase().includes(q));
+  const grid=document.getElementById('grid');
+  if(!list.length){grid.innerHTML='<div class="empty-state"><i class="ti ti-users"></i><p>لا يوجد متدربون مرتبطون بحسابك</p></div>';return}
+  grid.innerHTML=list.map((t,i)=>{const c=colors[i%colors.length];const ini=getInitials(t.name);return `
+    <div class="trainee-card">
+      <div class="card-top">
+        <div class="t-avatar" style="background:${c}">${ini}</div>
+        <div style="flex:1">
+          <div class="t-name">${t.name}</div>
+          <div class="t-meta">${t.major||'—'} — ${t.university||'—'}<br> GPA: ${t.gpa||'—'}</div>
+        </div>
+      </div>
+      <div class="card-stats">
+        <div class="cs"><div class="cs-num">${t.gpa||'—'}</div><div class="cs-label">المعدل</div></div>
+        <div class="cs"><div class="cs-num">${t.major?t.major.substring(0,8):'—'}</div><div class="cs-label">التخصص</div></div>
+        <div class="cs"><div class="cs-num">${t.assignment_date?t.assignment_date.substring(0,10):'—'}</div><div class="cs-label">تاريخ الربط</div></div>
+      </div>
+      <div class="card-footer">
+        <button class="btn-sm btn-warning"><i class="ti ti-chart-line"></i>التقارير</button>
+        <button class="btn-sm btn-outline"><i class="ti ti-messages"></i>مراسلة</button>
+      </div>
+    </div>`}).join('');
+}
+
+function filterByTab(btn,status){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderTrainees();
+}
+
+function filterTrainees(){renderTrainees()}
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(!getToken()){window.location.href='../public/02-login.html';return}
   try{
-    var res=await fetch(API_BASE+'/performance/supervisor/trainees/',{headers:authHeaders()});
-    if(!res.ok)throw new Error('Failed');
-    var trainees=await res.json();
-    if(!grid)return;
-    grid.innerHTML='';
-    if(!trainees.length){grid.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-mid)">لا يوجد متدربيين</div>';return;}
-    document.querySelector('.topbar-sub').textContent='متابعة '+trainees.length+' متدربيين';
-    var colors=['var(--primary)','#22C55E','#FF6B6B','#7C3AED','#F59E0B','#6B7280','#0EA5E9','#EC4899'];
-    trainees.forEach(function(t,i){
-      var initials=t.name.substring(0,2);
-      var progress=t.gpa?Math.round((t.gpa/4)*100):0;
-      var color=colors[i%colors.length];
-      var card=document.createElement('div');
-      card.className='trainee-card';
-      card.setAttribute('data-status','active');
-      card.innerHTML='<div class="trainee-header"><div class="trainee-avatar" style="background:'+color+'">'+initials+'</div><div><div class="trainee-name">'+t.name+'</div><div class="trainee-dept">'+(t.major||'')+'</div></div><span class="trainee-status" style="background:var(--success-light);color:#15803D">نشط</span></div><div style="font-size:12px;color:var(--text-mid);margin-bottom:8px"><i class="ti ti-building" style="margin-left:4px"></i>'+(t.university||'')+' · '+(t.assignment_date||'')+'</div><div class="progress-row"><span style="font-weight:600">تقدم المشروع</span><span style="font-weight:700;color:var(--primary)">'+progress+'%</span></div><div class="progress-track"><div class="progress-fill" style="width:'+progress+'%;background:var(--primary)"></div></div><div class="trainee-info"><div class="info-item"><div class="info-num">—</div><div class="info-label">تقارير</div></div><div class="info-item"><div class="info-num" style="color:var(--warning)">'+(t.gpa||'—')+'</div><div class="info-label">GPA</div></div><div class="info-item"><div class="info-num" style="color:var(--success)">—</div><div class="info-label">أسابيع</div></div></div><div class="btn-row"><button class="btn-sm" style="background:var(--primary);color:white">عرض التقارير</button><button class="btn-sm" style="background:var(--primary-light);color:var(--primary)">مراسلة</button></div>';
-      grid.appendChild(card);
-    });
+    const res=await fetch(API+'/supervisor/trainees/',{headers:{'Authorization':'Bearer '+getToken()}});
+    if(!res.ok)throw new Error('fail');
+    allTrainees=await res.json();
+    document.getElementById('traineeCount').textContent=allTrainees.length+' متدربون مرتبطون بحسابك';
+    renderTrainees();
   }catch(e){
-    if(grid)grid.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-mid)">حدث خطأ في تحميل البيانات</div>';
-    console.log('Error loading trainees:',e);
-  }
-
-  var searchInput=document.querySelector('.search-bar');
-  if(searchInput){
-    searchInput.addEventListener('input',function(){
-      var q=this.value.toLowerCase();
-      document.querySelectorAll('.trainee-card').forEach(function(card){
-        card.style.display=card.textContent.toLowerCase().indexOf(q)!==-1?'block':'none';
-      });
-    });
+    document.getElementById('grid').innerHTML='<div class="empty-state"><i class="ti ti-alert-circle"></i><p>حدث خطأ في تحميل البيانات</p></div>';
   }
 });
-
-function filterTrainees(btn,status){
-  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
-  btn.classList.add('active');
-  document.querySelectorAll('.trainee-card').forEach(function(card){
-    card.style.display=(status==='all'||card.dataset.status===status)?'block':'none';
-  });
-}
 </script>
 </body>
 </html>
