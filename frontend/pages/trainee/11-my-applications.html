@@ -312,25 +312,25 @@ function statusInfo(status) {
 }
 
 function renderAppCard(app, idx) {
-  const internship = app.internship || {};
-  const title = internship.title || app.title || 'فرصة تدريب';
-  const company = internship.company_name || app.company_name || '';
+  const title = app.internship_title || 'فرصة تدريب';
+  const company = app.company_name || '';
   const status = app.status || 'pending';
   const si = statusInfo(status);
-  const created = app.created_at || app.applied_at || '';
+  const created = app.application_date || '';
   let dateStr = '';
   if (created) {
     try { dateStr = new Date(created).toLocaleDateString('ar', { year: 'numeric', month: 'long', day: 'numeric' }); } catch(e) { dateStr = created; }
   }
-  const id = internship.id || app.internship_id || '';
-  const location = internship.location || '';
-  const duration = internship.duration || '';
-  const isFree = internship.is_free !== undefined ? internship.is_free : true;
+  const id = app.internship_id || '';
+  const location = app.location || '';
+  const isPaid = app.is_paid;
+  const workDays = app.work_days || '';
 
   const tags = [];
-  tags.push('<span class="app-tag" style="background:' + (isFree ? 'var(--success-light);color:#15803D' : '#FFF0F0;color:#DC2626') + '">' + (isFree ? 'مجاني' : 'مدفوع') + '</span>');
+  tags.push('<span class="app-tag" style="background:' + (isPaid ? '#FFF0F0;color:#DC2626' : 'var(--success-light);color:#15803D') + '">' + (isPaid ? 'مدفوع' : 'مجاني') + '</span>');
   if (location) tags.push('<span class="app-tag" style="background:var(--primary-light);color:var(--primary)">' + location + '</span>');
-  if (duration) tags.push('<span class="app-tag" style="background:var(--bg);color:var(--text-mid)">' + duration + '</span>');
+  if (app.internship_type_display) tags.push('<span class="app-tag" style="background:var(--bg);color:var(--text-mid)">' + app.internship_type_display + '</span>');
+  if (workDays) tags.push('<span class="app-tag" style="background:var(--bg);color:var(--text-mid)">' + workDays + '</span>');
 
   let actionsHtml = '';
   if (status === 'accepted' || status === 'approved') {
@@ -353,7 +353,7 @@ function renderAppCard(app, idx) {
     rejectedMsg = '<div class="rejection-box"><i class="ti ti-info-circle"></i><span><strong>سبب الرفض:</strong> ' + (reason || 'لم يُحدد سبب') + '</span></div>';
   }
 
-  return '<div class="app-card" data-status="' + status + '" onclick="openDetail(' + id + ')">' +
+  return '<div class="app-card" data-status="' + status + '" data-id="' + app.id + '" onclick="openDetail(' + id + ')">' +
     '<div class="app-card-top">' +
       '<div class="company-logo" style="background:' + getColor(idx) + '">' + getInitials(company) + '</div>' +
       '<div style="flex:1">' +
@@ -426,6 +426,18 @@ async function withdrawApp(btn) {
 
 document.addEventListener('DOMContentLoaded', async function() {
   if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
+
+  try {
+    const pres = await fetch(API_BASE + '/auth/profile/', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+    if (pres.ok) {
+      const pd = await pres.json();
+      const nm = pd.full_name || 'متدرب';
+      const ini = nm.substring(0, 2);
+      document.querySelector('.sidebar .sidebar-logo + div div').textContent = ini;
+      document.querySelector('.sidebar .sidebar-logo + div div + div').textContent = nm;
+    }
+  } catch(e) {}
+
   try {
     const res = await fetch(API_BASE + '/internships/applications/', { headers: authHeaders() });
     if (!res.ok) throw new Error('API error');

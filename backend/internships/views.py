@@ -204,12 +204,23 @@ class ApplicationListView(APIView):
         for a in apps:
             data.append({
                 'id': a.id,
+                'internship_id': a.internship.id,
                 'internship_title': a.internship.title,
+                'company_name': a.internship.company.company_name,
+                'company_id': a.internship.company.id,
                 'trainee_name': a.trainee.person.full_name,
                 'status': a.status,
                 'status_display': a.get_status_display(),
                 'application_date': str(a.application_date),
                 'rejection_reason': a.rejection_reason,
+                'location': a.internship.location,
+                'internship_type': a.internship.internship_type,
+                'internship_type_display': a.internship.get_internship_type_display(),
+                'is_paid': a.internship.is_paid,
+                'work_days': a.internship.work_days,
+                'available_positions': a.internship.available_positions,
+                'has_certificate': a.internship.has_certificate,
+                'deadline': str(a.internship.deadline),
             })
         return Response(data)
 
