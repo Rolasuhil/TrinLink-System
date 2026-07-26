@@ -152,6 +152,23 @@ class PostLikeView(APIView):
 
 
 class CompanyRatingFlatView(APIView):
+    def get(self, request):
+        ratings = CompanyRating.objects.select_related(
+            'company', 'company__person', 'trainee', 'trainee__person'
+        ).order_by('-created_at')[:10]
+
+        data = []
+        for r in ratings:
+            data.append({
+                'id': r.id,
+                'company_name': r.company.company_name if r.company else '',
+                'trainee_name': r.trainee.person.full_name if r.trainee and r.trainee.person else '',
+                'score': r.score,
+                'review': r.review,
+                'created_at': str(r.created_at),
+            })
+        return Response(data)
+
     def post(self, request):
         user = get_user(request)
         if not user or user.person_type != 'trainee':

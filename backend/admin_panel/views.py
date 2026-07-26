@@ -8,6 +8,7 @@ from performance.models import SupervisionAssignment, PerformanceReport
 from messaging.models import Notification
 from .models import ContentReport
 from django.conf import settings
+from rest_framework.permissions import AllowAny
 import jwt
 
 
@@ -23,6 +24,19 @@ def get_admin(request):
         return user
     except Exception:
         return None
+
+
+class PublicStatsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        return Response({
+            'total_trainees': Trainee.objects.count(),
+            'total_companies': CompanyProfile.objects.count(),
+            'total_internships': Internship.objects.count(),
+            'open_internships': Internship.objects.filter(status='open').count(),
+            'total_applications': Application.objects.count(),
+        })
 
 
 class AdminDashboardView(APIView):

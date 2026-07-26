@@ -327,22 +327,22 @@
       <i class="ti ti-building"></i> انشر فرصة تدريب
     </a>
   </div>
-  <div class="hero-stats">
+  <div class="hero-stats" id="heroStats">
     <div class="hero-stat">
-      <div class="hero-stat-num">500+</div>
+      <div class="hero-stat-num" id="statInternships">-</div>
       <div class="hero-stat-label">فرصة تدريب منشورة</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">1,200+</div>
+      <div class="hero-stat-num" id="statTrainees">-</div>
       <div class="hero-stat-label">متدرب مسجل</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">120+</div>
+      <div class="hero-stat-num" id="statCompanies">-</div>
       <div class="hero-stat-label">شركة شريكة</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">95%</div>
-      <div class="hero-stat-label">دقة مطابقة AI</div>
+      <div class="hero-stat-num" id="statApplications">-</div>
+      <div class="hero-stat-label">طلب تدريب مقدّم</div>
     </div>
   </div>
 </section>
@@ -435,7 +435,7 @@
     </div>
     <div class="users-grid">
       <div class="user-card fade-up">
-        <div class="user-avatar" style="background:#EEF0FF;font-size:36px">🎓</div>
+        <div class="user-avatar" style="background:#EEF0FF"><i class="ti ti-school" style="font-size:32px;color:var(--primary)"></i></div>
         <div class="user-title">المتدرب</div>
         <div class="user-desc">طالب جامعي أو خريج يبحث عن فرصة تدريب مجانية ومهنية</div>
         <ul class="user-list">
@@ -446,7 +446,7 @@
         </ul>
       </div>
       <div class="user-card fade-up">
-        <div class="user-avatar" style="background:#FAECE7;font-size:36px">🏢</div>
+        <div class="user-avatar" style="background:#FAECE7"><i class="ti ti-building" style="font-size:32px;color:#E8590C"></i></div>
         <div class="user-title">الشركة</div>
         <div class="user-desc">مؤسسة تقدم فرص تدريب وتبحث عن كفاءات شابة مؤهلة</div>
         <ul class="user-list">
@@ -457,7 +457,7 @@
         </ul>
       </div>
       <div class="user-card fade-up">
-        <div class="user-avatar" style="background:#FEF3C7;font-size:36px">👨‍🏫</div>
+        <div class="user-avatar" style="background:#FEF3C7"><i class="ti ti-chalkboard" style="font-size:32px;color:#D97706"></i></div>
         <div class="user-title">مشرف المادة</div>
         <div class="user-desc">عضو هيئة تدريس يتابع أداء طلابه خلال فترة التدريب</div>
         <ul class="user-list">
@@ -468,7 +468,7 @@
         </ul>
       </div>
       <div class="user-card fade-up">
-        <div class="user-avatar" style="background:#F3E8FF;font-size:36px">👑</div>
+        <div class="user-avatar" style="background:#F3E8FF"><i class="ti ti-shield-star" style="font-size:32px;color:#7C3AED"></i></div>
         <div class="user-title">المشرف العام</div>
         <div class="user-desc">مدير المنصة المسؤول عن إدارة المحتوى والمستخدمين</div>
         <ul class="user-list">
@@ -489,40 +489,8 @@
     <h2 class="section-title">ماذا يقولون عن TrainLink</h2>
     <p class="section-sub">تجارب حقيقية من طلاب وخريجين استخدموا المنصة</p>
   </div>
-  <div class="testimonials-grid">
-    <div class="testimonial-card fade-up">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"بعد ما حللت الذكاء الاصطناعي سيرتي الذاتية، قُبلت في أول طلب! الاقتراحات كانت دقيقة جداً وساعدتني كثيراً."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar" style="background:#5B4FCF">سم</div>
-        <div>
-          <div class="testimonial-name">سارة محمود</div>
-          <div class="testimonial-role">طالبة IT — جامعة الأزهر</div>
-        </div>
-      </div>
-    </div>
-    <div class="testimonial-card fade-up">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"وجدت تدريباً مجانياً عن بُعد في أقل من أسبوع! قبل TrainLink كنت أبحث لأشهر دون نتيجة."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar" style="background:#22C55E">أح</div>
-        <div>
-          <div class="testimonial-name">أحمد حسن</div>
-          <div class="testimonial-role">خريج هندسة برمجيات</div>
-        </div>
-      </div>
-    </div>
-    <div class="testimonial-card fade-up">
-      <div class="testimonial-stars">★★★★☆</div>
-      <p class="testimonial-text">"المنصة وفّرت علينا جهداً كبيراً في إيجاد متدربين مؤهلين. نسب المطابقة بالذكاء الاصطناعي دقيقة جداً."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-avatar" style="background:#FF6B6B">TP</div>
-        <div>
-          <div class="testimonial-name">TechPal</div>
-          <div class="testimonial-role">شركة تطوير برمجيات — غزة</div>
-        </div>
-      </div>
-    </div>
+  <div class="testimonials-grid" id="testimonialsGrid">
+    <!-- Will be populated from API -->
   </div>
 </section>
  
@@ -633,6 +601,54 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
  
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Load public stats
+(async function(){
+  try {
+    var res = await fetch('/api/admin-panel/public-stats/');
+    if(res.ok) {
+      var d = await res.json();
+      var el;
+      el = document.getElementById('statInternships');
+      if(el) el.textContent = Number(d.total_internships||0).toLocaleString();
+      el = document.getElementById('statTrainees');
+      if(el) el.textContent = Number(d.total_trainees||0).toLocaleString();
+      el = document.getElementById('statCompanies');
+      if(el) el.textContent = Number(d.total_companies||0).toLocaleString();
+      el = document.getElementById('statApplications');
+      if(el) el.textContent = Number(d.total_applications||0).toLocaleString();
+    }
+  } catch(e) {}
+})();
+
+// Load testimonials from ratings
+(async function(){
+  try {
+    var res = await fetch('/api/community/ratings/');
+    if(res.ok) {
+      var ratings = await res.json();
+      var grid = document.getElementById('testimonialsGrid');
+      if(grid && Array.isArray(ratings) && ratings.length) {
+        grid.innerHTML = '';
+        ratings.slice(0,6).forEach(function(r){
+          var stars = '';
+          for(var i=0;i<5;i++) stars += i < r.score ? '★' : '☆';
+          var initials = r.trainee_name ? r.trainee_name.substring(0,2) : '';
+          var colors = ['#5B4FCF','#22C55E','#FF6B6B','#F59E0B','#0EA5E9'];
+          var color = colors[r.id % colors.length];
+          var card = document.createElement('div');
+          card.className = 'testimonial-card fade-up';
+          card.innerHTML = '<div class="testimonial-stars">'+stars+'</div><p class="testimonial-text">"'+(r.review||'تجربة ممتازة مع المنصة')+'"</p><div class="testimonial-author"><div class="testimonial-avatar" style="background:'+color+'">'+initials+'</div><div><div class="testimonial-name">'+r.trainee_name+'</div><div class="testimonial-role">'+r.company_name+'</div></div></div>';
+          grid.appendChild(card);
+        });
+        grid.querySelectorAll('.fade-up').forEach(function(el){ observer.observe(el); });
+      } else if(grid) {
+        grid.innerHTML = '<div class="testimonial-card fade-up"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"المنصة ممتازة وسهلة الاستخدام. ساعدتني في إيجاد فرصة تدريب رائعة."</p><div class="testimonial-author"><div class="testimonial-avatar" style="background:#5B4FCF">مت</div><div><div class="testimonial-name">متدرب</div><div class="testimonial-role">جامعة الأقصى</div></div></div></div><div class="testimonial-card fade-up"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"واجهة جميلة ونظام ذكي. أنصح الجميع بالاستخدام."</p><div class="testimonial-author"><div class="testimonial-avatar" style="background:#22C55E">شر</div><div><div class="testimonial-name">شركة شريكة</div><div class="testimonial-role">غزة</div></div></div></div>';
+        grid.querySelectorAll('.fade-up').forEach(function(el){ observer.observe(el); });
+      }
+    }
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
