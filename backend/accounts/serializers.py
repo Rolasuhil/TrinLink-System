@@ -273,6 +273,9 @@ class PersonSerializer(serializers.ModelSerializer):
     industry = serializers.SerializerMethodField()
     company_size = serializers.SerializerMethodField()
     department = serializers.SerializerMethodField()
+    about = serializers.SerializerMethodField()
+    website = serializers.SerializerMethodField()
+    location = serializers.SerializerMethodField()
 
     class Meta:
         model = Person
@@ -280,7 +283,7 @@ class PersonSerializer(serializers.ModelSerializer):
                   'profile_picture', 'person_type', 'is_verified', 'created_at',
                   'trainee_id', 'company_id', 'supervisor_id', 'company_name',
                   'skills', 'university', 'major', 'gpa', 'year_of_study', 'is_graduate',
-                  'industry', 'company_size', 'department']
+                  'industry', 'company_size', 'department', 'about', 'website', 'location']
         read_only_fields = ['id', 'user_id', 'person_type', 'is_verified', 'created_at']
 
     def get_trainee_id(self, obj):
@@ -339,3 +342,22 @@ class PersonSerializer(serializers.ModelSerializer):
     def get_department(self, obj):
         try: return obj.supervisor_profile.department
         except Exception: return None
+
+    def get_about(self, obj):
+        try: return obj.company_profile.about
+        except Exception: return None
+
+    def get_website(self, obj):
+        try: return obj.company_profile.website
+        except Exception: return None
+
+    def get_location(self, obj):
+        try:
+            if obj.person_type == 'company':
+                return obj.company_profile.location
+        except Exception: pass
+        try:
+            if obj.person_type == 'trainee':
+                return obj.trainee_profile.location
+        except Exception: pass
+        return None
