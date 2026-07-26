@@ -41,8 +41,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .hero-tags{display:flex;gap:8px;flex-wrap:wrap}
 .tag{font-size:11px;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
 .hero-right{display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0}
-.ai-match-box{background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius-md);padding:10px 16px;display:flex;align-items:center;gap:10px}
-.ai-match-text{font-size:13px;color:#15803D;font-weight:700}
 .btn-apply-main{background:var(--primary);color:white;border:none;padding:12px 24px;border-radius:var(--radius-md);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:8px;transition:all 0.2s;box-shadow:0 4px 16px rgba(91,79,207,0.3)}
 .btn-apply-main:hover{background:var(--primary-dark);transform:translateY(-1px)}
 .btn-save-main{background:transparent;color:var(--primary);border:1.5px solid var(--primary);padding:10px 16px;border-radius:var(--radius-md);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;transition:all 0.15s}
@@ -62,7 +60,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .tab-content.active{display:block}
 .desc-section{margin-bottom:18px}
 .desc-section-title{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
-.desc-text{font-size:13px;color:var(--text-mid);line-height:1.8}
+.desc-text{font-size:13px;color:var(--text-mid);line-height:1.8;white-space:pre-line}
 .desc-list{list-style:none;display:flex;flex-direction:column;gap:7px}
 .desc-list li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text-mid);line-height:1.5}
 .desc-list li i{font-size:14px;margin-top:1px;flex-shrink:0}
@@ -122,26 +120,29 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .btn-confirm{flex:2;padding:10px;border-radius:var(--radius-md);font-size:13px;font-weight:700;color:white;background:var(--primary);border:none;cursor:pointer;font-family:var(--font)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
 .toast.show{display:flex}
+.status-open{background:var(--success-light);color:#15803D;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.status-closed{background:#FFF0F0;color:#DC2626;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.status-full{background:var(--warning-light);color:#B45309;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
 </style>
 </head>
 <body>
 <nav class="sidebar">
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
   <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
-    <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">سم</div>
-    <div style="color:white;font-size:11px;font-weight:600">سارة محمود</div>
+    <div id="sidebarAvatar" style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">--</div>
+    <div id="sidebarName" style="color:white;font-size:11px;font-weight:600">--</div>
   </div>
   <a href="08-trainee-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
   <a href="09-search.html" class="nav-item active"><i class="ti ti-search"></i><span>البحث</span></a>
-  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span><span class="nav-badge">3</span></a>
+  <a href="11-my-applications.html" class="nav-item"><i class="ti ti-clipboard-list"></i><span>طلباتي</span></a>
   <a href="13-ai-assistant.html" class="nav-item"><i class="ti ti-robot"></i><span>مساعد AI</span></a>
   <a href="15-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span></a>
   <a href="14-community.html" class="nav-item"><i class="ti ti-users-group"></i><span>المجتمع</span></a>
   <a href="17-attendance.html" class="nav-item"><i class="ti ti-calendar-check"></i><span>الحضور</span></a>
-  <div class="nav-section" style="padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase">الحساب</div>
+  <div style="padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase">الحساب</div>
   <a href="12-my-profile.html" class="nav-item"><i class="ti ti-user"></i><span>ملفي</span></a>
-  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الإشعارات</span><span class="nav-badge">5</span></a>
-  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
+  <a href="16-notifications.html" class="nav-item"><i class="ti ti-bell"></i><span>الاشعارات</span></a>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item" onclick="localStorage.clear()"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
 </nav>
 
 <div class="main">
@@ -151,207 +152,117 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
       <i class="ti ti-chevron-left" style="font-size:14px"></i>
       <a href="09-search.html">البحث</a>
       <i class="ti ti-chevron-left" style="font-size:14px"></i>
-      <span class="current">مطور ويب Frontend</span>
+      <span class="current" id="breadcrumbTitle">--</span>
     </div>
     <div style="display:flex;gap:10px;align-items:center">
-      <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white">سم</div>
+      <div id="topAvatar" style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white">--</div>
     </div>
   </div>
 
   <div class="content">
-    <!-- HERO -->
     <div class="hero-card">
       <div class="hero-top">
         <div class="hero-left">
-          <div class="company-logo">TP</div>
+          <div class="company-logo" id="heroLogo">--</div>
           <div>
-            <div class="job-title">مطور ويب Frontend</div>
-            <div class="company-name">
-              <i class="ti ti-building"></i> TechPal
-              <span class="verified"><i class="ti ti-shield-check"></i> موثّقة</span>
-            </div>
-            <div class="hero-tags">
-              <span class="tag" style="background:var(--success-light);color:#15803D"><i class="ti ti-gift"></i>مجاني</span>
-              <span class="tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-map-pin"></i>داخل غزة</span>
-              <span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-clock"></i>3 أشهر</span>
-              <span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-users"></i>5 مقاعد</span>
-              <span class="tag" style="background:var(--warning-light);color:#B45309"><i class="ti ti-eye"></i>128 مشاهدة</span>
-            </div>
+            <div class="job-title" id="heroTitle">جاري التحميل...</div>
+            <div class="company-name" id="heroCompany"><i class="ti ti-building"></i> --</div>
+            <div class="hero-tags" id="heroTags"></div>
           </div>
         </div>
         <div class="hero-right">
-          <div class="ai-match-box">
-            <i class="ti ti-robot" style="color:#15803D;font-size:18px"></i>
-            <span class="ai-match-text">مطابقة 95% مع ملفك</span>
-          </div>
-          <button class="btn-apply-main" onclick="openModal()"><i class="ti ti-send"></i>تقدّم الآن</button>
-          <button class="btn-save-main" id="saveBtn" onclick="toggleSave()"><i class="ti ti-bookmark" id="saveIcon"></i>حفظ</button>
+          <button class="btn-apply-main" onclick="openModal()"><i class="ti ti-send"></i>تقدم الآن</button>
+          <button class="btn-save-main" onclick="toggleSave()"><i class="ti ti-bookmark" id="saveIcon"></i>حفظ</button>
         </div>
       </div>
-      <div class="hero-stats">
-        <div class="hstat"><i class="ti ti-calendar-due"></i><div><div class="hstat-label">آخر موعد</div><div class="hstat-val" style="color:var(--accent)">22 يوليو 2025</div></div></div>
-        <div class="hstat"><i class="ti ti-star" style="color:var(--warning)"></i><div><div class="hstat-label">تقييم الشركة</div><div class="hstat-val">4.8 ★ (24)</div></div></div>
-        <div class="hstat"><i class="ti ti-users"></i><div><div class="hstat-label">المتقدمون</div><div class="hstat-val">32 متدرب</div></div></div>
-        <div class="hstat"><i class="ti ti-check" style="color:var(--success)"></i><div><div class="hstat-label">نسبة القبول</div><div class="hstat-val" style="color:var(--success)">65%</div></div></div>
-        <div class="hstat"><i class="ti ti-armchair"></i><div><div class="hstat-label">المقاعد المتبقية</div><div class="hstat-val" style="color:var(--accent)">3 من 5</div></div></div>
-      </div>
+      <div class="hero-stats" id="heroStats"></div>
     </div>
 
     <div class="detail-layout">
-      <!-- LEFT -->
       <div>
         <div class="card">
           <div class="tabs">
             <button class="tab-btn active" onclick="switchTab(this,'desc')">الوصف</button>
             <button class="tab-btn" onclick="switchTab(this,'skills')">المهارات</button>
-            <button class="tab-btn" onclick="switchTab(this,'reviews')">التقييمات (24)</button>
+            <button class="tab-btn" onclick="switchTab(this,'reviews')">التقييمات</button>
             <button class="tab-btn" onclick="switchTab(this,'company')">عن الشركة</button>
           </div>
 
           <div class="tab-content active" id="tab-desc">
             <div class="desc-section">
               <div class="desc-section-title">نبذة عن الفرصة</div>
-              <div class="desc-text">نبحث عن متدربين متحمسين لتطوير الويب للانضمام لفريقنا. ستعمل على مشاريع حقيقية وتتعلم من مطورين محترفين في بيئة احترافية ومحفزة.</div>
+              <div class="desc-text" id="tabDesc">--</div>
             </div>
-            <div class="desc-section">
-              <div class="desc-section-title">المهام والمسؤوليات</div>
-              <ul class="desc-list">
-                <li><i class="ti ti-point" style="color:var(--primary)"></i>تطوير واجهات مستخدم باستخدام React.js</li>
-                <li><i class="ti ti-point" style="color:var(--primary)"></i>العمل على مشاريع حقيقية للعملاء</li>
-                <li><i class="ti ti-point" style="color:var(--primary)"></i>المشاركة في اجتماعات الفريق اليومية</li>
-                <li><i class="ti ti-point" style="color:var(--primary)"></i>كتابة كود نظيف وموثّق</li>
-                <li><i class="ti ti-point" style="color:var(--primary)"></i>المشاركة في مراجعة الكود</li>
-              </ul>
+            <div class="desc-section" id="reqSection" style="display:none">
+              <div class="desc-section-title">المتطلبات</div>
+              <div class="desc-text" id="tabReqs"></div>
             </div>
-            <div class="desc-section">
+            <div class="desc-section" id="learnSection" style="display:none">
               <div class="desc-section-title">ما ستتعلمه</div>
-              <ul class="desc-list">
-                <li><i class="ti ti-sparkles" style="color:var(--warning)"></i>تطوير تطبيقات React.js من الصفر</li>
-                <li><i class="ti ti-sparkles" style="color:var(--warning)"></i>استخدام Git في بيئة عمل حقيقية</li>
-                <li><i class="ti ti-sparkles" style="color:var(--warning)"></i>التعامل مع APIs وقواعد البيانات</li>
-                <li><i class="ti ti-sparkles" style="color:var(--warning)"></i>مهارات العمل الجماعي المهني</li>
-              </ul>
+              <div class="desc-text" id="tabLearn"></div>
             </div>
           </div>
 
           <div class="tab-content" id="tab-skills">
-            <div class="desc-section">
-              <div class="desc-section-title">المهارات الأساسية (مطلوبة)</div>
-              <div class="skills-wrap" style="margin-bottom:16px">
-                <span class="skill-tag skill-required">HTML/CSS</span>
-                <span class="skill-tag skill-required">JavaScript</span>
-                <span class="skill-tag skill-required">React.js</span>
-                <span class="skill-tag skill-required">Git</span>
-              </div>
-              <div class="desc-section-title">المهارات الإضافية (مفضّلة)</div>
-              <div class="skills-wrap">
-                <span class="skill-tag skill-optional">TypeScript</span>
-                <span class="skill-tag skill-optional">Tailwind CSS</span>
-                <span class="skill-tag skill-optional">Node.js</span>
-                <span class="skill-tag skill-optional">Figma</span>
-              </div>
-            </div>
-            <div style="background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius-md);padding:12px 16px;margin-top:12px">
-              <div style="font-size:13px;color:#15803D;display:flex;align-items:center;gap:8px"><i class="ti ti-robot"></i><strong>تحليل AI:</strong> أنتِ تمتلكين 6 من 9 مهارات — نسبة مطابقة 95%!</div>
+            <div class="desc-section" id="skillsSection">
+              <div class="desc-section-title">المهارات المطلوبة</div>
+              <div class="skills-wrap" id="reqSkillsWrap" style="margin-bottom:16px"></div>
+              <div class="desc-section-title">المهارات الإضافية</div>
+              <div class="skills-wrap" id="optSkillsWrap"></div>
             </div>
           </div>
 
           <div class="tab-content" id="tab-reviews">
-            <div class="review-summary">
-              <div class="review-score"><div class="review-big">4.8</div><div class="review-stars">★★★★★</div><div class="review-count">24 تقييم</div></div>
-              <div class="review-bars">
-                <div class="rbar-row"><span class="rbar-label">5</span><div class="rbar-track"><div class="rbar-fill" style="width:80%"></div></div><span class="rbar-count">19</span></div>
-                <div class="rbar-row"><span class="rbar-label">4</span><div class="rbar-track"><div class="rbar-fill" style="width:15%"></div></div><span class="rbar-count">4</span></div>
-                <div class="rbar-row"><span class="rbar-label">3</span><div class="rbar-track"><div class="rbar-fill" style="width:5%"></div></div><span class="rbar-count">1</span></div>
-                <div class="rbar-row"><span class="rbar-label">2</span><div class="rbar-track"><div class="rbar-fill" style="width:0%"></div></div><span class="rbar-count">0</span></div>
-                <div class="rbar-row"><span class="rbar-label">1</span><div class="rbar-track"><div class="rbar-fill" style="width:0%"></div></div><span class="rbar-count">0</span></div>
-              </div>
+            <div class="review-summary" id="reviewSummary">
+              <div class="review-score"><div class="review-big" id="revAvg">--</div><div class="review-stars" id="revStars">--</div><div class="review-count" id="revCount">--</div></div>
+              <div class="review-bars" id="revBars"></div>
             </div>
-            <div class="review-item">
-              <div class="review-header"><div class="review-avatar" style="background:#5B4FCF">أح</div><div><div class="review-name">أحمد حسن</div><div class="review-date">مايو 2025</div></div><div style="margin-right:auto;color:var(--warning)">★★★★★</div></div>
-              <div class="review-text">تجربة رائعة جداً! تعلمت React من الصفر وعملت على مشروع حقيقي. الفريق محترف ومتعاون.</div>
-            </div>
-            <div class="review-item">
-              <div class="review-header"><div class="review-avatar" style="background:#FF6B6B">من</div><div><div class="review-name">منى ناصر</div><div class="review-date">أبريل 2025</div></div><div style="margin-right:auto;color:var(--warning)">★★★★★</div></div>
-              <div class="review-text">أفضل قرار اتخذته! المشرف متعاون جداً واكتسبت خبرة ساعدتني في الحصول على وظيفة بعدها.</div>
-            </div>
+            <div id="reviewsList"></div>
           </div>
 
           <div class="tab-content" id="tab-company">
             <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:16px">
-              <div style="width:56px;height:56px;border-radius:var(--radius-lg);background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;flex-shrink:0">TP</div>
+              <div class="company-logo" id="companyTabLogo" style="width:56px;height:56px;font-size:18px">--</div>
               <div>
-                <div style="font-size:16px;font-weight:800;color:var(--text-dark);margin-bottom:4px">TechPal <i class="ti ti-shield-check" style="color:var(--success);font-size:14px"></i></div>
-                <div style="font-size:13px;color:var(--text-mid);margin-bottom:8px">تطوير برمجيات · غزة، فلسطين</div>
-                <div style="display:flex;gap:8px">
-                  <span style="font-size:11px;background:var(--primary-light);color:var(--primary);padding:3px 10px;border-radius:20px">تطوير ويب</span>
-                  <span style="font-size:11px;background:var(--bg);color:var(--text-mid);padding:3px 10px;border-radius:20px">10-50 موظف</span>
-                </div>
+                <div style="font-size:16px;font-weight:800;color:var(--text-dark);margin-bottom:4px" id="companyTabName">--</div>
+                <div style="font-size:13px;color:var(--text-mid);margin-bottom:8px" id="companyTabInfo">--</div>
               </div>
             </div>
-            <div style="font-size:13px;color:var(--text-mid);line-height:1.8;margin-bottom:16px">TechPal شركة متخصصة في تطوير تطبيقات الويب تأسست عام 2018 في غزة. نؤمن بتطوير المواهب الشابة ونقدم بيئة عمل احترافية.</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div style="background:var(--bg);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--primary)">45+</div><div style="font-size:11px;color:var(--text-mid)">متدرب سابق</div></div>
-              <div style="background:var(--bg);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--warning)">4.8★</div><div style="font-size:11px;color:var(--text-mid)">متوسط التقييم</div></div>
-            </div>
+            <div style="font-size:13px;color:var(--text-mid);line-height:1.8;margin-bottom:16px" id="companyTabDesc">--</div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT STICKY -->
       <div>
         <div class="card" style="position:sticky;top:80px">
-          <div class="deadline-box"><i class="ti ti-clock" style="color:#B45309;font-size:18px"></i><span class="deadline-text">ينتهي التقديم خلال <strong>8 أيام</strong></span></div>
-          <div class="info-row"><span class="info-key">نوع التدريب</span><span class="info-val" style="color:var(--success)">مجاني</span></div>
-          <div class="info-row"><span class="info-key">الموقع</span><span class="info-val">داخل غزة</span></div>
-          <div class="info-row"><span class="info-key">المدة</span><span class="info-val">3 أشهر</span></div>
-          <div class="info-row"><span class="info-key">أيام العمل</span><span class="info-val">5 أيام/أسبوع</span></div>
-          <div class="info-row"><span class="info-key">المقاعد المتبقية</span><span class="info-val" style="color:var(--accent)">3 من 5</span></div>
-          <div class="info-row"><span class="info-key">شهادة إتمام</span><span class="info-val" style="color:var(--success)">متوفرة</span></div>
+          <div class="deadline-box" id="deadlineBox"><i class="ti ti-clock" style="color:#B45309;font-size:18px"></i><span class="deadline-text" id="deadlineText">--</span></div>
+          <div id="sidebarInfo"></div>
           <div style="margin-top:14px">
-            <button class="btn-full btn-full-primary" onclick="openModal()"><i class="ti ti-send"></i>تقدّم الآن</button>
-            <button class="btn-full btn-full-outline" id="saveBtnFull" onclick="toggleSave()"><i class="ti ti-bookmark" id="saveIconFull"></i>حفظ للاحقاً</button>
+            <button class="btn-full btn-full-primary" onclick="openModal()"><i class="ti ti-send"></i>تقدم الآن</button>
+            <button class="btn-full btn-full-outline" onclick="toggleSave()"><i class="ti ti-bookmark" id="saveIconFull"></i>حفظ للاحقاً</button>
             <div class="share-row">
-              <button class="share-btn" onclick="window.open('https://wa.me/?text=' + encodeURIComponent(document.title + ' ' + window.location.href), '_blank')"><i class="ti ti-brand-whatsapp"></i>واتساب</button>
+              <button class="share-btn" onclick="window.open('https://wa.me/?text='+encodeURIComponent(document.title+' '+window.location.href),'_blank')"><i class="ti ti-brand-whatsapp"></i>واتساب</button>
               <button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href);showToast('تم نسخ الرابط!')"><i class="ti ti-link"></i>نسخ</button>
             </div>
           </div>
         </div>
         <div class="card">
           <div style="font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:12px;display:flex;align-items:center;gap:6px"><i class="ti ti-sparkles" style="color:var(--primary)"></i>فرص مشابهة</div>
-          <div class="similar-item" onclick="window.location.href='10-internship-details.html'">
-            <div class="similar-logo" style="background:#FF6B6B">DH</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مصمم UI/UX</div><div style="font-size:11px;color:var(--text-mid)">DesignHub · عن بُعد</div></div>
-            <span style="font-size:10px;background:#FFF0F0;color:#DC2626;padding:2px 8px;border-radius:20px">50$/شهر</span>
-          </div>
-          <div class="similar-item" onclick="window.location.href='10-internship-details.html'">
-            <div class="similar-logo" style="background:#22C55E">DS</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">مطور قواعد بيانات</div><div style="font-size:11px;color:var(--text-mid)">DataSoft · عن بُعد</div></div>
-            <span style="font-size:10px;background:var(--success-light);color:#15803D;padding:2px 8px;border-radius:20px">مجاني</span>
-          </div>
+          <div id="similarList"><div style="padding:16px;text-align:center;color:var(--text-mid);font-size:12px">جاري التحميل...</div></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- APPLY MODAL -->
 <div class="modal-overlay" id="applyModal">
   <div class="modal">
     <div class="modal-title">التقديم على الفرصة</div>
-    <div class="modal-sub">مطور ويب Frontend — TechPal</div>
+    <div class="modal-sub" id="modalSub">--</div>
     <div class="form-group"><label class="form-label">رسالة التقديم</label><textarea id="coverLetter" class="form-textarea" placeholder="اكتب رسالة مختصرة تشرح سبب اهتمامك بهذه الفرصة..."></textarea></div>
-    <div class="form-group">
-      <label class="form-label">السيرة الذاتية (PDF)</label>
-      <div class="upload-area" onclick="document.getElementById('cvInput').click()">
-        <input type="file" id="cvInput" accept=".pdf,.doc,.docx,image/*" style="display:none" onchange="onCvSelected(this)">
-        <i class="ti ti-upload" style="font-size:24px;color:var(--text-mid);display:block;margin-bottom:6px"></i>
-        <div id="cvLabel" style="font-size:13px;color:var(--text-mid)">اضغط لرفع CV أو اسحبه هنا</div>
-      </div>
-    </div>
     <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
-      <button class="btn-confirm" onclick="submitApp()">إرسال الطلب</button>
+      <button class="btn-cancel" onclick="closeModal()">الغاء</button>
+      <button class="btn-confirm" id="btnSubmitApp" onclick="submitApp()">ارسال الطلب</button>
     </div>
   </div>
 </div>
@@ -359,146 +270,222 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
-(function(){
-  var token = localStorage.getItem('trainlink_token');
-  if(!token){ window.location.href = '../public/02-login.html'; return; }
-})();
+(function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+var API='/api';
+var token=localStorage.getItem('trainlink_token');
+var internData=null;
+var companyData=null;
 
-const API_BASE = '/api';
-function getToken() { return localStorage.getItem('trainlink_token'); }
-function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
-function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
-function logout() { localStorage.removeItem('trainlink_token'); localStorage.removeItem('trainlink_user'); window.location.href = '../public/02-login.html'; }
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
+function authHeaders(){return {'Authorization':'Bearer '+token};}
+function showToast(msg){var t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
 
-function getUrlId() {
-  const p = new URLSearchParams(window.location.search);
-  return p.get('id');
-}
+function getUrlId(){return new URLSearchParams(window.location.search).get('id');}
 
-function switchTab(btn, id) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+function switchTab(btn,id){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});
   btn.classList.add('active');
-  document.getElementById('tab-' + id).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
 }
 
-let saved = false;
-let internshipId = null;
-
-function toggleSave() {
-  saved = !saved;
-  ['saveIcon', 'saveIconFull'].forEach(function(elId) {
-    document.getElementById(elId).className = saved ? 'ti ti-bookmark-filled' : 'ti ti-bookmark';
-  });
-  showToast(saved ? 'تم حفظ الفرصة!' : 'تم إزالة الفرصة من المحفوظات');
-  if (internshipId) {
-    fetch(API_BASE + '/internships/saved/', {
-      method: 'POST',
-      headers: authHeaders(),
-      body: JSON.stringify({ internship_id: internshipId })
-    }).catch(() => {});
-  }
+var saved=false;
+function toggleSave(){
+  saved=!saved;
+  document.getElementById('saveIcon').className=saved?'ti ti-bookmark-filled':'ti ti-bookmark';
+  document.getElementById('saveIconFull').className=saved?'ti ti-bookmark-filled':'ti ti-bookmark';
+  showToast(saved?'تم حفظ الفرصة!':'تم الازالة من المحفوظات');
 }
 
-function openModal() { document.getElementById('applyModal').classList.add('open'); }
-function closeModal() { document.getElementById('applyModal').classList.remove('open'); }
-function onCvSelected(input) {
-  if (input.files && input.files[0]) {
-    document.getElementById('cvLabel').innerHTML = '<span style="color:var(--success)">✓ ' + input.files[0].name + '</span>';
-  }
+function openModal(){document.getElementById('applyModal').classList.add('open');}
+function closeModal(){document.getElementById('applyModal').classList.remove('open');}
+
+async function submitApp(){
+  var id=getUrlId();
+  if(!id){showToast('خطأ: لا توجد فرصة');return;}
+  var btn=document.getElementById('btnSubmitApp');
+  btn.disabled=true;btn.textContent='جاري الارسال...';
+  var fd=new FormData();
+  fd.append('internship_id',id);
+  fd.append('cover_letter',document.getElementById('coverLetter').value);
+  try{
+    var res=await fetch(API+'/internships/applications/',{method:'POST',headers:authHeaders(),body:fd});
+    if(!res.ok){var err=await res.json().catch(function(){});throw new Error(err.detail||err.error||'Failed');}
+    closeModal();showToast('تم ارسال طلبك بنجاح!');
+  }catch(e){closeModal();showToast('حدث خطأ: '+(e.message||'لم يتم الارسال'));}
+  btn.disabled=false;btn.textContent='ارسال الطلب';
 }
 
-async function submitApp() {
-  if (!internshipId) { showToast('خطأ: لا توجد فرصة'); return; }
-  const fd = new FormData();
-  fd.append('internship_id', internshipId);
-  fd.append('cover_letter', document.getElementById('coverLetter').value);
-  const cvFile = document.getElementById('cvInput').files[0];
-  if (cvFile) fd.append('resume', cvFile);
-  try {
-    const res = await fetch(API_BASE + '/internships/applications/', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + getToken() },
-      body: fd
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.detail || err.error || 'Failed');
-    }
-    closeModal();
-    showToast('تم إرسال طلبك بنجاح!');
-  } catch (err) {
-    closeModal();
-    showToast('حدث خطأ: ' + (err.message || 'لم يتم الإرسال'));
-  }
+async function loadUserProfile(){
+  try{
+    var res=await fetch(API+'/auth/profile/',{headers:authHeaders()});
+    if(!res.ok)return;
+    var d=await res.json();
+    var name=d.full_name||'متدرب';
+    var ini=name.substring(0,2);
+    document.getElementById('sidebarAvatar').textContent=ini;
+    document.getElementById('sidebarName').textContent=name;
+    document.getElementById('topAvatar').textContent=ini;
+  }catch(e){}
 }
 
-document.addEventListener('DOMContentLoaded', async function() {
-  if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
-  internshipId = getUrlId();
-  if (!internshipId) return;
+function daysUntil(dateStr){
+  if(!dateStr)return null;
+  var now=new Date();
+  var target=new Date(dateStr);
+  var diff=Math.ceil((target-now)/(1000*60*60*24));
+  return diff;
+}
 
-  try {
-    const res = await fetch(API_BASE + '/internships/' + internshipId + '/', { headers: authHeaders() });
-    if (!res.ok) throw new Error('Not found');
-    const d = await res.json();
+async function loadInternship(){
+  var id=getUrlId();
+  if(!id){showToast('لم يتم تحديد الفرصة');return;}
+  try{
+    var res=await fetch(API+'/internships/'+id+'/',{headers:authHeaders()});
+    if(!res.ok)throw new Error('Not found');
+    var d=await res.json();
+    internData=d;
 
-    const title = d.title || d.name || '';
-    const company = d.company_name || d.company || '';
-    const isFree = d.is_free !== undefined ? d.is_free : !d.salary;
-    const salary = d.salary || (isFree ? 'مجاني' : '');
-    const location = d.location || '';
-    const duration = d.duration || '';
-    const seats = d.seats || d.available_seats || '';
-    const deadline = d.deadline || d.end_date || '';
-    const description = d.description || d.about || '';
-    const skills = d.skills || [];
-    const required_skills = d.required_skills || [];
-    const optional_skills = d.optional_skills || [];
+    document.title='TrainLink — '+d.title;
+    document.getElementById('breadcrumbTitle').textContent=d.title;
+    document.getElementById('heroTitle').textContent=d.title;
+    document.getElementById('modalSub').textContent=d.title+' — '+d.company;
 
-    document.querySelector('.job-title').textContent = title;
-    document.querySelector('.company-name').innerHTML = '<i class="ti ti-building"></i> ' + company;
-    document.title = 'TrainLink — ' + title;
+    var ini=d.company?d.company.substring(0,2):'--';
+    document.getElementById('heroLogo').textContent=ini;
+    document.getElementById('heroCompany').innerHTML='<i class="ti ti-building"></i> '+d.company;
 
-    document.querySelector('.breadcrumb .current').textContent = title;
+    var tags=[];
+    var statusMap={'open':'status-open','closed':'status-closed','full':'status-full'};
+    var statusLabel={'open':'مفتوح','closed':'مغلق','full':'مكتمل'};
+    tags.push('<span class="'+(statusMap[d.status]||'status-open')+'">'+(statusLabel[d.status]||d.status)+'</span>');
+    tags.push('<span class="tag" style="background:'+(d.is_paid?'#FFF0F0;color:#DC2626':'var(--success-light);color:#15803D')+'"><i class="ti ti-'+(d.is_paid?'currency-dollar':'gift')+'"></i>'+(d.is_paid?'مدفوع':'مجاني')+'</span>');
+    if(d.location)tags.push('<span class="tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-map-pin"></i>'+d.location+'</span>');
+    if(d.internship_type_display)tags.push('<span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-building-office"></i>'+d.internship_type_display+'</span>');
+    if(d.available_positions)tags.push('<span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-users"></i>'+d.available_positions+' مقاعد</span>');
+    if(d.work_days)tags.push('<span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-calendar"></i>'+d.work_days+'</span>');
+    document.getElementById('heroTags').innerHTML=tags.join('');
 
-    const tagsHtml = [];
-    if (isFree) tagsHtml.push('<span class="tag" style="background:var(--success-light);color:#15803D"><i class="ti ti-gift"></i>مجاني</span>');
-    else tagsHtml.push('<span class="tag" style="background:#FFF0F0;color:#DC2626"><i class="ti ti-currency-dollar"></i>' + salary + '</span>');
-    if (location) tagsHtml.push('<span class="tag" style="background:var(--primary-light);color:var(--primary)"><i class="ti ti-map-pin"></i>' + location + '</span>');
-    if (duration) tagsHtml.push('<span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-clock"></i>' + duration + '</span>');
-    if (seats) tagsHtml.push('<span class="tag" style="background:var(--bg);color:var(--text-mid)"><i class="ti ti-users"></i>' + seats + ' مقاعد</span>');
-    document.querySelector('.hero-tags').innerHTML = tagsHtml.join('');
+    var statsHtml='';
+    if(d.deadline){
+      var days=daysUntil(d.deadline);
+      var dlColor=days!==null&&days<=7?'color:var(--accent)':'color:var(--text-dark)';
+      statsHtml+='<div class="hstat"><i class="ti ti-calendar-due"></i><div><div class="hstat-label">آخر موعد</div><div class="hstat-val" style="'+dlColor+'">'+d.deadline+'</div></div></div>';
+    }
+    if(d.acceptance_rate!==undefined){
+      statsHtml+='<div class="hstat"><i class="ti ti-check" style="color:var(--success)"></i><div><div class="hstat-label">نسبة القبول</div><div class="hstat-val" style="color:var(--success)">'+d.acceptance_rate+'%</div></div></div>';
+    }
+    if(d.available_positions){
+      statsHtml+='<div class="hstat"><i class="ti ti-armchair"></i><div><div class="hstat-label">المقاعد</div><div class="hstat-val">'+d.available_positions+'</div></div></div>';
+    }
+    if(d.start_date){
+      statsHtml+='<div class="hstat"><i class="ti ti-calendar-star"></i><div><div class="hstat-label">يبدأ</div><div class="hstat-val">'+d.start_date+'</div></div></div>';
+    }
+    if(d.end_date){
+      statsHtml+='<div class="hstat"><i class="ti ti-calendar-check"></i><div><div class="hstat-label">ينتهي</div><div class="hstat-val">'+d.end_date+'</div></div></div>';
+    }
+    document.getElementById('heroStats').innerHTML=statsHtml;
 
-    if (description) {
-      document.querySelector('#tab-desc .desc-text').textContent = description;
+    if(d.deadline){
+      var days2=daysUntil(d.deadline);
+      document.getElementById('deadlineText').innerHTML=days2!==null&&days2>=0?'ينتهي التقديم خلال <strong>'+days2+' يوم</strong>':'انتهى التسجيل';
     }
 
-    const allSkills = [...required_skills, ...optional_skills, ...skills];
-    if (allSkills.length) {
-      const reqHtml = required_skills.length ? required_skills.map(s => '<span class="skill-tag skill-required">' + (s.name || s) + '</span>').join('') : '';
-      const optHtml = optional_skills.length ? optional_skills.map(s => '<span class="skill-tag skill-optional">' + (s.name || s) + '</span>').join('') : skills.map(s => '<span class="skill-tag skill-optional">' + (s.name || s) + '</span>').join('');
-      document.querySelector('#tab-skills .skills-wrap').innerHTML = reqHtml + optHtml;
-    }
+    if(d.description){document.getElementById('tabDesc').textContent=d.description;}
+    if(d.requirements){document.getElementById('reqSection').style.display='block';document.getElementById('tabReqs').textContent=d.requirements;}
+    if(d.learning_outcomes){document.getElementById('learnSection').style.display='block';document.getElementById('tabLearn').textContent=d.learning_outcomes;}
 
-    if (d.info_row_type) document.querySelector('.info-row:nth-child(1) .info-val').textContent = d.info_row_type;
-    if (location) document.querySelector('.info-row:nth-child(2) .info-val').textContent = location;
-    if (duration) document.querySelector('.info-row:nth-child(3) .info-val').textContent = duration;
-    if (deadline) {
-      document.querySelector('.hstat-val').textContent = deadline;
-      document.querySelector('.deadline-text').innerHTML = 'ينتهي التقديم: <strong>' + deadline + '</strong>';
+    var allSkills=(d.additional_skills||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
+    var reqSkills=(d.requirements||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
+    if(reqSkills.length){
+      document.getElementById('reqSkillsWrap').innerHTML=reqSkills.map(function(s){return '<span class="skill-tag skill-required">'+s+'</span>';}).join('');
     }
+    if(allSkills.length){
+      document.getElementById('optSkillsWrap').innerHTML=allSkills.map(function(s){return '<span class="skill-tag skill-optional">'+s+'</span>';}).join('');
+    }
+    if(!reqSkills.length&&!allSkills.length){document.getElementById('skillsSection').innerHTML='<div style="padding:16px;text-align:center;color:var(--text-mid);font-size:12px">لا توجد مهارات محددة</div>';}
 
-    document.querySelector('.breadcrumb .current').textContent = title;
-  } catch (err) {
-    showToast('حدث خطأ في تحميل تفاصيل الفرصة');
-  }
+    var sideInfo='';
+    sideInfo+='<div class="info-row"><span class="info-key">نوع التدريب</span><span class="info-val" style="color:'+(d.is_paid?'#DC2626':'var(--success)')+'">'+(d.is_paid?'مدفوع':'مجاني')+'</span></div>';
+    if(d.location)sideInfo+='<div class="info-row"><span class="info-key">الموقع</span><span class="info-val">'+d.location+'</span></div>';
+    if(d.internship_type_display)sideInfo+='<div class="info-row"><span class="info-key">النوع</span><span class="info-val">'+d.internship_type_display+'</span></div>';
+    if(d.work_days)sideInfo+='<div class="info-row"><span class="info-key">ايام العمل</span><span class="info-val">'+d.work_days+'</span></div>';
+    if(d.available_positions)sideInfo+='<div class="info-row"><span class="info-key">المقاعد</span><span class="info-val">'+d.available_positions+'</span></div>';
+    sideInfo+='<div class="info-row"><span class="info-key">شهادة اتمام</span><span class="info-val" style="color:'+(d.has_certificate?'var(--success)':'var(--text-mid)')+'">'+(d.has_certificate?'متوفرة':'غير متوفرة')+'</span></div>';
+    document.getElementById('sidebarInfo').innerHTML=sideInfo;
+
+    loadSimilar(d.company_id);
+    loadCompanyReviews(d.company_id);
+  }catch(e){showToast('حدث خطأ في تحميل تفاصيل الفرصة');}
+}
+
+async function loadSimilar(companyId){
+  try{
+    var res=await fetch(API+'/internships/',{headers:authHeaders()});
+    if(!res.ok)return;
+    var data=await res.json();
+    var list=Array.isArray(data)?data:(data.results||[]);
+    var currentId=parseInt(getUrlId());
+    var similar=list.filter(function(i){return i.id!==currentId;}).slice(0,3);
+    if(!similar.length){document.getElementById('similarList').innerHTML='<div style="padding:12px;text-align:center;color:var(--text-mid);font-size:12px">لا توجد فرص مشابهة</div>';return;}
+    var colors=['#5B4FCF','#FF6B6B','#22C55E','#F59E0B','#EC4899'];
+    document.getElementById('similarList').innerHTML=similar.map(function(item,i){
+      var ini=(item.company||'ش').substring(0,2);
+      var c=colors[i%colors.length];
+      var paid=item.is_paid;
+      return '<div class="similar-item" onclick="window.location.href=\'10-internship-details.html?id='+item.id+'\'">'+
+        '<div class="similar-logo" style="background:'+c+'">'+ini+'</div>'+
+        '<div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text-dark)">'+item.title+'</div>'+
+        '<div style="font-size:11px;color:var(--text-mid)">'+item.company+'</div></div>'+
+        '<span style="font-size:10px;background:'+(paid?'#FFF0F0;color:#DC2626':'var(--success-light);color:#15803D')+';padding:2px 8px;border-radius:20px">'+(paid?'مدفوع':'مجاني')+'</span>'+
+      '</div>';
+    }).join('');
+  }catch(e){}
+}
+
+async function loadCompanyReviews(companyId){
+  try{
+    var res=await fetch(API+'/community/ratings/',{headers:authHeaders()});
+    if(!res.ok)return;
+    var data=await res.json();
+    var list=Array.isArray(data)?data:(data.results||[]);
+    var companyReviews=list.filter(function(r){return r.company_name===internData.company;});
+    if(!companyReviews.length){
+      document.getElementById('revAvg').textContent='--';
+      document.getElementById('revStars').innerHTML='<span style="color:var(--text-mid);font-size:13px">لا توجد تقييمات لهذه الشركة</span>';
+      document.getElementById('revCount').textContent='';
+      document.getElementById('reviewsList').innerHTML='';
+      return;
+    }
+    var avg=(companyReviews.reduce(function(s,r){return s+(r.score||0);},0)/companyReviews.length).toFixed(1);
+    var fs=Math.floor(avg);
+    document.getElementById('revAvg').textContent=avg;
+    document.getElementById('revStars').innerHTML='★'.repeat(fs)+'☆'.repeat(5-fs);
+    document.getElementById('revCount').textContent=companyReviews.length+' تقييم';
+
+    var counts=[0,0,0,0,0];
+    companyReviews.forEach(function(r){var s=Math.round(r.score||0);if(s>=1&&s<=5)counts[s-1]++;});
+    var barsHtml='';
+    for(var i=5;i>=1;i--){
+      var pct=companyReviews.length?Math.round((counts[i-1]/companyReviews.length)*100):0;
+      barsHtml+='<div class="rbar-row"><span class="rbar-label">'+i+'</span><div class="rbar-track"><div class="rbar-fill" style="width:'+pct+'%"></div></div><span class="rbar-count">'+counts[i-1]+'</span></div>';
+    }
+    document.getElementById('revBars').innerHTML=barsHtml;
+
+    var colors=['#5B4FCF','#FF6B6B','#22C55E','#F59E0B','#EC4899'];
+    document.getElementById('reviewsList').innerHTML=companyReviews.slice(0,5).map(function(r){
+      var name=r.trainee_name||'متدرب';
+      var ini=name.substring(0,2);
+      var c=colors[Math.floor(Math.random()*colors.length)];
+      var rs='★'.repeat(Math.floor(r.score||0))+'☆'.repeat(5-Math.floor(r.score||0));
+      return '<div class="review-item"><div class="review-header"><div class="review-avatar" style="background:'+c+'">'+ini+'</div><div><div class="review-name">'+name+'</div><div class="review-date">'+(r.created_at?new Date(r.created_at).toLocaleDateString('ar-EG'):'')+'</div></div><div style="margin-right:auto;color:var(--warning)">'+rs+'</div></div><div class="review-text">'+(r.review||'')+'</div></div>';
+    }).join('');
+  }catch(e){}
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  if(!token){window.location.href='../public/02-login.html';return;}
+  loadUserProfile();
+  loadInternship();
 });
 </script>
 </body>
