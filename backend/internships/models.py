@@ -43,6 +43,10 @@ class Internship(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open', verbose_name='الحالة')
     acceptance_rate = models.FloatField(default=0.0, verbose_name='نسبة القبول')
     is_paid = models.BooleanField(default=False, verbose_name='مدفوع')
+    learning_outcomes = models.TextField(blank=True, verbose_name='ما سيتعلمه المتدرب')
+    additional_skills = models.TextField(blank=True, verbose_name='المهارات الإضافية')
+    has_certificate = models.BooleanField(default=False, verbose_name='شهادة إتمام')
+    work_days = models.CharField(max_length=50, blank=True, verbose_name='أيام العمل')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ النشر')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='آخر تحديث')
 

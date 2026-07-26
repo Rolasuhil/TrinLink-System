@@ -124,21 +124,21 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">تاريخ البدء <span class="req">*</span></label>
+            <label class="form-label">تاريخ بدء التدريب <span class="req">*</span></label>
             <input type="date" class="form-input" id="internStartDate">
           </div>
           <div class="form-group">
-            <label class="form-label">تاريخ الانتهاء <span class="req">*</span></label>
+            <label class="form-label">تاريخ انتهاء التدريب <span class="req">*</span></label>
             <input type="date" class="form-input" id="internEndDate">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">عدد المقاعد <span class="req">*</span></label>
+            <label class="form-label">عدد المقاعد المتوفرة <span class="req">*</span></label>
             <input type="number" class="form-input" id="internPositions" value="3" min="1" max="20">
           </div>
           <div class="form-group">
-            <label class="form-label">آخر موعد للتقديم <span class="req">*</span></label>
+            <label class="form-label">آخر موعد لتقديم الطلبات <span class="req">*</span></label>
             <input type="date" class="form-input" id="internDeadline">
           </div>
         </div>
@@ -179,6 +179,38 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
             <button class="skill-tag" onclick="toggleSkill(this)" data-skill="Figma">Figma</button>
             <button class="skill-tag" onclick="toggleSkill(this)" data-skill="Flutter">Flutter</button>
             <button class="skill-tag" onclick="toggleSkill(this)" data-skill="TypeScript">TypeScript</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">المهارات الإضافية</label>
+          <input class="form-input" id="internAddSkills" placeholder="أضف مهارات أخرى غير القائمة أعلاه (مفصولة بفاصلة)">
+        </div>
+      </div>
+
+      <!-- ADDITIONAL DETAILS -->
+      <div class="card">
+        <div class="card-title"><i class="ti ti-list-details"></i>تفاصيل إضافية</div>
+        <div class="form-group">
+          <label class="form-label">ما سيتعلمه المتدرب من هذه الفرصة</label>
+          <textarea class="form-textarea" id="internLearning" placeholder="مثال: سيلتعمم على بناء واجهات مستخدم تفاعلية باستخدام React، وإدارة قواعد البيانات، ونشر التطبيقات..." rows="3"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">أيام العمل في الأسبوع</label>
+            <select class="form-select" id="internWorkDays">
+              <option value="">اختر عدد الأيام</option>
+              <option value="3 أيام">3 أيام</option>
+              <option value="4 أيام">4 أيام</option>
+              <option value="5 أيام">5 أيام</option>
+              <option value="6 أيام">6 أيام</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">شهادة إتمام</label>
+            <select class="form-select" id="internCertificate">
+              <option value="true">نعم — تُمنح شهادة إتمام</option>
+              <option value="false">لا — بدون شهادة</option>
+            </select>
           </div>
         </div>
       </div>
@@ -273,6 +305,10 @@ async function publishJob(){
   const end_date=document.getElementById('internEndDate').value;
   const deadline=document.getElementById('internDeadline').value;
   const available_positions=parseInt(document.getElementById('internPositions').value)||1;
+  const learning_outcomes=document.getElementById('internLearning').value.trim();
+  const additional_skills=document.getElementById('internAddSkills').value.trim();
+  const has_certificate=document.getElementById('internCertificate').value==='true';
+  const work_days=document.getElementById('internWorkDays').value;
 
   if(!title||!description||!location||!start_date||!end_date||!deadline){
     showToast('⚠️ يرجى ملء جميع الحقول المطلوبة');return;
@@ -287,7 +323,8 @@ async function publishJob(){
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${authToken}`},
       body:JSON.stringify({
         title,description,requirements,location,internship_type,
-        start_date,end_date,deadline,available_positions,skills:selectedSkills
+        start_date,end_date,deadline,available_positions,skills:selectedSkills,
+        learning_outcomes,additional_skills,has_certificate,work_days
       })
     });
     if(res.ok){
@@ -311,6 +348,10 @@ async function saveDraft(){
   const end_date=document.getElementById('internEndDate').value;
   const deadline=document.getElementById('internDeadline').value;
   const available_positions=parseInt(document.getElementById('internPositions').value)||1;
+  const learning_outcomes=document.getElementById('internLearning').value.trim();
+  const additional_skills=document.getElementById('internAddSkills').value.trim();
+  const has_certificate=document.getElementById('internCertificate').value==='true';
+  const work_days=document.getElementById('internWorkDays').value;
   const selectedSkills=[];
   document.querySelectorAll('.skill-tag.selected').forEach(s=>selectedSkills.push(s.dataset.skill));
   try{
@@ -319,7 +360,8 @@ async function saveDraft(){
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${authToken}`},
       body:JSON.stringify({
         title,description,requirements,location,internship_type,
-        start_date,end_date,deadline,available_positions,skills:selectedSkills,status:'draft'
+        start_date,end_date,deadline,available_positions,skills:selectedSkills,status:'draft',
+        learning_outcomes,additional_skills,has_certificate,work_days
       })
     });
     if(res.ok){showToast('💾 تم حفظ المسودة');setTimeout(()=>window.location.href='18-company-dashboard.html',1500);}

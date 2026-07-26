@@ -58,6 +58,10 @@ class InternshipListView(APIView):
                 'available_positions': i.available_positions,
                 'acceptance_rate': i.acceptance_rate,
                 'is_paid': i.is_paid,
+                'learning_outcomes': i.learning_outcomes,
+                'additional_skills': i.additional_skills,
+                'has_certificate': i.has_certificate,
+                'work_days': i.work_days,
                 'created_at': str(i.created_at),
             })
         return Response(data)
@@ -92,6 +96,10 @@ class InternshipListView(APIView):
             start_date=request.data.get('start_date'),
             end_date=request.data.get('end_date'),
             is_paid=request.data.get('is_paid', False),
+            learning_outcomes=request.data.get('learning_outcomes', ''),
+            additional_skills=request.data.get('additional_skills', ''),
+            has_certificate=request.data.get('has_certificate', False),
+            work_days=request.data.get('work_days', ''),
         )
         return Response({'message': 'تم نشر الفرصة بنجاح', 'id': internship.id}, status=status.HTTP_201_CREATED)
 
@@ -121,6 +129,10 @@ class InternshipDetailView(APIView):
             'available_positions': i.available_positions,
             'acceptance_rate': i.acceptance_rate,
             'is_paid': i.is_paid,
+            'learning_outcomes': i.learning_outcomes,
+            'additional_skills': i.additional_skills,
+            'has_certificate': i.has_certificate,
+            'work_days': i.work_days,
             'status': i.status,
         })
 
@@ -151,6 +163,10 @@ class InternshipDetailView(APIView):
         i.deadline = request.data.get('deadline', i.deadline)
         i.available_positions = request.data.get('available_positions', i.available_positions)
         i.is_paid = request.data.get('is_paid', i.is_paid)
+        i.learning_outcomes = request.data.get('learning_outcomes', i.learning_outcomes)
+        i.additional_skills = request.data.get('additional_skills', i.additional_skills)
+        i.has_certificate = request.data.get('has_certificate', i.has_certificate)
+        i.work_days = request.data.get('work_days', i.work_days)
         i.status = request.data.get('status', i.status)
         i.save()
         return Response({'message': 'تم تحديث الفرصة بنجاح'})

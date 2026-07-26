@@ -266,6 +266,12 @@ select.form-input{cursor:pointer;appearance:none}
     <div class="form-group"><label class="form-label">آخر موعد للتقديم</label><input class="form-input" id="editDeadline" type="date"></div>
     <div class="form-group"><label class="form-label">الوصف</label><textarea class="form-input" id="editDesc" placeholder="وصف الفرصة..."></textarea></div>
     <div class="form-group"><label class="form-label">المتطلبات</label><textarea class="form-input" id="editReqs" placeholder="المتطلبات والمهارات المطلوبة..."></textarea></div>
+    <div class="form-group"><label class="form-label">ما سيتعلمه المتدرب</label><textarea class="form-input" id="editLearning" placeholder="ما سيتعلمه المتدرب من هذه الفرصة..."></textarea></div>
+    <div class="form-group"><label class="form-label">المهارات الإضافية</label><input class="form-input" id="editAddSkills" placeholder="مهارات إضافية (مفصولة بفاصلة)"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">أيام العمل</label><select class="form-input" id="editWorkDays"><option value="">اختر</option><option value="3 أيام">3 أيام</option><option value="4 أيام">4 أيام</option><option value="5 أيام">5 أيام</option><option value="6 أيام">6 أيام</option></select></div>
+      <div class="form-group"><label class="form-label">شهادة إتمام</label><select class="form-input" id="editCert"><option value="true">نعم</option><option value="false">لا</option></select></div>
+    </div>
     <div class="form-group"><label class="form-label">الحالة</label><select class="form-input" id="editStatus"><option value="open">مفتوح</option><option value="closed">مغلق</option></select></div>
     <div class="modal-actions">
       <button class="btn-delete" onclick="deleteInternship()"><i class="ti ti-trash" style="margin-left:4px"></i>حذف الفرصة</button>
@@ -483,6 +489,10 @@ async function openEditModal(id){
     document.getElementById('editDeadline').value=d.deadline&&d.deadline!=='None'?d.deadline:'';
     document.getElementById('editDesc').value=d.description||'';
     document.getElementById('editReqs').value=d.requirements||'';
+    document.getElementById('editLearning').value=d.learning_outcomes||'';
+    document.getElementById('editAddSkills').value=d.additional_skills||'';
+    document.getElementById('editWorkDays').value=d.work_days||'';
+    document.getElementById('editCert').value=d.has_certificate?'true':'false';
     document.getElementById('editStatus').value=d.status||'open';
     document.getElementById('editModal').classList.add('open');
   }catch(e){showToast('❌ خطأ في تحميل بيانات الفرصة');}
@@ -502,6 +512,10 @@ async function saveEdit(){
       deadline:document.getElementById('editDeadline').value||null,
       description:document.getElementById('editDesc').value,
       requirements:document.getElementById('editReqs').value,
+      learning_outcomes:document.getElementById('editLearning').value,
+      additional_skills:document.getElementById('editAddSkills').value,
+      work_days:document.getElementById('editWorkDays').value,
+      has_certificate:document.getElementById('editCert').value==='true',
       status:document.getElementById('editStatus').value
     };
     const res=await fetch(API_BASE+'/internships/'+editingId+'/',{method:'PUT',headers:authHeaders(),body:JSON.stringify(body)});
