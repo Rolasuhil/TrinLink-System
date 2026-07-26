@@ -341,8 +341,8 @@
       <div class="hero-stat-label">شركة شريكة</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num" id="statApplications">-</div>
-      <div class="hero-stat-label">طلب تدريب مقدّم</div>
+      <div class="hero-stat-num">95%</div>
+      <div class="hero-stat-label">دقة مطابقة AI</div>
     </div>
   </div>
 </section>
@@ -615,8 +615,6 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
       if(el) el.textContent = Number(d.total_trainees||0).toLocaleString();
       el = document.getElementById('statCompanies');
       if(el) el.textContent = Number(d.total_companies||0).toLocaleString();
-      el = document.getElementById('statApplications');
-      if(el) el.textContent = Number(d.total_applications||0).toLocaleString();
     }
   } catch(e) {}
 })();
