@@ -88,6 +88,7 @@ class Application(models.Model):
     application_date = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ التقديم')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name='الحالة')
     resume_version = models.CharField(max_length=500, blank=True, verbose_name='السيرة الذاتية المستخدمة')
+    cover_letter = models.TextField(blank=True, verbose_name='رسالة التقديم')
     rejection_reason = models.TextField(blank=True, verbose_name='سبب الرفض')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاريخ الإنشاء')
 

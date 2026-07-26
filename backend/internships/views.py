@@ -154,10 +154,17 @@ class ApplicationListView(APIView):
         if Application.objects.filter(internship=internship, trainee=user.trainee_profile).exists():
             return Response({'error': 'لقد قدمت على هذه الفرصة مسبقاً'}, status=status.HTTP_400_BAD_REQUEST)
 
+        cover_letter = request.data.get('cover_letter', '')
+        resume_version = ''
+        if 'resume' in request.FILES:
+            resume_file = request.FILES['resume']
+            resume_version = resume_file.name
+
         app = Application.objects.create(
             internship=internship,
             trainee=user.trainee_profile,
-            resume_version=request.data.get('resume_version', ''),
+            resume_version=resume_version,
+            cover_letter=cover_letter,
         )
         return Response({'message': 'تم التقديم بنجاح', 'id': app.id}, status=status.HTTP_201_CREATED)
 
