@@ -124,21 +124,21 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">تاريخ بدء التدريب <span class="req">*</span></label>
+            <label class="form-label">تاريخ البدء <span class="req">*</span></label>
             <input type="date" class="form-input" id="internStartDate">
           </div>
           <div class="form-group">
-            <label class="form-label">تاريخ انتهاء التدريب <span class="req">*</span></label>
+            <label class="form-label">تاريخ الانتهاء <span class="req">*</span></label>
             <input type="date" class="form-input" id="internEndDate">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">عدد المقاعد المتوفرة <span class="req">*</span></label>
+            <label class="form-label">عدد المقاعد <span class="req">*</span></label>
             <input type="number" class="form-input" id="internPositions" value="3" min="1" max="20">
           </div>
           <div class="form-group">
-            <label class="form-label">آخر موعد لتقديم الطلبات <span class="req">*</span></label>
+            <label class="form-label">آخر موعد للتقديم <span class="req">*</span></label>
             <input type="date" class="form-input" id="internDeadline">
           </div>
         </div>
@@ -207,10 +207,13 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
           </div>
           <div class="form-group">
             <label class="form-label">شهادة إتمام</label>
-            <select class="form-select" id="internCertificate">
-              <option value="true">نعم — تُمنح شهادة إتمام</option>
-              <option value="false">لا — بدون شهادة</option>
-            </select>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div id="certToggle" onclick="toggleCert()" style="width:44px;height:24px;border-radius:12px;background:rgba(255,255,255,0.15);cursor:pointer;position:relative;transition:background 0.2s">
+                <div id="certDot" style="width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:3px;right:3px;transition:right 0.2s"></div>
+              </div>
+              <span id="certLabel" style="font-size:12px;color:rgba(255,255,255,0.4)">لا يوجد</span>
+            </div>
+            <input type="hidden" id="internCertificate" value="false">
           </div>
         </div>
       </div>
@@ -281,6 +284,14 @@ async function loadProfile() {
 }
 
 function toggleSkill(btn){btn.classList.toggle('selected');}
+function toggleCert(){
+  var h=document.getElementById('internCertificate');
+  var dot=document.getElementById('certDot');
+  var label=document.getElementById('certLabel');
+  var wrap=document.getElementById('certToggle');
+  if(h.value==='true'){h.value='false';dot.style.right='3px';wrap.style.background='rgba(255,255,255,0.15)';label.textContent='لا يوجد';label.style.color='rgba(255,255,255,0.4)';}
+  else{h.value='true';dot.style.right='23px';wrap.style.background='var(--success)';label.textContent='يُمنح شهادة';label.style.color='var(--success)';}
+}
 function selectType(opt,type){
   document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('selected'));
   opt.classList.add('selected');
