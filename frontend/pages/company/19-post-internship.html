@@ -149,12 +149,12 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
         <div class="card-title"><i class="ti ti-coin"></i>نوع التدريب</div>
         <div class="type-selector">
           <div class="type-opt selected" onclick="selectType(this,'free')">
-            <div class="type-opt-icon">🆓</div>
+            <div class="type-opt-icon"><i class="ti ti-gift" style="font-size:28px;color:var(--success)"></i></div>
             <div class="type-opt-label">مجاني</div>
             <div class="type-opt-sub">تدريب مجاني بدون مقابل مادي</div>
           </div>
           <div class="type-opt" onclick="selectType(this,'paid')">
-            <div class="type-opt-icon">💰</div>
+            <div class="type-opt-icon"><i class="ti ti-cash" style="font-size:28px;color:var(--warning)"></i></div>
             <div class="type-opt-label">مدفوع</div>
             <div class="type-opt-sub">تدريب براتب شهري</div>
           </div>
@@ -207,11 +207,14 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
           </div>
           <div class="form-group">
             <label class="form-label">شهادة إتمام</label>
-            <div style="display:flex;align-items:center;gap:10px">
-              <div id="certToggle" onclick="toggleCert()" style="width:44px;height:24px;border-radius:12px;background:rgba(255,255,255,0.15);cursor:pointer;position:relative;transition:background 0.2s">
-                <div id="certDot" style="width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:3px;right:3px;transition:right 0.2s"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);background:rgba(255,255,255,0.05)">
+              <div style="display:flex;align-items:center;gap:8px">
+                <i class="ti ti-certificate" style="color:var(--primary);font-size:16px"></i>
+                <span style="font-size:13px;color:rgba(255,255,255,0.7)">تُمنح شهادة إتمام</span>
               </div>
-              <span id="certLabel" style="font-size:12px;color:rgba(255,255,255,0.4)">لا يوجد</span>
+              <div id="certToggle" onclick="toggleCert()" style="width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,0.15);cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0">
+                <div id="certDot" style="width:16px;height:16px;border-radius:50%;background:white;position:absolute;top:3px;right:3px;transition:all 0.2s"></div>
+              </div>
             </div>
             <input type="hidden" id="internCertificate" value="false">
           </div>
@@ -232,7 +235,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
             </div>
           </div>
           <div class="preview-tags">
-            <span class="preview-tag" id="prevLocation" style="background:rgba(91,79,207,0.15);color:#A89CFF">📍 داخل غزة</span>
+            <span class="preview-tag" id="prevLocation" style="background:rgba(91,79,207,0.15);color:#A89CFF"><i class="ti ti-map-pin" style="font-size:10px"></i> داخل غزة</span>
           </div>
           <div style="font-size:11px;color:rgba(255,255,255,0.4);display:flex;gap:12px">
             <span><i class="ti ti-users"></i> <span id="previewPositions">3</span> مقاعد</span>
@@ -287,10 +290,9 @@ function toggleSkill(btn){btn.classList.toggle('selected');}
 function toggleCert(){
   var h=document.getElementById('internCertificate');
   var dot=document.getElementById('certDot');
-  var label=document.getElementById('certLabel');
   var wrap=document.getElementById('certToggle');
-  if(h.value==='true'){h.value='false';dot.style.right='3px';wrap.style.background='rgba(255,255,255,0.15)';label.textContent='لا يوجد';label.style.color='rgba(255,255,255,0.4)';}
-  else{h.value='true';dot.style.right='23px';wrap.style.background='var(--success)';label.textContent='يُمنح شهادة';label.style.color='var(--success)';}
+  if(h.value==='true'){h.value='false';dot.style.right='3px';wrap.style.background='rgba(255,255,255,0.15)';}
+  else{h.value='true';dot.style.right='21px';wrap.style.background='var(--success)';}
 }
 function selectType(opt,type){
   document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('selected'));
@@ -302,7 +304,7 @@ function updatePreview(){
   document.getElementById('prevTitle').textContent=title;
   const loc=document.getElementById('internLocation');
   const locText=loc.options[loc.selectedIndex]?.text||'الموقع';
-  document.getElementById('prevLocation').textContent='📍 '+locText;
+  document.getElementById('prevLocation').innerHTML='<i class="ti ti-map-pin" style="font-size:10px"></i> '+locText;
   document.getElementById('previewPositions').textContent=document.getElementById('internPositions').value||'0';
 }
 
@@ -322,7 +324,7 @@ async function publishJob(){
   const work_days=document.getElementById('internWorkDays').value;
 
   if(!title||!description||!location||!start_date||!end_date||!deadline){
-    showToast('⚠️ يرجى ملء جميع الحقول المطلوبة');return;
+    showToast('يرجى ملء جميع الحقول المطلوبة');return;
   }
 
   const selectedSkills=[];
@@ -339,19 +341,19 @@ async function publishJob(){
       })
     });
     if(res.ok){
-      showToast('🎉 تم نشر الفرصة بنجاح!');
+      showToast('تم نشر الفرصة بنجاح!');
       setTimeout(()=>window.location.href='18-company-dashboard.html',2000);
     }else{
       const err=await res.json();
-      showToast('⚠️ '+JSON.stringify(err));
+      showToast(' '+JSON.stringify(err));
     }
-  }catch(e){showToast('❌ خطأ في الاتصال بالخادم');}
+  }catch(e){showToast('خطأ في الاتصال بالخادم');}
 }
 
 async function saveDraft(){
   const title=document.getElementById('jobTitle').value.trim();
   const description=document.getElementById('internDescription').value.trim();
-  if(!title||!description){showToast('⚠️ يرجى إدخال العنوان والوصف على الأقل');return;}
+  if(!title||!description){showToast('يرجى إدخال العنوان والوصف على الأقل');return;}
   const requirements=document.getElementById('internRequirements').value.trim();
   const location=document.getElementById('internLocation').value;
   const internship_type=selectedInternType;
@@ -375,9 +377,9 @@ async function saveDraft(){
         learning_outcomes,additional_skills,has_certificate,work_days
       })
     });
-    if(res.ok){showToast('💾 تم حفظ المسودة');setTimeout(()=>window.location.href='18-company-dashboard.html',1500);}
-    else{showToast('⚠️ المسودة غير مدعومة حالياً');}
-  }catch(e){showToast('⚠️ المسودة غير مدعومة حالياً');}
+    if(res.ok){showToast('تم حفظ المسودة');setTimeout(()=>window.location.href='18-company-dashboard.html',1500);}
+    else{showToast('المسودة غير مدعومة حالياً');}
+  }catch(e){showToast('المسودة غير مدعومة حالياً');}
 }
 function showToast(msg){
   const t=document.getElementById('toast');
