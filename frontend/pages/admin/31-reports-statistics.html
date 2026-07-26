@@ -213,29 +213,93 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token')}
-function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
 function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
 
 document.addEventListener('DOMContentLoaded',async function(){
-  var statNums=document.querySelectorAll('.stat-num');
+  document.querySelector('.btn-primary').addEventListener('click',function(){location.reload()});
+
   try{
     var res=await fetch(API_BASE+'/admin-panel/reports/',{headers:authHeaders()});
-    if(res.ok){
-      var d=await res.json();
-      if(d.total_users!==undefined&&statNums[0])statNums[0].textContent=Number(d.total_users).toLocaleString();
-      if(d.total_internships!==undefined&&statNums[1])statNums[1].textContent=Number(d.total_internships).toLocaleString();
-      if(d.total_applications!==undefined&&statNums[2])statNums[2].textContent=Number(d.total_applications).toLocaleString();
-      if(d.average_rating!==undefined&&statNums[3])statNums[3].textContent=d.average_rating;
-      var chartVals=document.querySelectorAll('.chart-val');
-      if(d.monthly_registrations&&Array.isArray(d.monthly_registrations)){
-        d.monthly_registrations.forEach(function(val,i){if(chartVals[i])chartVals[i].textContent=val});
+    if(!res.ok)throw new Error('fail');
+    var d=await res.json();
+
+    var statNums=document.querySelectorAll('.stat-num');
+    if(statNums[0])statNums[0].textContent=Number(d.total_users||0).toLocaleString();
+    if(statNums[1])statNums[1].textContent=Number(d.total_internships||0).toLocaleString();
+    if(statNums[2])statNums[2].textContent=Number(d.total_applications||0).toLocaleString();
+    if(statNums[3])statNums[3].textContent=d.average_rating||'0';
+
+    var statChanges=document.querySelectorAll('.stat-change');
+    if(statChanges[0]&&d.total_users)statChanges[0].textContent='إجمالي مسجل';
+    if(statChanges[1]&&d.total_internships)statChanges[1].textContent=d.open_internships?d.open_internships+' نشطة':'إجمالي';
+    if(statChanges[2]&&d.total_applications)statChanges[2].textContent=d.accepted_count+' مقبولة';
+    if(statChanges[3])statChanges[3].textContent=d.average_rating>=4?'ممتاز':d.average_rating>=3?'جيد':'متوسط';
+
+    if(d.monthly_registrations&&d.monthly_registrations.length){
+      var bars=document.querySelectorAll('.grid-2 .card:first-child .chart-bar');
+      var maxCount=Math.max.apply(null,d.monthly_registrations.map(function(m){return m.count}));
+      d.monthly_registrations.forEach(function(m,i){
+        if(bars[i]){
+          var pct=maxCount>0?Math.round(m.count/maxCount*100):0;
+          bars[i].querySelector('.chart-fill').style.width=pct+'%';
+          bars[i].querySelector('.chart-val').textContent=m.count;
+          bars[i].querySelector('.chart-label').textContent=m.month;
+        }
+      });
+    }
+
+    if(d.best_companies&&d.best_companies.length){
+      var companyItems=document.querySelectorAll('.grid-2 .card:nth-child(2) .report-item');
+      var colors=['var(--primary)','var(--success)','var(--warning)','var(--accent)'];
+      d.best_companies.forEach(function(c,i){
+        if(companyItems[i]){
+          companyItems[i].querySelector('div:first-child').textContent=i+1;
+          companyItems[i].querySelector('div:first-child').style.background=colors[i%colors.length];
+          companyItems[i].querySelector('.p-name,.report-item div:nth-child(2) div:first-child').textContent=c.name;
+          companyItems[i].querySelector('.report-item div:nth-child(2) div:nth-child(2)').textContent=c.count+' فرصة';
+        }
+      });
+    }
+
+    if(d.success_rate!==undefined){
+      var sRate=d.success_rate;
+      var pRate=d.pending_rate||0;
+      var rRate=d.rejected_rate||0;
+      var donutEl=document.querySelector('.grid-2 .card:nth-child(3) div[style*="conic-gradient"]');
+      if(donutEl){
+        donutEl.style.background='conic-gradient(var(--success) 0% '+sRate+'%,var(--warning) '+sRate+'% '+(sRate+pRate)+'%,var(--accent) '+(sRate+pRate)+'% 100%)';
       }
+      var donutNum=document.querySelector('.grid-2 .card:nth-child(3) div[style*="font-size:18px"]');
+      if(donutNum)donutNum.textContent=sRate+'%';
+      var legends=document.querySelectorAll('.grid-2 .card:nth-child(3) .legend-item');
+      if(legends[0])legends[0].innerHTML='<div class="legend-dot" style="background:var(--success)"></div>مقبولة '+sRate+'%';
+      if(legends[1])legends[1].innerHTML='<div class="legend-dot" style="background:var(--warning)"></div>معلقة '+pRate+'%';
+      if(legends[2])legends[2].innerHTML='<div class="legend-dot" style="background:var(--accent)"></div>مرفوضة '+rRate+'%';
+    }
+
+    if(d.weekly_activity&&d.weekly_activity.length){
+      var actBars=document.querySelectorAll('.grid-2 > div:last-child > .card:last-child div[style*="flex-direction:column"]');
+      var maxAct=Math.max.apply(null,d.weekly_activity.map(function(w){return w.count}||1));
+      d.weekly_activity.forEach(function(w,i){
+        if(actBars[i]){
+          var barH=maxAct>0?Math.round(w.count/maxAct*80):0;
+          actBars[i].querySelector('div:first-child').style.height=Math.max(barH,10)+'px';
+          actBars[i].querySelector('div:last-child').textContent=w.day;
+        }
+      });
+    }
+
+    if(d.specialization_distribution&&d.specialization_distribution.length){
+      var totalSpec=d.specialization_distribution.reduce(function(s,x){return s+x.count},0);
+      var specDonutCenter=document.querySelectorAll('.donut-num');
+      if(specDonutCenter[0])specDonutCenter[0].textContent=totalSpec.toLocaleString();
     }
   }catch(e){
     try{
       var dashRes=await fetch(API_BASE+'/admin-panel/dashboard/',{headers:authHeaders()});
       if(dashRes.ok){
         var d=await dashRes.json();
+        var statNums=document.querySelectorAll('.stat-num');
         if(statNums[0])statNums[0].textContent=Number(d.total_users||0).toLocaleString();
         if(statNums[1])statNums[1].textContent=Number(d.total_internships||0).toLocaleString();
         if(statNums[2])statNums[2].textContent=Number(d.total_applications||0).toLocaleString();

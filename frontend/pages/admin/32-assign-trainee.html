@@ -209,17 +209,14 @@ function authHeaders(){return{'Content-Type':'application/json','Authorization':
 
 document.addEventListener('DOMContentLoaded',async function(){
   var traineeSelect=document.getElementById('traineeSelect');
-  var categorySelect=document.getElementById('categorySelect');
-  if(categorySelect){
-    categorySelect.id='supervisorSelect';
-    categorySelect.innerHTML='<option value="">— اختر مشرفاً —</option>';
-    categorySelect.previousElementSibling.textContent='اختر المشرف';
-  }
+
   try{
-    var[trainRes,supRes]=await Promise.all([
+    var[trainRes,supRes,assignRes]=await Promise.all([
       fetch(API_BASE+'/admin-panel/users/?type=trainee',{headers:authHeaders()}),
-      fetch(API_BASE+'/admin-panel/users/?type=supervisor',{headers:authHeaders()})
+      fetch(API_BASE+'/admin-panel/users/?type=supervisor',{headers:authHeaders()}),
+      fetch(API_BASE+'/admin-panel/assign/',{headers:authHeaders()})
     ]);
+
     if(trainRes.ok){
       var tData=await trainRes.json();
       var tList=tData.results||tData;
@@ -233,6 +230,7 @@ document.addEventListener('DOMContentLoaded',async function(){
         });
       }
     }
+
     if(supRes.ok){
       var sData=await supRes.json();
       var sList=sData.results||sData;
@@ -247,7 +245,31 @@ document.addEventListener('DOMContentLoaded',async function(){
         });
       }
     }
-  }catch(e){console.log('Error loading users:',e)}
+
+    if(assignRes.ok){
+      var aData=await assignRes.json();
+      var assignments=aData.assignments||aData;
+      var listContainer=document.querySelector('.card:last-child');
+      if(listContainer&&Array.isArray(assignments)&&assignments.length){
+        var html='';
+        assignments.forEach(function(a){
+          var initials=a.trainee_name?a.trainee_name.substring(0,2):'';
+          var statusColor=a.status==='active'?'var(--success-light);color:#15803D':'#FEE2E2;color:#DC2626';
+          var statusLabel=a.status==='active'?'نشط':'منتهي';
+          html+='<div class="assigned-item">';
+          html+='<div class="match-avatar" style="background:var(--primary);width:36px;height:36px;font-size:11px">'+initials+'</div>';
+          html+='<div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">'+a.trainee_name+'</div>';
+          html+='<div style="font-size:11px;color:var(--text-mid)">'+a.supervisor_name+'</div></div>';
+          html+='<span style="font-size:10px;padding:3px 10px;border-radius:20px;background:'+statusColor+';font-weight:600">'+statusLabel+'</span>';
+          html+='</div>';
+        });
+        var titleEl=listContainer.querySelector('.card-title');
+        listContainer.innerHTML='';
+        if(titleEl)listContainer.appendChild(titleEl);
+        listContainer.insertAdjacentHTML('beforeend',html);
+      }
+    }
+  }catch(e){console.log('Error loading data:',e)}
 });
 
 function showMatches(){
@@ -274,8 +296,10 @@ async function assignTrainee(){
       showToast('تم تعيين المتدرب بنجاح ✓');
       document.getElementById('matchesArea').style.display='none';
       document.getElementById('traineeSelect').value='';
+      location.reload();
     }else{
-      showToast('حدث خطأ في التعيين');
+      var err=await res.json();
+      showToast(err.error||'حدث خطأ في التعيين');
     }
   }catch(e){console.log(e);showToast('حدث خطأ');}
 }

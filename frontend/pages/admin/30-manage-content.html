@@ -224,7 +224,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token')}
-function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
 function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
 
 document.addEventListener('DOMContentLoaded',async function(){
@@ -232,46 +231,67 @@ document.addEventListener('DOMContentLoaded',async function(){
     var res=await fetch(API_BASE+'/admin-panel/content/',{headers:authHeaders()});
     if(!res.ok)throw new Error('Failed');
     var data=await res.json();
-    var list=data.results||data;
-    if(!Array.isArray(list))return;
+
+    var stats=data.stats||{};
+    var statNums=document.querySelectorAll('.stat-mini-num');
+    if(statNums[0])statNums[0].textContent=stats.total_internships||0;
+    if(statNums[1])statNums[1].textContent=stats.active_internships||0;
+    if(statNums[2])statNums[2].textContent=stats.draft_internships||0;
+    if(statNums[3])statNums[3].textContent=stats.closed_internships||0;
+
+    var internships=data.internships||[];
     var internshipBody=document.querySelector('#internships tbody');
-    var postsBody=document.querySelector('#posts tbody');
-    var internships=[],posts=[];
-    list.forEach(function(item){
-      if(item.type==='internship'||item.category==='internship')internships.push(item);
-      else posts.push(item);
-    });
-    if(internshipBody){
+    if(internshipBody&&internships.length){
       internshipBody.innerHTML='';
-      if(internships.length){
-        internships.forEach(function(item,i){
-          var row=document.createElement('tr');
-          var statusColor=item.status==='active'?'var(--success-light);color:#15803D':item.status==='draft'?'var(--warning-light);color:#B45309':'#FEE2E2;color:#DC2626';
-          var statusLabel=item.status==='active'?'نشط':item.status==='draft'?'مسودة':'منتهي';
-          row.innerHTML='<td><span style="font-weight:700;color:var(--text-dark)">'+(item.title||item.name||'فرصة')+'</span></td><td><span style="font-size:12px">'+(item.company||'')+'</span></td><td><span style="font-size:12px;color:var(--text-mid)">'+(item.location||'')+'</span></td><td><span class="status-badge" style="background:'+statusColor+'">'+statusLabel+'</span></td><td><div class="action-btns"><button class="action-btn danger" onclick="deleteContent(\''+item.id+'\','+i+',\'internship\')"><i class="ti ti-trash"></i></button></div></td>';
-          internshipBody.appendChild(row);
-        });
-      }
+      internships.forEach(function(item){
+        var row=document.createElement('tr');
+        var statusMap={'open':'نشط','draft':'مسودة','closed':'منتهي','paused':'متوقف'};
+        var colorMap={'open':'var(--success-light);color:#15803D','draft':'var(--warning-light);color:#B45309','closed':'#FEE2E2;color:#DC2626','paused':'var(--warning-light);color:#B45309'};
+        row.innerHTML='<td><span style="font-weight:700;color:var(--text-dark)">'+item.title+'</span></td><td><span style="font-size:12px">'+item.company+'</span></td><td><span style="font-size:12px;color:var(--text-mid)">'+item.location+'</span></td><td><span class="status-badge" style="background:'+(colorMap[item.status]||'var(--success-light);color:#15803D')+'">'+(statusMap[item.status]||item.status)+'</span></td><td><div class="action-btns"><button class="action-btn danger" onclick="deleteItem(\'internship\','+item.id+')"><i class="ti ti-trash"></i></button></div></td>';
+        internshipBody.appendChild(row);
+      });
     }
-    if(postsBody){
+
+    var posts=data.posts||[];
+    var postsBody=document.querySelector('#posts tbody');
+    if(postsBody&&posts.length){
       postsBody.innerHTML='';
-      if(posts.length){
-        posts.forEach(function(item,i){
-          var row=document.createElement('tr');
-          var statusColor=item.status==='active'?'var(--success-light);color:#15803D':'var(--warning-light);color:#B45309';
-          var statusLabel=item.status==='active'?'نشط':'مُبلّغ';
-          row.innerHTML='<td><span style="font-weight:600;color:var(--text-dark)">'+(item.title||item.content||'منشور')+'</span></td><td><span style="font-size:12px">'+(item.author||'')+'</span></td><td><span class="status-badge" style="background:var(--success-light);color:#15803D">'+(item.type||'')+'</span></td><td><span class="status-badge" style="background:'+statusColor+'">'+statusLabel+'</span></td><td><div class="action-btns"><button class="action-btn danger" onclick="deleteContent(\''+item.id+'\','+i+',\'post\')"><i class="ti ti-trash"></i></button></div></td>';
-          postsBody.appendChild(row);
-        });
-      }
+      posts.forEach(function(item){
+        var row=document.createElement('tr');
+        row.innerHTML='<td><span style="font-weight:600;color:var(--text-dark)">'+item.title+'</span></td><td><span style="font-size:12px">'+item.author+'</span></td><td><span class="status-badge" style="background:var(--success-light);color:#15803D">'+item.type+'</span></td><td><span class="status-badge" style="background:var(--success-light);color:#15803D">'+item.status+'</span></td><td><div class="action-btns"><button class="action-btn danger" onclick="deleteItem(\'post\','+item.id+')"><i class="ti ti-trash"></i></button></div></td>';
+        postsBody.appendChild(row);
+      });
     }
+
+    var categories=data.categories||[];
+    var catContainer=document.querySelector('#categories div[style*="grid-template-columns"]');
+    if(catContainer&&categories.length){
+      catContainer.innerHTML='';
+      var icons=['ti-code','ti-device-mobile','ti-palette','ti-database','ti-shield-lock','ti-robot'];
+      var bgColors=['var(--primary-light)','var(--success-light)','#FFF0F0','var(--warning-light)','#FEE2E2','#E0F2FE'];
+      var iconColors=['var(--primary)','var(--success)','var(--accent)','var(--warning)','#DC2626','#0EA5E9'];
+      categories.forEach(function(c,i){
+        var div=document.createElement('div');
+        div.style.cssText='padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s';
+        div.onmouseover=function(){this.style.borderColor='var(--primary)'};
+        div.onmouseout=function(){this.style.borderColor='var(--border)'};
+        div.innerHTML='<div style="width:40px;height:40px;border-radius:var(--radius-sm);background:'+bgColors[i%bgColors.length]+';display:flex;align-items:center;justify-content:center"><i class="ti '+(icons[i%icons.length])+'" style="color:'+(iconColors[i%iconColors.length])+';font-size:18px"></i></div><div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">'+c.name+'</div><div style="font-size:11px;color:var(--text-mid)">'+c.count+' فرصة</div></div>';
+        catContainer.appendChild(div);
+      });
+    }
+
+    var postStatNums=document.querySelectorAll('#posts .stat-mini-num');
+    if(postStatNums[0])postStatNums[0].textContent=stats.total_posts||0;
+    if(postStatNums[1])postStatNums[1].textContent=stats.total_posts||0;
+
   }catch(e){console.log('Error loading content:',e)}
 });
 
-async function deleteContent(id,index,type){
+async function deleteItem(type,id){
+  if(!confirm('هل أنت متأكد من الحذف؟'))return;
   try{
-    var res=await fetch(API_BASE+'/admin-panel/content/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({report_id:id,status:'rejected'})});
-    if(res.ok){showToast('تم الحذف بنجاح');}
+    var res=await fetch(API_BASE+'/admin-panel/content/',{method:'DELETE',headers:authHeaders(),body:JSON.stringify({content_type:type,content_id:id})});
+    if(res.ok){showToast('تم الحذف بنجاح');setTimeout(function(){location.reload()},1000);}
     else{showToast('حدث خطأ');}
   }catch(e){console.log(e);showToast('حدث خطأ');}
 }

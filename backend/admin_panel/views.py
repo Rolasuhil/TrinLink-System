@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Count, Avg
 from accounts.models import Person, Trainee, CompanyProfile, SupervisorProfile
 from internships.models import Internship, Application, Category
 from performance.models import SupervisionAssignment, PerformanceReport
@@ -110,47 +111,82 @@ class ManageContentView(APIView):
         if not admin:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        reports = ContentReport.objects.all()
-        data = [{
-            'id': r.id,
-            'reported_by': r.reported_by.full_name,
-            'content_type': r.content_type,
-            'content_id': r.content_id,
-            'reason': r.reason,
-            'status': r.status,
-            'created_at': str(r.created_at),
-        } for r in reports]
-        return Response(data)
+        # Fetch real internships
+        internships = Internship.objects.select_related('company', 'company__person', 'category').all()
+        internship_data = []
+        for i in internships:
+            internship_data.append({
+                'id': i.id,
+                'title': i.title,
+                'company': i.company.person.full_name if i.company and i.company.person else '',
+                'location': getattr(i, 'location', ''),
+                'status': i.status,
+                'type': 'internship',
+            })
 
-    def patch(self, request):
-        admin = get_admin(request)
-        if not admin:
-            return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
+        # Fetch real posts
+        from community.models import CommunityPost
+        posts = CommunityPost.objects.select_related('author').all()
+        post_data = []
+        for p in posts:
+            post_data.append({
+                'id': p.id,
+                'title': p.content[:60] if p.content else '',
+                'author': p.author.full_name if p.author else '',
+                'type': 'منشور',
+                'status': 'active',
+                'type_label': 'post',
+            })
 
-        report_id = request.data.get('report_id')
-        try:
-            report = ContentReport.objects.get(id=report_id)
-            report.status = request.data.get('status', 'approved')
-            report.reviewed_by = admin
-            report.save()
-            return Response({'message': 'تم التحديث'})
-        except ContentReport.DoesNotExist:
-            return Response({'error': 'البلاغ غير موجود'}, status=status.HTTP_404_NOT_FOUND)
+        # Fetch categories
+        categories = Category.objects.annotate(internship_count=Count('internship')).all()
+        cat_data = []
+        for c in categories:
+            cat_data.append({
+                'id': c.id,
+                'name': c.name,
+                'count': c.internship_count,
+            })
+
+        return Response({
+            'internships': internship_data,
+            'posts': post_data,
+            'categories': cat_data,
+            'stats': {
+                'total_internships': len(internship_data),
+                'active_internships': sum(1 for i in internship_data if i['status'] == 'open'),
+                'draft_internships': sum(1 for i in internship_data if i['status'] == 'draft'),
+                'closed_internships': sum(1 for i in internship_data if i['status'] == 'closed'),
+                'total_posts': len(post_data),
+                'total_categories': len(cat_data),
+            }
+        })
 
     def delete(self, request):
         admin = get_admin(request)
         if not admin:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        report_id = request.data.get('report_id')
-        try:
-            report = ContentReport.objects.get(id=report_id)
-            report.status = 'removed'
-            report.reviewed_by = admin
-            report.save()
-            return Response({'message': 'تمت الإزالة'})
-        except ContentReport.DoesNotExist:
-            return Response({'error': 'البلاغ غير موجود'}, status=status.HTTP_404_NOT_FOUND)
+        content_type = request.data.get('content_type', '')
+        content_id = request.data.get('content_id')
+
+        if content_type == 'internship':
+            try:
+                internship = Internship.objects.get(id=content_id)
+                internship.delete()
+                return Response({'message': 'تم الحذف بنجاح'})
+            except Internship.DoesNotExist:
+                return Response({'error': 'الفرصة غير موجودة'}, status=status.HTTP_404_NOT_FOUND)
+        elif content_type == 'post':
+            from community.models import CommunityPost
+            try:
+                post = CommunityPost.objects.get(id=content_id)
+                post.delete()
+                return Response({'message': 'تم الحذف بنجاح'})
+            except CommunityPost.DoesNotExist:
+                return Response({'error': 'المنشور غير موجود'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'error': 'نوع المحتوى غير صحيح'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AdminReportsView(APIView):
@@ -159,22 +195,110 @@ class AdminReportsView(APIView):
         if not admin:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        from django.db.models import Count
+        from django.utils import timezone
+        from datetime import timedelta
+        from community.models import CompanyRating
+
         monthly_apps = Application.objects.values('status').annotate(count=Count('id'))
         popular_categories = Internship.objects.values('category__name').annotate(
             count=Count('id')
         ).order_by('-count')[:5]
 
+        # Monthly registrations (last 7 months)
+        monthly_registrations = []
+        now = timezone.now()
+        month_names = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']
+        for i in range(6, -1, -1):
+            d = now - timedelta(days=30*i)
+            count = Person.objects.filter(created_at__year=d.year, created_at__month=d.month).count()
+            monthly_registrations.append({'month': month_names[d.month-1], 'count': count})
+
+        # Average rating
+        avg_rating = CompanyRating.objects.aggregate(avg=Avg('score'))['avg'] or 0
+
+        # Application stats
+        total_apps = Application.objects.count()
+        accepted = Application.objects.filter(status='accepted').count()
+        pending = Application.objects.filter(status='pending').count()
+        rejected = Application.objects.filter(status='rejected').count()
+
+        # Weekly activity (last 7 days)
+        weekly_activity = []
+        day_names = ['سبت','أحد','إثن','ثلا','أرب','خمي','جمع']
+        for i in range(6, -1, -1):
+            d = now - timedelta(days=i)
+            count = Person.objects.filter(created_at__date=d.date()).count()
+            weekly_activity.append({'day': day_names[6-i], 'count': count})
+
+        # Best companies by internship count
+        best_companies = (
+            Internship.objects.values('company__person__full_name')
+            .annotate(internship_count=Count('id'))
+            .order_by('-internship_count')[:5]
+        )
+        best_cos = []
+        for c in best_companies:
+            name = c['company__person__full_name'] or 'شركة'
+            best_cos.append({'name': name, 'count': c['internship_count']})
+
         return Response({
-            'applications_by_status': list(monthly_apps),
-            'popular_categories': list(popular_categories),
             'total_users': Person.objects.count(),
             'total_internships': Internship.objects.count(),
-            'total_applications': Application.objects.count(),
+            'total_applications': total_apps,
+            'average_rating': round(avg_rating, 1),
+            'applications_by_status': list(monthly_apps),
+            'popular_categories': list(popular_categories),
+            'monthly_registrations': monthly_registrations,
+            'weekly_activity': weekly_activity,
+            'success_rate': round(accepted/total_apps*100, 1) if total_apps else 0,
+            'pending_rate': round(pending/total_apps*100, 1) if total_apps else 0,
+            'rejected_rate': round(rejected/total_apps*100, 1) if total_apps else 0,
+            'accepted_count': accepted,
+            'pending_count': pending,
+            'rejected_count': rejected,
+            'best_companies': best_cos,
+            'specialization_distribution': list(
+                Trainee.objects.values('major').annotate(count=Count('id')).order_by('-count')[:5]
+            ),
         })
 
 
 class AssignTraineeView(APIView):
+    def get(self, request):
+        admin = get_admin(request)
+        if not admin:
+            return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        assignments = SupervisionAssignment.objects.select_related(
+            'supervisor', 'supervisor__person', 'trainee', 'trainee__person'
+        ).all()
+
+        data = []
+        for a in assignments:
+            data.append({
+                'id': a.id,
+                'trainee_name': a.trainee.person.full_name if a.trainee else '',
+                'trainee_id': a.trainee.person.user_id if a.trainee else '',
+                'supervisor_name': a.supervisor.person.full_name if a.supervisor else '',
+                'status': a.status,
+                'created_at': str(a.assignment_date) if hasattr(a, 'assignment_date') else '',
+            })
+
+        # Internships list for matching
+        internships = Internship.objects.filter(status='open').select_related('company', 'company__person', 'category')
+        internship_data = []
+        for i in internships:
+            internship_data.append({
+                'id': i.id,
+                'title': i.title,
+                'company': i.company.person.full_name if i.company and i.company.person else '',
+                'location': getattr(i, 'location', ''),
+                'category': i.category.name if i.category else '',
+                'internship_type': getattr(i, 'internship_type', ''),
+            })
+
+        return Response({'assignments': data, 'internships': internship_data})
+
     def post(self, request):
         admin = get_admin(request)
         if not admin:
