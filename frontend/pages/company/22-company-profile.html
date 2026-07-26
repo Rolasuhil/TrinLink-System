@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة ملف الشركة (22-company-profile.html)
+  ========================================
+  الغرض: عرض وتعديل معلومات ملف الشركة (اسم الشركة، الوصف، التخصص، الموقع، etc).
+  تتصل بالـ API لجلب البيانات وتحديثها عبر التعديل المدمج (inline editing).
+  تتضمن: صورة غلاف، شعار الشركة، معلومات الاتصال، الإحصائيات، تقييمات المتدربين.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -205,7 +214,11 @@ select.if option{background:var(--dark-2);color:white}
 
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — ملف الشركة -->
+<!-- ======================================== -->
 <script>
+/* أكواد JavaScript — ملف الشركة: جلب وتعديل الملف الشخصي، عرض الفرص */
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 var API='/api';
 var token=localStorage.getItem('trainlink_token');

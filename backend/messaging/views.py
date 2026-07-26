@@ -1,3 +1,8 @@
+"""
+ views API لتطبيق الرسائل
+تتضمن واجهات برمجية لإدارة قنوات الدردشة والرسائل والإشعارات
+"""
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,7 +11,9 @@ from django.conf import settings
 import jwt
 
 
+# دالة مساعدة لاستخراج المستخدم من رمز JWT في رأس التصريح
 def get_user(request):
+    """تستخرج المستخدم الحالي من التوكن المُرسل في رأس Authorization"""
     auth = request.headers.get('Authorization', '')
     if not auth.startswith('Bearer '):
         return None
@@ -18,8 +25,11 @@ def get_user(request):
         return None
 
 
+# واجهة API لإدارة قنوات الدردشة
 class ChatChannelListView(APIView):
+    """عرض قائمة قنوات الدردشة الخاصة بالمستخدم أو إنشاء قناة فردية جديدة"""
     def get(self, request):
+        """إرجاع جميع قنوات الدردشة التي يشارك فيها المستخدم مع آخر رسالة في كل قناة"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -27,6 +37,7 @@ class ChatChannelListView(APIView):
         channels = user.chat_channels.all()
         data = []
         for ch in channels:
+            # استبعاد المستخدم الحالي من قائمة المشاركين لعرض الأسماء الأخرى فقط
             participants = ch.participants.exclude(id=user.id)
             last_msg = ch.last_message
             data.append({
@@ -43,6 +54,7 @@ class ChatChannelListView(APIView):
         return Response(data)
 
     def post(self, request):
+        """إنشاء قناة دردشة فردية جديدة بين المستخدم الحالي والمستخدم المحدد"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -54,6 +66,7 @@ class ChatChannelListView(APIView):
         except Person.DoesNotExist:
             return Response({'error': 'المستخدم غير موجود'}, status=status.HTTP_404_NOT_FOUND)
 
+        # التحقق من وجود قناة فردية مسبقاً بين المستخدمين لتجنب التكرار
         existing = ChatChannel.objects.filter(channel_type='direct', participants=user).filter(participants=recipient)
         if existing.exists():
             return Response({'id': existing.first().id, 'message': 'القناة موجودة مسبقاً'})
@@ -63,8 +76,11 @@ class ChatChannelListView(APIView):
         return Response({'id': channel.id, 'message': 'تم إنشاء القناة'}, status=status.HTTP_201_CREATED)
 
 
+# واجهة API لإدارة الرسائل داخل قناة دردشة
 class MessageListView(APIView):
+    """عرض جميع رسائل قناة معينة أو إرسال رسالة جديدة فيها"""
     def get(self, request, channel_id):
+        """إرجاع جميع الرسائل في قناة محددة بعد التحقق من مشاركة المستخدم في القناة"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -87,6 +103,7 @@ class MessageListView(APIView):
         return Response(data)
 
     def post(self, request, channel_id):
+        """إرسال رسالة جديدة في قناة معينة وإنشاء إشعار لكل مشارك آخر"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -102,6 +119,7 @@ class MessageListView(APIView):
             content=request.data.get('content', ''),
         )
 
+        # إنشاء إشعار لكل مشارك آخر في القناة
         recipients = channel.participants.exclude(id=user.id)
         for r in recipients:
             Notification.objects.create(
@@ -120,8 +138,11 @@ class MessageListView(APIView):
         }, status=status.HTTP_201_CREATED)
 
 
+# واجهة API لإدارة إشعارات المستخدم
 class NotificationListView(APIView):
+    """عرض إشعارات المستخدم وتحديث حالة قراءتها"""
     def get(self, request):
+        """إرجاع آخر 50 إشعار للمستخدم مع عدد الإشعارات غير المقروءة"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -142,12 +163,15 @@ class NotificationListView(APIView):
         return Response({'notifications': data, 'unread_count': unread_count})
 
     def patch(self, request):
+        """تحديث حالة الإشعار: تعليم الكل كمقروء أو تعليم إشعار واحد كمقروء"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
+        # تعليم جميع الإشعارات غير المقروءة كمقروءة
         if request.data.get('mark_all_read'):
             user.notifications.filter(is_read=False).update(is_read=True)
+        # تعليم إشعار محدد كمقروء
         elif request.data.get('notification_id'):
             try:
                 n = user.notifications.get(id=request.data['notification_id'])

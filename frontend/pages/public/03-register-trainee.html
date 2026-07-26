@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- صفحة تسجيل متدرب جديد في منصة TrainLink - نموذج ثلاث مراحل: معلومات شخصية، بيانات أكاديمية، مهارات ووثائق -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -9,19 +10,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين الأنماط الأساسية */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* المتغيرات اللونية والخطوط */
 :root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--dark:#0F0E1A;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif}
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-height:100vh}
+/* حاوية الصفحة: مقسمة للكتلة اليسرى واليمنى */
 .page{display:flex;min-height:100vh}
+/* ===== اللوحة اليسرى: شريط التقدم الخطوات الثلاث ===== */
 .left-panel{width:380px;flex-shrink:0;background:linear-gradient(135deg,#0F0E1A,#2D1B69);display:flex;flex-direction:column;padding:48px 36px;position:relative;overflow:hidden}
+/* التوهج الضوئي في الخلفية */
 .left-panel::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(91,79,207,0.2) 0%,transparent 70%);top:30%;left:50%;transform:translate(-50%,-50%)}
+/* شعار المنصة */
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:60px;position:relative;z-index:1}
 .logo-icon{width:38px;height:38px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center}
 .logo-icon i{color:white;font-size:20px}
 .logo-text{font-size:20px;font-weight:800;color:white}
+/* ===== شريط تقدم الخطوات الثلاث (الجانب الأيسر) ===== */
 .steps-nav{display:flex;flex-direction:column;gap:0;position:relative;z-index:1}
 .step-item{display:flex;align-items:flex-start;gap:14px;padding-bottom:32px;position:relative}
+/* الخط العمودي الذي يربط بين الخطوات */
 .step-item:not(:last-child)::after{content:'';position:absolute;right:17px;top:36px;width:2px;bottom:0;background:rgba(255,255,255,0.1)}
+/* رقم الخطوة */
 .step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;transition:all 0.3s}
 .step-num.done{background:var(--success);color:white}
 .step-num.active{background:var(--primary);color:white;box-shadow:0 0 0 4px rgba(91,79,207,0.3)}
@@ -30,18 +40,21 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
 .step-label{font-size:11px;color:#9B96B8;margin-bottom:3px}
 .step-name{font-size:14px;font-weight:600;color:white}
 .step-name.pending{color:#9B96B8}
+/* رابط تسجيل الدخول في أسفل اللوحة اليسرى */
 .left-bottom{margin-top:auto;position:relative;z-index:1}
 .left-bottom p{font-size:13px;color:#9B96B8;line-height:1.6}
 .left-bottom a{color:#A89CFF;text-decoration:none;font-weight:600}
  
-/* RIGHT */
+/* ===== اللوحة اليمنى: نموذج التسجيل ثلاث المراحل ===== */
 .right-panel{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
 .form-card{background:white;border-radius:var(--radius-lg);padding:40px 48px;width:100%;max-width:580px;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+/* إخفاء جميع المراحل ما عدا النشطة */
 .step-content{display:none}
 .step-content.active{display:block}
 .step-header{margin-bottom:28px}
 .step-title{font-size:22px;font-weight:800;color:var(--text-dark);margin-bottom:6px}
 .step-sub{font-size:14px;color:var(--text-mid)}
+/* صفوف النموذج (عمودين) */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .form-group{margin-bottom:16px}
 .form-label{display:block;font-size:13px;font-weight:600;color:var(--text-dark);margin-bottom:6px}
@@ -52,19 +65,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
 .form-select{width:100%;padding:11px 42px 11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:14px;font-family:var(--font);color:var(--text-dark);background:var(--bg);outline:none;appearance:none}
 .form-select:focus{border-color:var(--primary)}
  
-/* SKILLS */
+/* ===== منطقة المهارات القابلة للتحديد (المرحلة الثالثة) ===== */
 .skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+/* وسم مهارة واحد */
 .skill-tag{padding:6px 14px;border-radius:40px;font-size:13px;cursor:pointer;border:1.5px solid var(--border);color:var(--text-mid);background:var(--bg);font-family:var(--font);transition:all 0.15s}
 .skill-tag.selected{background:var(--primary-light);color:var(--primary);border-color:var(--primary)}
  
-/* UPLOAD */
+/* ===== منطقة رفع الملفات (وثيقة الهوية) ===== */
 .upload-area{border:2px dashed var(--border);border-radius:var(--radius-md);padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;margin-top:6px}
 .upload-area:hover{border-color:var(--primary);background:var(--primary-light)}
 .upload-icon{font-size:32px;color:var(--text-mid);margin-bottom:8px}
 .upload-text{font-size:13px;color:var(--text-mid)}
 .upload-text span{color:var(--primary);font-weight:600}
  
-/* PW STRENGTH */
+/* ===== مؤشر قوة كلمة المرور ===== */
 .pw-strength{margin-top:8px}
 .pw-bars{display:flex;gap:4px;margin-bottom:5px}
 .pw-bar{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background 0.3s}
@@ -73,14 +87,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
 .pw-bar.strong{background:var(--success)}
 .pw-label{font-size:11px;color:var(--text-mid)}
  
-/* NAVIGATION BTNS */
+/* ===== أزرار التنقل بين المراحل (السابق / التالي) ===== */
 .form-nav{display:flex;gap:12px;margin-top:24px}
 .btn-back{flex:1;padding:12px;border-radius:var(--radius-md);font-size:14px;font-weight:600;color:var(--text-mid);background:var(--bg);border:1.5px solid var(--border);cursor:pointer;font-family:var(--font);transition:all 0.15s}
 .btn-back:hover{border-color:var(--primary);color:var(--primary)}
 .btn-next{flex:2;padding:12px;border-radius:var(--radius-md);font-size:14px;font-weight:700;color:white;background:var(--primary);border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
 .btn-next:hover{background:var(--primary-dark);transform:translateY(-1px)}
  
-/* TERMS */
+/* ===== مربع الموافقة على الشروط ===== */
 .terms-check{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-mid);cursor:pointer;margin-bottom:16px}
 .terms-check input{margin-top:2px;accent-color:var(--primary);width:15px;height:15px;flex-shrink:0}
 .terms-check a{color:var(--primary);text-decoration:none;font-weight:600}
@@ -89,9 +103,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
 <body>
 <div class="page">
  
-  <!-- LEFT -->
+  <!-- ===== اللوحة اليسرى: شريط تقدم الخطوات الثلاث ===== -->
   <div class="left-panel">
     <div class="logo"><div class="logo-icon"><i class="ti ti-briefcase"></i></div><span class="logo-text">TrainLink</span></div>
+    <!-- شريط التقدم: ثلاث خطوات (شخصية، أكاديمية، مهارات) -->
     <div class="steps-nav">
       <div class="step-item">
         <div class="step-num active" id="sn1">1</div>
@@ -106,22 +121,25 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
         <div class="step-info"><div class="step-label">الخطوة 3 من 3</div><div class="step-name pending" id="sl3">المهارات والوثائق</div></div>
       </div>
     </div>
+    <!-- رابط تسجيل الدخول -->
     <div class="left-bottom">
       <p>لديك حساب بالفعل؟ <a href="02-login.html">سجّل دخولك</a></p>
     </div>
   </div>
  
-  <!-- RIGHT -->
+  <!-- ===== اللوحة اليمنى: نموذج التسجيل ثلاث المراحل ===== -->
   <div class="right-panel">
     <div class="form-card">
+      <!-- رسالة الخطأ العامة -->
       <div class="error-msg" id="regError" style="background:#FEE2E2;border:1px solid #FECACA;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:#DC2626;display:none;align-items:center;gap:8px;margin-bottom:14px"><i class="ti ti-alert-circle"></i><span id="regErrorText"></span></div>
 
-      <!-- STEP 1 -->
+      <!-- ===== المرحلة الأولى: المعلومات الشخصية ===== -->
       <div class="step-content active" id="step1">
         <div class="step-header">
           <div class="step-title">المعلومات الشخصية</div>
           <div class="step-sub">أدخل بياناتك الأساسية لإنشاء حسابك</div>
         </div>
+        <!-- حقول الاسم الأول والأخير -->
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">الاسم الأول</label>
@@ -132,14 +150,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             <div class="input-wrap"><i class="ti ti-user input-icon"></i><input type="text" class="form-input" id="regLastName" placeholder="محمود" required></div>
           </div>
         </div>
+        <!-- حقل البريد الإلكتروني -->
         <div class="form-group">
           <label class="form-label">البريد الإلكتروني</label>
           <div class="input-wrap"><i class="ti ti-mail input-icon"></i><input type="email" class="form-input" id="regEmail" placeholder="sara@email.com" required></div>
         </div>
+        <!-- حقل رقم الهاتف -->
         <div class="form-group">
           <label class="form-label">رقم الهاتف</label>
           <div class="input-wrap"><i class="ti ti-phone input-icon"></i><input type="tel" class="form-input" id="regPhone" placeholder="+970 59 000 0000"></div>
         </div>
+        <!-- قائمة اختيار موقع السكن -->
         <div class="form-group">
           <label class="form-label">موقع السكن</label>
           <div class="input-wrap"><i class="ti ti-map-pin input-icon"></i>
@@ -149,6 +170,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             </select>
           </div>
         </div>
+        <!-- حقل كلمة المرور مع مؤشر القوة -->
         <div class="form-group">
           <label class="form-label">كلمة المرور</label>
           <div class="input-wrap"><i class="ti ti-lock input-icon"></i><input type="password" class="form-input" id="pw1" placeholder="••••••••" oninput="checkStrength(this.value)" required></div>
@@ -157,21 +179,24 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             <div class="pw-label" id="pwLabel">أدخل كلمة مرور قوية (8+ أحرف، أرقام ورموز)</div>
           </div>
         </div>
+        <!-- حقل تأكيد كلمة المرور -->
         <div class="form-group">
           <label class="form-label">تأكيد كلمة المرور</label>
           <div class="input-wrap"><i class="ti ti-lock input-icon"></i><input type="password" class="form-input" id="regConfirmPw" placeholder="••••••••" required></div>
         </div>
+        <!-- زر الانتقال للمرحلة التالية -->
         <div class="form-nav">
           <button class="btn-next" onclick="goStep(2)">التالي <i class="ti ti-arrow-left"></i></button>
         </div>
       </div>
  
-      <!-- STEP 2 -->
+      <!-- ===== المرحلة الثانية: البيانات الأكاديمية ===== -->
       <div class="step-content" id="step2">
         <div class="step-header">
           <div class="step-title">البيانات الأكاديمية</div>
           <div class="step-sub">أخبرنا عن وضعك الأكاديمي لنجد أنسب الفرص لك</div>
         </div>
+        <!-- نوع الحساب (طالب جامعي أو خريج) -->
         <div class="form-group">
           <label class="form-label">نوع الحساب</label>
           <div class="input-wrap">
@@ -182,6 +207,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             </select>
           </div>
         </div>
+        <!-- قائمة اختيار الجامعة -->
         <div class="form-group">
           <label class="form-label">اسم الجامعة</label>
           <div class="input-wrap">
@@ -195,6 +221,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             </select>
           </div>
         </div>
+        <!-- قائمة اختيار التخصص -->
         <div class="form-group">
           <label class="form-label">التخصص</label>
           <div class="input-wrap">
@@ -209,6 +236,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             </select>
           </div>
         </div>
+        <!-- حقول السنة الدراسية والمعدل التراكمي -->
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">السنة الدراسية</label>
@@ -222,23 +250,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             <div class="input-wrap"><i class="ti ti-star input-icon"></i><input type="number" class="form-input" id="regGPA" placeholder="3.5" step="0.1" min="0" max="4"></div>
           </div>
         </div>
+        <!-- حقل ID المشرف (اختياري) للربط التلقائي -->
         <div class="form-group">
           <label class="form-label">ID المشرف (اختياري)</label>
           <div class="input-wrap"><i class="ti ti-id-badge input-icon"></i><input type="text" class="form-input" id="regSupervisor" placeholder="SUP-00001"></div>
           <div style="font-size:12px;color:var(--text-mid);margin-top:5px">أدخل ID مشرف المادة إذا كان لديك واحد للربط التلقائي</div>
         </div>
+        <!-- أزرار التنقل: السابق + التالي -->
         <div class="form-nav">
           <button class="btn-back" onclick="goStep(1)"><i class="ti ti-arrow-right"></i> السابق</button>
           <button class="btn-next" onclick="goStep(3)">التالي <i class="ti ti-arrow-left"></i></button>
         </div>
       </div>
  
-      <!-- STEP 3 -->
+      <!-- ===== المرحلة الثالثة: المهارات والوثائق ===== -->
       <div class="step-content" id="step3">
         <div class="step-header">
           <div class="step-title">المهارات والوثائق</div>
           <div class="step-sub">اختر مهاراتك وارفع وثيقة هويتك لإكمال التسجيل</div>
         </div>
+        <!-- قائمة المهارات القابلة للتحديد -->
         <div class="form-group">
           <label class="form-label">مهاراتك التقنية (اختر ما ينطبق)</label>
           <div class="skills-wrap">
@@ -256,6 +287,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             <button class="skill-tag" onclick="toggleSkill(this)">Flutter</button>
           </div>
         </div>
+        <!-- منطقة رفع وثيقة الهوية الرسمية -->
         <div class="form-group" style="margin-top:20px">
           <label class="form-label">وثيقة الهوية الرسمية</label>
           <div class="upload-area" onclick="document.getElementById('regFileInput').click()">
@@ -265,10 +297,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
             <div style="font-size:12px;color:var(--text-mid);margin-top:6px">بطاقة طالب / شهادة تخرج / هوية وطنية (PDF أو صورة)</div>
           </div>
         </div>
+        <!-- مربع الموافقة على شروط الاستخدام -->
         <label class="terms-check">
           <input type="checkbox" id="termsCheck">
           أوافق على <a href="#">شروط الاستخدام</a> و<a href="#">سياسة الخصوصية</a>
         </label>
+        <!-- أزرار التنقل: السابق + إنشاء الحساب -->
         <div class="form-nav">
           <button class="btn-back" onclick="goStep(2)"><i class="ti ti-arrow-right"></i> السابق</button>
           <button class="btn-next" onclick="doRegister()"><i class="ti ti-check"></i> إنشاء الحساب</button>
@@ -280,13 +314,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
 </div>
  
 <script>
+// ===== المتغير الحالي للمرحلة النشطة =====
 let currentStep = 1;
+
+// ===== دالة الانتقال بين مراحل التسجيل =====
+// تقوم بإخفاء المرحلة الحالية وإظهار المرحلة المحددة
 function goStep(n) {
   document.getElementById('step'+currentStep).classList.remove('active');
   currentStep = n;
   document.getElementById('step'+n).classList.add('active');
   updateNav();
 }
+
+// ===== دالة تحديث شريط التقدم في اللوحة اليسرى =====
+// تغير حالة كل خطوة (مكتملة / نشطة / قادمة) حسب المرحلة الحالية
 function updateNav() {
   for (let i = 1; i <= 3; i++) {
     const num = document.getElementById('sn'+i);
@@ -296,12 +337,21 @@ function updateNav() {
     else { num.className='step-num pending'; num.textContent=i; label.className='step-name pending'; }
   }
 }
+
+// ===== دالة تبديل تحديد مهارة (إضافة/إزالة) =====
 function toggleSkill(btn) { btn.classList.toggle('selected'); }
+
+// ===== دالة معالجة اختيار ملف الهوية =====
+// تعرض اسم الملف المختار بعد الرفع
 function handleFileSelect(input) {
   if (input.files && input.files[0]) {
     document.getElementById('uploadText').innerHTML = '<span style="color:var(--success)">✓ ' + input.files[0].name + '</span>';
   }
 }
+
+// ===== دالة فحص قوة كلمة المرور =====
+// تتحقق من: طول 8+ أحرف، أحرف كبيرة، أرقام، رموز خاصة
+// وتعرض مؤشر بصري من 4 شرائط
 function checkStrength(pw) {
   const bars = ['b1','b2','b3','b4'];
   const label = document.getElementById('pwLabel');
@@ -317,12 +367,20 @@ function checkStrength(pw) {
   });
   label.textContent = score <= 1 ? 'ضعيفة' : score <= 2 ? 'متوسطة' : score <= 3 ? 'جيدة' : 'قوية جداً ✓';
 }
+
+// ===== دالة عرض رسالة خطأ التسجيل =====
 function showRegError(msg) {
   document.getElementById('regErrorText').textContent = msg;
   document.getElementById('regError').style.display = 'flex';
 }
+
+// ===== الدالة الرئيسية لتسجيل المتدرب =====
+// تقوم بجمع جميع البيانات من المراحل الثلاث والتحقق من صحتها
+// ثم إرسالها للخادم عبر API
 async function doRegister() {
+  // التحقق من الموافقة على الشروط
   if (!document.getElementById('termsCheck').checked) { showRegError('يرجى الموافقة على الشروط والأحكام'); return; }
+  // جمع بيانات المرحلة الأولى (المعلومات الشخصية)
   const firstName = document.getElementById('regFirstName').value.trim();
   const lastName = document.getElementById('regLastName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
@@ -330,16 +388,20 @@ async function doRegister() {
   const location = document.querySelector('#step1 .form-select').value;
   const pw = document.getElementById('pw1').value;
   const confirmPw = document.getElementById('regConfirmPw').value;
+  // جمع بيانات المرحلة الثانية (البيانات الأكاديمية)
   const university = document.getElementById('regUniversity').value;
   const major = document.getElementById('regMajor').value;
   const year = document.getElementById('regYear').value;
   const gpa = document.getElementById('regGPA').value;
   const supervisorId = document.getElementById('regSupervisor').value.trim();
   const isGraduate = document.getElementById('regAccountType').value === 'graduate';
+  // جمع بيانات المرحلة الثالثة (المهارات المحددة)
   const skills = [...document.querySelectorAll('#step3 .skill-tag.selected')].map(t => t.textContent.trim()).join(',');
+  // التحقق من الحقول المطلوبة
   if (!firstName || !lastName || !email || !pw) { showRegError('يرجى ملء جميع الحقول المطلوبة'); return; }
   if (pw !== confirmPw) { showRegError('كلمتا المرور غير متطابقتين'); return; }
   if (pw.length < 8) { showRegError('كلمة المرور يجب أن تكون 8 أحرف على الأقل'); return; }
+  // تجهيز البيانات للإرسال
   const data = {
     full_name: firstName + ' ' + lastName,
     email, password: pw,
@@ -352,10 +414,12 @@ async function doRegister() {
     supervisor_id: supervisorId,
     skills: skills
   };
+  // تعطيل الزر وعرض رسالة التحميل
   const btn = document.querySelector('#step3 .btn-next');
   btn.disabled = true;
   btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> جاري إنشاء الحساب...';
   try {
+    // إرسال طلب التسجيل للخادم
     const res = await fetch('/api/auth/register/trainee/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -363,8 +427,10 @@ async function doRegister() {
     });
     const result = await res.json();
     if (res.ok) {
+      // عند النجاح: توجيه لصفحة التحقق من OTP
       window.location.href = '07-otp-verification.html?email=' + encodeURIComponent(email);
     } else {
+      // عرض رسالة الخطأ من الخادم
       const msg = result.error || result.detail || Object.values(result).flat().join(', ') || 'خطأ في التسجيل';
       showRegError(msg);
     }
@@ -372,6 +438,7 @@ async function doRegister() {
     console.error('Registration error:', e);
     showRegError('حدث خطأ: ' + e.message);
   } finally {
+    // إعادة تفعيل الزر
     btn.disabled = false;
     btn.innerHTML = '<i class="ti ti-check"></i> إنشاء الحساب';
   }

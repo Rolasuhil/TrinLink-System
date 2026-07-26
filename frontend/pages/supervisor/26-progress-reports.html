@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+<!-- صفحة تقارير الأداء: تعرض تقارير تقدم المتدربين مع تقييمات الأداء وملاحظات الذكاء الاصطناعي مع إمكانية الفلترة والفرز -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,14 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين الأنماط الأساسية */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* المتغيرات العامة */
 :root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+/* نمط الصفحة الأساسي */
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+/* الشريط الجانبي */
 .sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+/* عناصر التنقل */
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
 .nav-item.active i,.nav-item.active span{color:var(--warning)!important}
@@ -29,55 +35,75 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .user-id{background:rgba(245,158,11,0.2);color:var(--warning);font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:5px;cursor:pointer}
 .user-id:hover{background:rgba(245,158,11,0.35)}
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+/* المحتوى الرئيسي */
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
 .topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
 .topbar-title{font-size:16px;font-weight:700}
 .topbar-sub{font-size:12px;color:var(--text-mid)}
 .content{padding:20px 24px;flex:1}
+/* التخطيط الرئيسي: عمودان - لوحة الفلاتر (260px) والمحتوى الرئيسي (المتبقي) */
 .layout{display:grid;grid-template-columns:260px 1fr;gap:20px}
+/* لوحة الفلاتر على اليسار */
 .filter-panel{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;height:fit-content;position:sticky;top:80px}
 .filter-title{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:14px}
 .filter-section{margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:16px}
 .filter-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
 .filter-section-title{font-size:12px;font-weight:700;color:var(--text-dark);margin-bottom:8px}
+/* خيار الفلتر */
 .filter-opt{display:flex;align-items:center;gap:8px;margin-bottom:7px;cursor:pointer;font-size:13px;color:var(--text-mid)}
 .filter-opt input{accent-color:var(--warning);width:15px;height:15px}
+/* رأس قسم التقارير */
 .reports-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .reports-count{font-size:14px;font-weight:600;color:var(--text-dark)}
+/* قائمة الفرز */
 .sort-select{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-family:var(--font);color:var(--text-mid);background:white;outline:none}
+/* بطاقة التقرير */
 .report-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;transition:all 0.2s}
 .report-card:hover{border-color:var(--warning);box-shadow:0 4px 16px rgba(245,158,11,0.08)}
+/* التقرير الجديد: حافة يمينية ملونة */
 .report-card.new{border-right:3px solid var(--warning)}
 .report-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+/* صورة المتدرب في التقرير */
 .r-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0}
 .r-name{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
 .r-meta{font-size:12px;color:var(--text-mid);display:flex;align-items:center;gap:6px}
+/* شارة رقم الأسبوع */
 .r-week{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--primary-light);color:var(--primary);margin-right:auto;flex-shrink:0}
+/* شارة التقرير الجديد */
 .r-new{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--warning-light);color:#B45309}
+/* قسم التقييم: يعرض التقييم الكبير والنجوم وأشرطة الفئات */
 .rating-section{display:flex;align-items:center;gap:16px;margin-bottom:12px;padding:10px;background:var(--bg);border-radius:var(--radius-md)}
 .rating-big{font-size:28px;font-weight:900;color:var(--text-dark)}
 .rating-stars{color:var(--warning);font-size:16px;margin-bottom:4px}
 .rating-label{font-size:11px;color:var(--text-mid)}
+/* أشرطة الفئات الفرعية (الجودة، الالتزام، الإبداع) */
 .rating-bars{flex:1}
 .rb-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .rb-label{font-size:11px;color:var(--text-mid);width:60px}
 .rb-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
 .rb-fill{height:100%;border-radius:3px}
+/* محتوى التقرير: الملاحظات والملخصات */
 .report-content{font-size:13px;color:var(--text-mid);line-height:1.8;margin-bottom:12px}
+/* ذيل التقرير: أزرار الإجراءات */
 .report-footer{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
 .btn-sm{padding:7px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:5px;border:none;transition:all 0.15s}
 .btn-warning{background:var(--warning);color:white}
 .btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
 .btn-success{background:var(--success);color:white}
+/* شارة الذكاء الاصطناعي */
 .ai-badge{background:var(--primary-light);color:var(--primary);font-size:10px;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px}
+/* حالة فارغة */
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-mid)}
 .empty-state i{font-size:48px;margin-bottom:12px;display:block;color:var(--border)}
 .empty-state p{font-size:14px}
+/* إشعار منبّه */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
 .toast.show{display:flex}
 </style>
 </head>
 <body>
+
+<!-- الشريط الجانبي -->
 <nav class="sidebar">
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
   <div class="sidebar-user">
@@ -95,51 +121,69 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </nav>
 
 <div class="main">
+  <!-- الشريط العلوي -->
   <div class="topbar">
     <div><div class="topbar-title">تقارير الأداء 📊</div><div class="topbar-sub" id="reportCount">جاري التحميل...</div></div>
   </div>
   <div class="content">
     <div class="layout">
+      <!-- لوحة الفلاتر الجانبية: فلترة حسب المتدرب وحالة تأكيد الحضور -->
       <div class="filter-panel">
         <div class="filter-title">فلترة التقارير</div>
         <div class="filter-section">
+          <!-- فلتر اختيار المتدرب -->
           <div class="filter-section-title">المتدرب</div>
           <div id="traineeFilters"><span style="font-size:12px;color:var(--text-mid)">جاري التحميل...</span></div>
         </div>
         <div class="filter-section">
+          <!-- فلتر حالة الحضور: تم التأكيد / لم يُؤكَّد -->
           <div class="filter-section-title">الحالة</div>
           <label class="filter-opt"><input type="checkbox" id="filterConfirmed" checked onchange="renderReports()">تم تأكيد الحضور</label>
           <label class="filter-opt"><input type="checkbox" id="filterNotConfirmed" checked onchange="renderReports()">لم يُؤكَّد</label>
         </div>
       </div>
       <div>
+        <!-- رأس قسم التقارير: عدد النتائج وخيارات الفرز -->
         <div class="reports-header">
           <div class="reports-count" id="reportsLabel">عُثر على <strong>0</strong> تقرير</div>
           <select class="sort-select" id="sortSelect" onchange="renderReports()"><option>الأحدث</option><option>الأعلى تقييماً</option><option>الأضعف</option></select>
         </div>
+        <!-- حاوية التقارير: يتم ملؤها ديناميكياً -->
         <div id="reportsContainer"></div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- إشعار منبّه -->
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+
 <script>
+// عنوان API الأساسي
 const API='/api/performance';
+// مصفوفات لتخزين التقارير والمتدربين
 let allReports=[];
 let allTrainees=[];
+// دالة جلب رمز المصادقة
 function getToken(){return localStorage.getItem('trainlink_token')}
+// دالة عرض إشعار منبّه مؤقت
 function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
 
+// دالة استخراج الأحرف الأولى من الاسم
 function getInitials(name){if(!name)return'?';const p=name.split(' ');return p.length>1?(p[0][0]+p[1][0]):p[0].substring(0,2)}
 const colors=['#5B4FCF','#FF6B6B','#22C55E','#7C3AED','#F59E0B','#0EA5E9','#EC4899','#14B8A6'];
 
+// دالة تحويل رقم التقييم إلى نص وصفي (ممتاز/جيد/متوسط/ضعيف)
 function getScoreLabel(s){if(!s)return'';if(s>=4.5)return'ممتاز';if(s>=3.5)return'جيد';if(s>=2.5)return'متوسط';return'ضعيف'}
+// دالة تحويل رقم التقييم إلى لون مناسب
 function getScoreColor(s){if(!s)return'var(--text-mid)';if(s>=4.5)return'var(--success)';if(s>=3.5)return'var(--warning)';return'var(--accent)'}
+// دالة تحويل رقم التقييم إلى نجوم مرئية (5 نجوم)
 function getStars(s){if(!s)return'';const full=Math.floor(s);return '★'.repeat(full)+'☆'.repeat(5-full)}
 
+// دالة عرض التقارير: تصفية حسب الحالة ثم الفرز ثم إنشاء البطاقات
 function renderReports(){
   let list=[...allReports];
+  // تطبيق فلتر حالة الحضور
   const confirmed=document.getElementById('filterConfirmed').checked;
   const notConfirmed=document.getElementById('filterNotConfirmed').checked;
   list=list.filter(r=>{
@@ -147,15 +191,19 @@ function renderReports(){
     if(!r.attendance_confirmed&&!notConfirmed)return false;
     return true;
   });
+  // تطبيق الفرز حسب الاختيار
   const sort=document.getElementById('sortSelect').value;
   if(sort==='الأعلى تقييماً')list.sort((a,b)=>(b.performance_score||0)-(a.performance_score||0));
   else if(sort==='الأضعف')list.sort((a,b)=>(a.performance_score||0)-(b.performance_score||0));
   else list.sort((a,b)=>(b.id||0)-(a.id||0));
 
+  // تحديث عداد النتائج
   document.getElementById('reportsLabel').innerHTML='عُثر على <strong>'+list.length+'</strong> تقرير';
   const container=document.getElementById('reportsContainer');
+  // عرض حالة فارغة إذا لم توجد تقارير
   if(!list.length){container.innerHTML='<div class="empty-state"><i class="ti ti-chart-line"></i><p>لا توجد تقارير أداء</p></div>';return}
 
+  // إنشاء بطاقة تقرير لكل نتيجة
   container.innerHTML=list.map((r,i)=>{
     const c=colors[i%colors.length];
     const ini=getInitials(r.trainee_name);
@@ -163,6 +211,7 @@ function renderReports(){
     const scoreLabel=getScoreLabel(score);
     const scoreColor=getScoreColor(score);
     const stars=getStars(score);
+    // حساب قيم الفئات الفرعية بناءً على التقييم العام
     const quality=Math.min(5,Math.max(1,score+0.3+(Math.random()*0.4-0.2))).toFixed(1);
     const commitment=Math.min(5,Math.max(1,score-0.2+(Math.random()*0.4-0.2))).toFixed(1);
     const creativity=Math.min(5,Math.max(1,score-0.5+(Math.random()*0.4))).toFixed(1);
@@ -188,6 +237,7 @@ function renderReports(){
           ${isNew?'<span class="r-new">جديد</span>':''}
         </div>
       </div>
+      <!-- قسم التقييم: التقييم الكبير والنجوم وأشرطة الجودة والالتزام والإبداع -->
       <div class="rating-section" style="background:${ratingBg}">
         <div><div class="rating-big" style="color:${scoreColor}">${score.toFixed(1)}</div><div class="rating-stars">${stars}</div><div class="rating-label" style="color:${scoreColor}">${scoreLabel}</div></div>
         <div class="rating-bars">
@@ -206,9 +256,11 @@ function renderReports(){
   }).join('');
 }
 
+// عند تحميل الصفحة: جلب التقارير والمتدربين من الخادم بشكل متوازي
 document.addEventListener('DOMContentLoaded',async()=>{
   if(!getToken()){window.location.href='../public/02-login.html';return}
   try{
+    // جلب التقارير والمتدربين في نفس الوقت (Promise.all)
     const [reportsRes,traineesRes]=await Promise.all([
       fetch(API+'/performance-reports/',{headers:{'Authorization':'Bearer '+getToken()}}),
       fetch(API+'/supervisor/trainees/',{headers:{'Authorization':'Bearer '+getToken()}})
@@ -216,11 +268,14 @@ document.addEventListener('DOMContentLoaded',async()=>{
     if(reportsRes.ok)allReports=await reportsRes.json();
     if(traineesRes.ok)allTrainees=await traineesRes.json();
 
+    // تحديث عداد التقارير
     document.getElementById('reportCount').textContent=allReports.length+' تقارير أداء';
+    // إنشاء فلاتر المتدربين ديناميكياً من أسماء المتدربين الفريدة
     const traineeNames=[...new Set(allReports.map(r=>r.trainee_name))];
     document.getElementById('traineeFilters').innerHTML=traineeNames.length?traineeNames.map(n=>'<label class="filter-opt"><input type="checkbox" checked onchange="renderReports()">'+n+'</label>').join(''):'<span style="font-size:12px;color:var(--text-mid)">لا يوجد متدربون</span>';
     renderReports();
   }catch(e){
+    // عرض رسالة خطأ في حال فشل التحميل
     document.getElementById('reportsContainer').innerHTML='<div class="empty-state"><i class="ti ti-alert-circle"></i><p>حدث خطأ في تحميل البيانات</p></div>';
   }
 });

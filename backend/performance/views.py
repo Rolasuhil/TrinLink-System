@@ -1,3 +1,6 @@
+# ملف واجهات برمجة التطبيقات لأداء النظام
+# يحتوي على منطق إدارة الحضور اليومي والتقارير اليومية والأسبوعية وقائمة المتدربين للمشرف
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +10,9 @@ import jwt
 
 
 def get_user(request):
+    """دالة مساعدة لاستخراج بيانات المستخدم من رمز JWT في طلب التصريح
+    ترجع كائن الشخص إذا كان الرمز صالحاً، أو None إذا لم يكن كذلك
+    """
     auth = request.headers.get('Authorization', '')
     if not auth.startswith('Bearer '):
         return None
@@ -19,7 +25,14 @@ def get_user(request):
 
 
 class DailyAttendanceView(APIView):
+    """واجهة سجل الحضور اليومي
+    تسمح للمتدربين بتسجيل حضورهم وانصرافهم اليومي وعرض سجل حضورهم
+    """
+
     def get(self, request):
+        """جلب سجل الحضور الكامل للمتدرب
+        ترجع قائمة بجميع سجلات الحضور مع التواريخ والأوقات والحالات
+        """
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -36,12 +49,18 @@ class DailyAttendanceView(APIView):
         return Response(data)
 
     def post(self, request):
+        """تسجيل الحضور أو الانصراف
+        - إذا لم يسجل المتدرب حضوره اليوم: يسجّل حضوره مع الوقت الحالي
+        - إذا كان طلب تسجيل انصراف: يسجّل وقت الانصراف
+        - إذا كان قد سجّل حضوره مسبقاً: يُرجع رسالة تأكيد
+        """
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
         from django.utils import timezone
         today = timezone.now().date()
+        # محاولة إنشاء سجل حضور جديد أو الحصول على السجل الحالي
         attendance, created = DailyAttendance.objects.get_or_create(
             trainee=user.trainee_profile,
             date=today,
@@ -51,6 +70,7 @@ class DailyAttendanceView(APIView):
             }
         )
         if not created:
+            # إذا كان السجل موجوداً بالفعل، تحقق من طلب الانصراف
             if request.data.get('action') == 'checkout':
                 attendance.check_out_time = timezone.now()
                 attendance.save()
@@ -61,7 +81,14 @@ class DailyAttendanceView(APIView):
 
 
 class WorkReportView(APIView):
+    """واجهة التقارير اليومية للمتدرب
+    تسمح للمتدربين برفع تقارير مهامهم اليومية وعرض تقاريرهم السابقة
+    """
+
     def get(self, request):
+        """جلب جميع التقارير اليومية للمتدرب
+        ترجع قائمة بالتقارير مع عناوين المهام والوصف والتقييم وملاحظات الشركة
+        """
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -78,6 +105,9 @@ class WorkReportView(APIView):
         return Response(data)
 
     def post(self, request):
+        """تقديم تقرير عمل يومي جديد
+        ينشئ سجلاً جديداً بالتقرير اليومي للمتدرب
+        """
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -91,14 +121,25 @@ class WorkReportView(APIView):
 
 
 class PerformanceReportView(APIView):
+    """واجهة تقارير الأداء الأسبوعية
+    تسمح للشركات بتقييم أداء المتدربين وعرض التقارير حسب نوع المستخدم
+    """
+
     def get(self, request):
+        """جلب تقارير الأداء الأسبوعية
+        - الشركة: ترى تقارير المتدربين الذين يقيّمون أداءهم
+        - المشرف: يرى تقارير المتدربين المعيّنين تحت إشرافه
+        - المتدرب: يرى تقارير أداءه الخاصة
+        """
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
+        # جلب التقارير حسب نوع المستخدم
         if user.person_type == 'company':
             reports = PerformanceReport.objects.filter(company=user.company_profile)
         elif user.person_type == 'supervisor':
+            # جلب المتدربين المعيّنين للمشرف ثم جلب تقاريرهم
             assignments = SupervisionAssignment.objects.filter(supervisor=user.supervisor_profile, status='active')
             trainee_ids = assignments.values_list('trainee_id', flat=True)
             reports = PerformanceReport.objects.filter(trainee_id__in=trainee_ids)
@@ -120,6 +161,9 @@ class PerformanceReportView(APIView):
         return Response(data)
 
     def post(self, request):
+        """إنشاء تقرير أداء أسبوعي جديد
+        فقط الشركات يمكنها تقديم تقارير الأداء للمتدربين
+        """
         user = get_user(request)
         if not user or user.person_type != 'company':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -142,11 +186,19 @@ class PerformanceReportView(APIView):
 
 
 class SupervisorTraineesView(APIView):
+    """واجهة جلب قائمة المتدربين المعيّنين للمشرف
+    ترجع جميع المتدربين النشطين تحت إشراف المشرف مع معلوماتهم الأكاديمية
+    """
+
     def get(self, request):
+        """جلب قائمة المتدربين النشطين تحت إشراف المشرف
+        ترجع: الاسم، الجامعة، التخصص، المعدل، تاريخ التعيين
+        """
         user = get_user(request)
         if not user or user.person_type != 'supervisor':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
 
+        # جلب التعيينات النشطة فقط
         assignments = SupervisionAssignment.objects.filter(
             supervisor=user.supervisor_profile, status='active'
         )

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿<!-- صفحة تعيين المتدربيين للمشرفين - تتيح للمدير اختيار متدرب وقسم وفرصة تدريبية ثم تعيينه يدوياً مع عرض نسب المطابقة والتعيينات الحالية -->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,9 +8,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين شاملة لجميع العناصر */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* المتغيرات العامة: الألوان والخطوط والأبعاد */
 :root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+/* تخطيط الصفحة الأساسي */
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+
+/* --- أنماط القائمة الجانبية --- */
+/* حاوية القائمة الجانبية المظلمة على اليمين */
 .sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
@@ -29,26 +37,45 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .topbar-title{font-size:16px;font-weight:700}
 .topbar-sub{font-size:12px;color:var(--text-mid)}
 .content{padding:20px 24px;flex:1;max-width:900px}
+
+/* --- أنماط البطاقات --- */
 .card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
 .card-title{font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .card-title i{color:var(--primary);font-size:18px}
+/* --- نموذج تعيين المتدربين --- */
+/* مجموعة حقل الإدخال */
 .form-group{margin-bottom:14px}
+
+/* تسمية حقل الإدخال */
 .form-label{font-size:12px;font-weight:700;color:var(--text-dark);display:block;margin-bottom:5px}
+
+/* قائمة منسدلة للاختيار */
 .form-select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none;background:var(--bg);appearance:none;cursor:pointer;transition:all 0.15s}
 .form-select:focus{border-color:var(--primary);background:white}
+
+/* --- بطاقة فرصة التدريب المطابقة --- */
 .match-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;transition:all 0.15s;cursor:pointer}
 .match-card:hover{border-color:var(--primary);background:var(--primary-light)}
 .match-card.selected{border-color:var(--primary);background:var(--primary-light);box-shadow:0 0 0 2px var(--primary)}
+
+/* الصورة الرمزية لبطاقة المطابقة */
 .match-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;flex-shrink:0}
+
+/* معلومات الفرصة المطابقة */
 .match-info{flex:1}
 .match-name{font-size:14px;font-weight:700;color:var(--text-dark)}
 .match-dept{font-size:12px;color:var(--text-mid);margin-top:2px}
+
+/* نسبة المطابقة */
 .match-score{display:flex;flex-direction:column;align-items:center}
 .match-percent{font-size:20px;font-weight:800;color:var(--primary)}
 .match-label{font-size:10px;color:var(--text-mid)}
+
+/* دائرة الاختيار */
 .match-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all 0.15s}
 .match-card.selected .match-check{background:var(--primary);border-color:var(--primary)}
 .match-card.selected .match-check::after{content:'✓';color:white;font-size:12px;font-weight:700}
+/* الأزرار */
 .btn{padding:10px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
 .btn-primary{background:var(--primary);color:white}
 .btn-primary:hover{background:var(--primary-dark)}
@@ -56,15 +83,21 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .btn-row{display:flex;gap:10px;margin-top:16px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
 .toast.show{display:flex}
+
+/* --- قائمة التعيينات الحالية --- */
 .assigned-list{margin-top:16px}
+
+/* عنصر تعيين فردي في القائمة */
 .assigned-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--radius-md);margin-bottom:8px}
 .assigned-item .match-avatar{width:36px;height:36px;font-size:11px}
 </style>
 </head>
 <body>
 
+<!-- === القائمة الجانبية === -->
 <nav class="sidebar">
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
+  <!-- معلومات المدير -->
   <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
     <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
     <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
@@ -82,7 +115,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </nav>
 
+<!-- === المحتوى الرئيسي === -->
 <div class="main">
+  <!-- شريط العنوان -->
   <div class="topbar">
     <div>
       <div class="topbar-title">تعيين المتدربيين 🎯</div>
@@ -91,6 +126,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 
   <div class="content">
+    <!-- === بطاقة معايير التعيين (اختيار المتدرب والقسم والشركة والموقع) === -->
     <div class="card">
       <div class="card-title"><i class="ti ti-settings"></i>معايير التعيين</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -138,7 +174,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
     </div>
 
     <!-- MATCHES -->
+    <!-- === قسم الفرص المطابقة (يظهر عند اختيار المتدرب) === -->
     <div id="matchesArea" style="display:none">
+      <!-- بطاقة عرض الفرص المطابقة مع نسب المطابقة -->
       <div class="card">
         <div class="card-title"><i class="ti ti-sparkles"></i>الفرص المطابقة — سارة محمود</div>
         <div class="match-card selected" onclick="this.classList.toggle('selected')">
@@ -168,6 +206,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
     </div>
 
     <!-- ASSIGNED LIST -->
+    <!-- === قائمة التعيينات الحالية === -->
     <div class="card">
       <div class="card-title"><i class="ti ti-list"></i>التعيينات الحالية</div>
       <div class="assigned-item">
@@ -201,22 +240,36 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
+// === ملف جافاسكريبت لتعيين المتدربيين للمشرفين ===
+
+// التحقق من صحة تسجيل الدخول
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+
+// عنوان واجهة برمجة التطبيقات
 const API_BASE='/api';
+
+// دالة الحصول على رمز المصادقة
 function getToken(){return localStorage.getItem('trainlink_token')}
+
+// دالة الحصول على بيانات المستخدم الحالي
 function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
+
+// دالة إنشاء رؤوس طلب المصادقة
 function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
 
+// === عند تحميل الصفحة بالكامل ===
 document.addEventListener('DOMContentLoaded',async function(){
   var traineeSelect=document.getElementById('traineeSelect');
 
   try{
+    // جلب البيانات من الخادم بشكل متزامن: المتدربيين، المشرفين، والتعيينات الحالية
     var[trainRes,supRes,assignRes]=await Promise.all([
       fetch(API_BASE+'/admin-panel/users/?type=trainee',{headers:authHeaders()}),
       fetch(API_BASE+'/admin-panel/users/?type=supervisor',{headers:authHeaders()}),
       fetch(API_BASE+'/admin-panel/assign/',{headers:authHeaders()})
     ]);
 
+    // ملء قائمة المتدربيين بالبيانات من الخادم
     if(trainRes.ok){
       var tData=await trainRes.json();
       var tList=tData.results||tData;
@@ -231,6 +284,7 @@ document.addEventListener('DOMContentLoaded',async function(){
       }
     }
 
+    // ملء قائمة المشرفين بالبيانات من الخادم
     if(supRes.ok){
       var sData=await supRes.json();
       var sList=sData.results||sData;
@@ -246,6 +300,7 @@ document.addEventListener('DOMContentLoaded',async function(){
       }
     }
 
+    // عرض التعيينات الحالية في القائمة
     if(assignRes.ok){
       var aData=await assignRes.json();
       var assignments=aData.assignments||aData;
@@ -272,6 +327,7 @@ document.addEventListener('DOMContentLoaded',async function(){
   }catch(e){console.log('Error loading data:',e)}
 });
 
+// دالة عرض الفرص المطابقة عند اختيار المتدرب
 function showMatches(){
   var trainee=document.getElementById('traineeSelect').value;
   if(trainee){
@@ -284,6 +340,7 @@ function showMatches(){
   }
 }
 
+// دالة تأكيد تعيين المتدرب للمشرف وإرسال الطلب للخادم
 async function assignTrainee(){
   var traineeId=document.getElementById('traineeSelect').value;
   var supervisorSelect=document.getElementById('supervisorSelect');
@@ -304,6 +361,7 @@ async function assignTrainee(){
   }catch(e){console.log(e);showToast('حدث خطأ');}
 }
 
+// دالة عرض رسالة تنبيه عائمة
 function showToast(msg){
   var t=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;

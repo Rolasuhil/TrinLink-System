@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة تفاصيل فرصة التدريب (10-internship-details.html)
+  ========================================
+  الغرض: عرض تفاصيل فرصة تدريب محددة من جميع الجوانب.
+  تجلب البيانات من API عبر ?id= في الرابط.
+  تتضمن: وصف الفرصة، المهارات المطلوبة، تقييمات المتدربين السابقين، معلومات الشركة، تقدم المشابهين.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -277,18 +286,37 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — تفاصيل فرصة التدريب -->
+<!-- ======================================== -->
 <script>
+/*
+ * ===========================================
+ * أكواد JavaScript — تفاصيل فرصة التدريب
+ * ===========================================
+ * الدوال الرئيسية:
+ * 1. جلب تفاصيل الفرصة من API عبر ?id=
+ * 2. جلب ملف المتدرب الشخصي
+ * 3. إرسال طلب التقديم مع رفع CV
+ * 4. عرض فرص مشابهة من نفس الشركة
+ * 5. عرض تقييمات المتدربين السابقين
+ * 6. حساب عدد الأيام المتبقية للددلاين
+ * ===========================================
+ */
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 var API='/api';
 var token=localStorage.getItem('trainlink_token');
+/* --- متغيرات لتخزين بيانات الفرصة والشركة --- */
 var internData=null;
 var companyData=null;
 
 function authHeaders(){return {'Authorization':'Bearer '+token};}
 function showToast(msg){var t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
 
+// استخراج معرف الفرصة من رابط URL
 function getUrlId(){return new URLSearchParams(window.location.search).get('id');}
 
+// التبديل بين تبويبات المحتوى (الوصف / المراجع / الشركة)
 function switchTab(btn,id){
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
   document.querySelectorAll('.tab-content').forEach(function(c){c.classList.remove('active');});
@@ -308,6 +336,7 @@ function openModal(){document.getElementById('applyModal').classList.add('open')
 function closeModal(){document.getElementById('applyModal').classList.remove('open');}
 function onCvSelected(input){if(input.files&&input.files[0]){document.getElementById('cvLabel').innerHTML='<span style="color:var(--success)"><i class="ti ti-check"></i> '+input.files[0].name+'</span>';}}
 
+// إرسال طلب التقديم على الفرصة مع رفع ملف السيرة الذاتية
 async function submitApp(){
   var id=getUrlId();
   if(!id){showToast('خطأ: لا توجد فرصة');return;}
@@ -347,6 +376,7 @@ function daysUntil(dateStr){
   return diff;
 }
 
+// جلب تفاصيل الفرصة من API وعرضها في الصفحة
 async function loadInternship(){
   var id=getUrlId();
   if(!id){showToast('لم يتم تحديد الفرصة');return;}
@@ -437,6 +467,7 @@ async function loadInternship(){
   }catch(e){showToast('حدث خطأ في تحميل تفاصيل الفرصة');}
 }
 
+// جلب فرص مشابهة من نفس الشركة لعرضها في القسم السفلي
 async function loadSimilar(companyId){
   try{
     var res=await fetch(API+'/internships/',{headers:authHeaders()});

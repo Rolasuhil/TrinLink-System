@@ -1,3 +1,8 @@
+"""
+ views API لتطبيق المجتمع
+تتضمن واجهات برمجية لإدارة المنشورات والتعليقات و تقييمات الشركات
+"""
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,7 +11,9 @@ from django.conf import settings
 import jwt
 
 
+# دالة مساعدة لاستخراج المستخدم من رمز JWT في رأس التصريح
 def get_user(request):
+    """تستخرج المستخدم الحالي من التوكن المُرسل في رأس Authorization"""
     auth = request.headers.get('Authorization', '')
     if not auth.startswith('Bearer '):
         return None
@@ -18,8 +25,11 @@ def get_user(request):
         return None
 
 
+# واجهة API لعرض جميع المنشورات وإنشاء منشور جديد
 class PostListView(APIView):
+    """عرض و إنشاء منشورات المجتمع - GET يُرجع جميع المنشورات المعتمدة، POST يُنشئ منشوراً جديداً"""
     def get(self, request):
+        """إرجاع جميع المنشورات المعتمدة مرتبة من الأحدث إلى الأقدم"""
         posts = CommunityPost.objects.filter(is_approved=True)
         data = [{
             'id': p.id,
@@ -35,6 +45,7 @@ class PostListView(APIView):
         return Response(data)
 
     def post(self, request):
+        """إنشاء منشور جديد بعد التحقق من هوية المستخدم"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -47,8 +58,11 @@ class PostListView(APIView):
         return Response({'message': 'تم النشر بنجاح', 'id': post.id}, status=status.HTTP_201_CREATED)
 
 
+# واجهة API لعرض تفاصيل منشور معين أو حذفه
 class PostDetailView(APIView):
+    """عرض تفاصيل منشور واحد مع تعليقاته أو حذفه إذا كان الكاتب هو المستخدم الحالي"""
     def get(self, request, pk):
+        """إرجاع تفاصيل منشور محدد بناءً على المعرّف"""
         try:
             post = CommunityPost.objects.get(id=pk)
         except CommunityPost.DoesNotExist:
@@ -71,6 +85,7 @@ class PostDetailView(APIView):
         })
 
     def delete(self, request, pk):
+        """حذف منشور - يُسمح فقط للكاتب بحذف منشوره"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -82,8 +97,11 @@ class PostDetailView(APIView):
             return Response({'error': 'غير موجود'}, status=status.HTTP_404_NOT_FOUND)
 
 
+# واجهة API لإضافة تعليق جديد على منشور
 class CommentCreateView(APIView):
+    """إضافة تعليق جديد على منشور محدد، ويُزداد عدّاد التعليقات تلقائياً"""
     def post(self, request, post_id):
+        """إنشاء تعليق جديد بعد التحقق من صلاحية المستخدم ووجود المنشور"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -103,8 +121,11 @@ class CommentCreateView(APIView):
         return Response({'message': 'تمت إضافة التعليق', 'id': comment.id}, status=status.HTTP_201_CREATED)
 
 
+# واجهة API لإدارة تقييمات الشركات بناءً على معرّف الشركة
 class CompanyRatingView(APIView):
+    """عرض تقييمات شركة محددة أو إضافة تقييم جديد لها"""
     def get(self, request, company_id):
+        """إرجاع جميع تقييمات شركة محددة مع متوسط التقييم وعدد التقييمات"""
         ratings = CompanyRating.objects.filter(company_id=company_id)
         data = [{
             'id': r.id,
@@ -118,6 +139,7 @@ class CompanyRatingView(APIView):
         return Response({'ratings': data, 'average_score': round(avg_score, 1), 'total': len(data)})
 
     def post(self, request, company_id):
+        """إضافة تقييم جديد لشركة - متاح فقط للمتدربين"""
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -137,8 +159,11 @@ class CompanyRatingView(APIView):
         return Response({'message': 'تم التقييم بنجاح'}, status=status.HTTP_201_CREATED)
 
 
+# واجهة API للإعجاب بالمنشورات
 class PostLikeView(APIView):
+    """إضافة إعجاب لمنشور معين وزيادة عدّاد الإعجابات"""
     def post(self, request, post_id):
+        """زيادة عدد إعجابات منشور بمعرّف محدد بعد التحقق من هوية المستخدم"""
         user = get_user(request)
         if not user:
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -151,8 +176,11 @@ class PostLikeView(APIView):
         return Response({'message': 'تم الإعجاب', 'likes_count': post.likes_count})
 
 
+# واجهة API شاملة لإدارة تقييمات الشركات بدون تحديد شركة معينة
 class CompanyRatingFlatView(APIView):
+    """عرض آخر 10 تقييمات لجميع الشركات أو إضافة تقييم جديد"""
     def get(self, request):
+        """إرجاع آخر 10 تقييمات مرتبة من الأحدث مع بيانات الشركة والمتدرب"""
         ratings = CompanyRating.objects.select_related(
             'company', 'company__person', 'trainee', 'trainee__person'
         ).order_by('-created_at')[:10]
@@ -170,6 +198,7 @@ class CompanyRatingFlatView(APIView):
         return Response(data)
 
     def post(self, request):
+        """إضافة تقييم جديد لشركة محددة - يتطلب تحديد company_id"""
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)

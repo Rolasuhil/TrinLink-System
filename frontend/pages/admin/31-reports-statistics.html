@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿<!-- صفحة التقارير والإحصائيات - تعرض نظرة شاملة على أداء المنصة تتضمن إحصائيات المستخدمين وفرص التدريب وطلبات التدريب ونسبة النجاح مع رسوم بيانية تفاعلية -->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,9 +8,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين شاملة لجميع العناصر */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* المتغيرات العامة: الألوان والخطوط والأبعاد */
 :root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+/* تخطيط الصفحة الأساسي */
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+
+/* --- أنماط القائمة الجانبية --- */
+/* حاوية القائمة الجانبية المظلمة على اليمين */
 .sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
@@ -29,6 +37,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .topbar-title{font-size:16px;font-weight:700}
 .topbar-sub{font-size:12px;color:var(--text-mid)}
 .content{padding:20px 24px;flex:1}
+/* --- بطاقات الإحصائيات الرئيسية --- */
+/* شبكة عرض 4 بطاقات إحصائية */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
 .stat-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;text-align:center;transition:all 0.2s}
 .stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(91,79,207,0.1)}
@@ -43,33 +53,40 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
 .card-title i{color:var(--primary);font-size:16px}
 .card-action{font-size:12px;color:var(--primary);cursor:pointer;text-decoration:none;font-weight:600}
+/* --- الرسم البياني الشريطي (للتسجيلات الشهرية) --- */
 .chart-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .chart-label{font-size:12px;color:var(--text-dark);width:100px;flex-shrink:0;text-align:left}
 .chart-track{flex:1;height:10px;background:var(--bg);border-radius:5px;overflow:hidden}
 .chart-fill{height:100%;border-radius:5px}
 .chart-val{font-size:12px;font-weight:700;color:var(--text-mid);width:50px;text-align:left}
+/* --- الرسم البياني الدائري (Donut) --- */
 .donut{width:120px;height:120px;border-radius:50%;position:relative;margin:0 auto 12px}
 .donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
 .donut-num{font-size:22px;font-weight:800;color:var(--text-dark)}
 .donut-label{font-size:10px;color:var(--text-mid)}
+/* المفتاح التوضيحي للرسوم البيانية */
 .legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-mid)}
 .legend-dot{width:10px;height:10px;border-radius:50%}
 .btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
 .btn-primary{background:var(--primary);color:white}
 .btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
+/* عناصر القوائم (أفضل الشركات) */
 .report-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
 .report-item:last-child{border-bottom:none}
 </style>
 </head>
 <body>
 
+<!-- === القائمة الجانبية === -->
 <nav class="sidebar">
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
+  <!-- معلومات المدير -->
   <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
     <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
     <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
   </div>
+  <!-- روابط التنقل -->
   <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
   <a href="28-admin-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
   <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span></a>
@@ -84,18 +101,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </nav>
 
 <div class="main">
+  <!-- شريط العنوان مع أزرار التصدير والتحديث -->
   <div class="topbar">
     <div>
       <div class="topbar-title">التقارير والإحصائيات 📊</div>
       <div class="topbar-sub">نظرة شاملة على أداء المنصة</div>
     </div>
     <div style="display:flex;gap:8px">
+      <!-- زر تصدير التقرير كملف PDF -->
       <button class="btn btn-outline" style="padding:7px 14px"><i class="ti ti-download" style="margin-left:4px"></i>تصدير PDF</button>
+      <!-- زر تحديث البيانات -->
       <button class="btn btn-primary" style="padding:7px 14px"><i class="ti ti-refresh" style="margin-left:4px"></i>تحديث</button>
     </div>
   </div>
 
   <div class="content">
+    <!-- === شبكة البطاقات الإحصائية الرئيسية === -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon" style="background:var(--primary-light)"><i class="ti ti-users" style="color:var(--primary)"></i></div>
@@ -123,10 +144,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
       </div>
     </div>
 
+    <!-- === الشبكة الرئيسية: الرسوم البيانية والقوائم === -->
     <div class="grid-2">
+      <!-- العمود الأول: الرسوم البيانية الشهرية والتوزيع حسب التخصص -->
       <div>
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i class="ti ti-chart-line"></i>التسجيلات الشهرية</div></div>
+        <!-- الرسم البياني الشريطي للتسجيلات الشهرية -->
           <div class="chart-bar"><div class="chart-label">يناير</div><div class="chart-track"><div class="chart-fill" style="width:40%;background:var(--primary)"></div></div><div class="chart-val">45</div></div>
           <div class="chart-bar"><div class="chart-label">فبراير</div><div class="chart-track"><div class="chart-fill" style="width:55%;background:var(--primary)"></div></div><div class="chart-val">62</div></div>
           <div class="chart-bar"><div class="chart-label">مارس</div><div class="chart-track"><div class="chart-fill" style="width:70%;background:var(--primary)"></div></div><div class="chart-val">78</div></div>
@@ -153,7 +175,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
         </div>
       </div>
 
+      <!-- العمود الثاني: القوائم والتقارير -->
       <div>
+        <!-- قائمة أفضل الشركات حسب عدد المتدربيين والتقييم -->
         <div class="card">
           <div class="card-header"><div class="card-title"><i class="ti ti-trophy"></i>أفضل الشركات</div></div>
           <div class="report-item">
@@ -178,6 +202,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
           </div>
         </div>
 
+        <!-- الرسم البياني الدائري لنسبة النجاح في طلبات التدريب -->
         <div class="card">
           <div class="card-header"><div class="card-title"><i class="ti ti-circle-check"></i>نسبة النجاح</div></div>
           <div style="text-align:center;padding:10px 0">
@@ -192,6 +217,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
           </div>
         </div>
 
+        <!-- الرسم البياني العمودي لنشاط آخر 7 أيام -->
         <div class="card">
           <div class="card-header"><div class="card-title"><i class="ti ti-calendar"></i>نشاط آخر 7 أيام</div></div>
           <div style="display:flex;justify-content:space-between;align-items:flex-end;height:80px;padding:0 4px">
@@ -210,31 +236,46 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </div>
 
 <script>
+// === ملف جافاسكريبت للتقارير والإحصائيات ===
+
+// التحقق من صحة تسجيل الدخول
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+
+// عنوان واجهة برمجة التطبيقات
 const API_BASE='/api';
+
+// دالة الحصول على رمز المصادقة
 function getToken(){return localStorage.getItem('trainlink_token')}
+
+// دالة إنشاء رؤوس طلب المصادقة
 function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
 
+// === عند تحميل الصفحة بالكامل ===
 document.addEventListener('DOMContentLoaded',async function(){
+  // إعداد زر التحديث لإعادة تحميل الصفحة
   document.querySelector('.btn-primary').addEventListener('click',function(){location.reload()});
 
   try{
+    // جلب بيانات التقارير من الخادم
     var res=await fetch(API_BASE+'/admin-panel/reports/',{headers:authHeaders()});
     if(!res.ok)throw new Error('fail');
     var d=await res.json();
 
+    // تحديث البطاقات الإحصائية الرئيسية بالبيانات من الخادم
     var statNums=document.querySelectorAll('.stat-num');
     if(statNums[0])statNums[0].textContent=Number(d.total_users||0).toLocaleString();
     if(statNums[1])statNums[1].textContent=Number(d.total_internships||0).toLocaleString();
     if(statNums[2])statNums[2].textContent=Number(d.total_applications||0).toLocaleString();
     if(statNums[3])statNums[3].textContent=d.average_rating||'0';
 
+    // تحديث معلومات التغيير أسفل كل بطاقة إحصائية
     var statChanges=document.querySelectorAll('.stat-change');
     if(statChanges[0]&&d.total_users)statChanges[0].textContent='إجمالي مسجل';
     if(statChanges[1]&&d.total_internships)statChanges[1].textContent=d.open_internships?d.open_internships+' نشطة':'إجمالي';
     if(statChanges[2]&&d.total_applications)statChanges[2].textContent=d.accepted_count+' مقبولة';
     if(statChanges[3])statChanges[3].textContent=d.average_rating>=4?'ممتاز':d.average_rating>=3?'جيد':'متوسط';
 
+    // تحديث الرسم البياني الشريطي للتسجيلات الشهرية
     if(d.monthly_registrations&&d.monthly_registrations.length){
       var bars=document.querySelectorAll('.grid-2 .card:first-child .chart-bar');
       var maxCount=Math.max.apply(null,d.monthly_registrations.map(function(m){return m.count}));
@@ -248,6 +289,7 @@ document.addEventListener('DOMContentLoaded',async function(){
       });
     }
 
+    // تحديث قائمة أفضل الشركات
     if(d.best_companies&&d.best_companies.length){
       var companyItems=document.querySelectorAll('.grid-2 .card:nth-child(2) .report-item');
       var colors=['var(--primary)','var(--success)','var(--warning)','var(--accent)'];
@@ -261,6 +303,7 @@ document.addEventListener('DOMContentLoaded',async function(){
       });
     }
 
+    // تحديث الرسم البياني الدائري لنسبة النجاح
     if(d.success_rate!==undefined){
       var sRate=d.success_rate;
       var pRate=d.pending_rate||0;
@@ -277,6 +320,7 @@ document.addEventListener('DOMContentLoaded',async function(){
       if(legends[2])legends[2].innerHTML='<div class="legend-dot" style="background:var(--accent)"></div>مرفوضة '+rRate+'%';
     }
 
+    // تحديث الرسم البياني العمودي لنشاط آخر 7 أيام
     if(d.weekly_activity&&d.weekly_activity.length){
       var actBars=document.querySelectorAll('.grid-2 > div:last-child > .card:last-child div[style*="flex-direction:column"]');
       var maxAct=Math.max.apply(null,d.weekly_activity.map(function(w){return w.count}||1));
@@ -289,12 +333,14 @@ document.addEventListener('DOMContentLoaded',async function(){
       });
     }
 
+    // تحديث إجمالي المتدربيين من توزيع التخصصات
     if(d.specialization_distribution&&d.specialization_distribution.length){
       var totalSpec=d.specialization_distribution.reduce(function(s,x){return s+x.count},0);
       var specDonutCenter=document.querySelectorAll('.donut-num');
       if(specDonutCenter[0])specDonutCenter[0].textContent=totalSpec.toLocaleString();
     }
   }catch(e){
+    // محاولة جلب البيانات من لوحة التحكم كبديل في حال فشل طلب التقارير
     try{
       var dashRes=await fetch(API_BASE+'/admin-panel/dashboard/',{headers:authHeaders()});
       if(dashRes.ok){

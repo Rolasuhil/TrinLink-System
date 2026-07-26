@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- الصفحة الرئيسية لمنصة TrainLink - منصة ذكية تربط المتدربين بالشركات في غزة -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -8,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-  /* ===== RESET ===== */
+  /* ===== إعادة تعيين الأنماط الأساسية ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
  
-  /* ===== TOKENS ===== */
+  /* ===== المتغيرات (الرموز اللونية والخطوط والظلال) ===== */
   :root {
     --primary: #5B4FCF;
     --primary-dark: #4A3FB5;
@@ -40,10 +41,11 @@
     --font: 'Cairo', sans-serif;
   }
  
+  /* ===== تنسيقات عامة للصفحة والجسم ===== */
   html { scroll-behavior: smooth; }
   body { font-family: var(--font); background: var(--bg); color: var(--text-dark); overflow-x: hidden; }
  
-  /* ===== NAVBAR ===== */
+  /* ===== شريط التنقل العلوي (Fixed Navbar) ===== */
   .navbar {
     position: fixed; top: 0; width: 100%; z-index: 1000;
     background: rgba(255,255,255,0.92);
@@ -54,7 +56,9 @@
     display: flex; align-items: center; justify-content: space-between;
     transition: box-shadow 0.3s;
   }
+  /* تأثير الظل عند التمرير لأسفل */
   .navbar.scrolled { box-shadow: var(--shadow-md); }
+  /* شعار المنصة في شريط التنقل */
   .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
   .nav-logo-icon {
     width: 36px; height: 36px; background: var(--primary); border-radius: 10px;
@@ -62,6 +66,7 @@
   }
   .nav-logo-icon i { color: white; font-size: 18px; }
   .nav-logo-text { font-size: 20px; font-weight: 800; color: var(--primary); }
+  /* روابط التنقل داخل الشريط */
   .nav-links { display: flex; align-items: center; gap: 8px; }
   .nav-link {
     padding: 8px 16px; border-radius: var(--radius-sm); font-size: 14px;
@@ -69,6 +74,7 @@
     transition: all 0.15s;
   }
   .nav-link:hover { background: var(--primary-light); color: var(--primary); }
+  /* أزرار تسجيل الدخول والتسجيل في شريط التنقل */
   .nav-btns { display: flex; gap: 10px; align-items: center; }
   .btn-outline {
     padding: 8px 20px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
@@ -83,7 +89,7 @@
   }
   .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
  
-  /* ===== HERO ===== */
+  /* ===== قسم البطل (Hero Section) - القسم الرئيسي مع الخلفية الداكنة ===== */
   .hero {
     min-height: 100vh;
     background: linear-gradient(135deg, #0F0E1A 0%, #1A1827 40%, #2D1B69 100%);
@@ -91,12 +97,14 @@
     text-align: center; padding: 100px 40px 60px;
     position: relative; overflow: hidden;
   }
+  /* التوهج الضوئي في خلفية البطل */
   .hero-bg-glow {
     position: absolute; width: 800px; height: 800px;
     background: radial-gradient(circle, rgba(91,79,207,0.3) 0%, transparent 70%);
     top: 50%; left: 50%; transform: translate(-50%, -50%);
     pointer-events: none;
   }
+  /* الشارة (Badge) التي تظهر "مدعوم بالذكاء الاصطناعي" */
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(91,79,207,0.2); border: 1px solid rgba(91,79,207,0.4);
@@ -104,15 +112,18 @@
     font-size: 13px; font-weight: 600; color: #A89CFF;
   }
   .hero-badge i { font-size: 16px; }
+  /* العنوان الرئيسي للصفحة */
   .hero-title {
     font-size: clamp(36px, 5vw, 64px); font-weight: 900; line-height: 1.15;
     color: white; margin-bottom: 20px; max-width: 800px;
   }
   .hero-title span { color: #A89CFF; }
+  /* النص التوضيحي تحت العنوان */
   .hero-subtitle {
     font-size: 18px; font-weight: 400; color: #9B96B8;
     max-width: 560px; line-height: 1.8; margin-bottom: 40px;
   }
+  /* أزرار الإجراء الرئيسي في قسم البطل */
   .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
   .hero-btn-main {
     padding: 14px 32px; border-radius: var(--radius-md); font-size: 16px; font-weight: 700;
@@ -128,6 +139,7 @@
     font-family: var(--font); transition: all 0.2s; backdrop-filter: blur(8px);
   }
   .hero-btn-sec:hover { background: rgba(255,255,255,0.2); }
+  /* الإحصائيات في أسفل قسم البطل (عدد الفرص، المتدربين، الشركات، ودقة AI) */
   .hero-stats {
     display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
     border-top: 1px solid rgba(255,255,255,0.08); padding-top: 40px; width: 100%; max-width: 700px;
@@ -136,7 +148,7 @@
   .hero-stat-num { font-size: 32px; font-weight: 900; color: white; }
   .hero-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
  
-  /* ===== SECTION ===== */
+  /* ===== التنسيقات العامة للأقسام ===== */
   .section { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
   .section-badge {
     display: inline-block; background: var(--primary-light); color: var(--primary);
@@ -148,19 +160,22 @@
   .section-header { text-align: center; margin-bottom: 52px; }
   .section-header .section-sub { margin: 0 auto; }
  
-  /* ===== HOW IT WORKS ===== */
+  /* ===== قسم "كيف يعمل" - الأربعة خطوات مع خلفية داكنة ===== */
   .how-section { background: var(--dark); padding: 80px 40px; }
   .how-inner { max-width: 1200px; margin: 0 auto; }
   .how-section .section-title { color: white; }
   .how-section .section-sub { color: var(--text-muted); }
   .how-section .section-badge { background: rgba(91,79,207,0.2); color: #A89CFF; }
+  /* شبكة الخطوات الأربع */
   .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 52px; }
+  /* بطاقة كل خطوة */
   .step-card {
     background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--radius-lg); padding: 28px; position: relative; overflow: hidden;
     transition: all 0.2s;
   }
   .step-card:hover { background: rgba(91,79,207,0.1); border-color: rgba(91,79,207,0.3); transform: translateY(-4px); }
+  /* رقم الخطوة الكبير في الخلفية */
   .step-num {
     font-size: 48px; font-weight: 900; color: rgba(91,79,207,0.2);
     position: absolute; top: 16px; left: 20px; line-height: 1;
@@ -174,8 +189,9 @@
   .step-title { font-size: 16px; font-weight: 700; color: white; margin-bottom: 8px; }
   .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
  
-  /* ===== FEATURES ===== */
+  /* ===== قسم المميزات - شبكة بطاقات المميزات ===== */
   .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  /* بطاقة مميزة واحدة */
   .feature-card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
     padding: 28px; transition: all 0.2s; cursor: default;
@@ -189,10 +205,11 @@
   .feature-title { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
   .feature-desc { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
  
-  /* ===== USER TYPES ===== */
+  /* ===== قسم أنواع المستخدمين - أربعة بطاقات لكل فئة مستخدم ===== */
   .users-section { background: var(--primary-light); padding: 80px 40px; }
   .users-inner { max-width: 1200px; margin: 0 auto; }
   .users-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 52px; }
+  /* بطاقة مستخدم (متدرب، شركة، مشرف أكاديمي، مشرف عام) */
   .user-card {
     background: white; border-radius: var(--radius-xl); padding: 32px 24px; text-align: center;
     box-shadow: var(--shadow-sm); transition: all 0.2s; cursor: default;
@@ -211,8 +228,9 @@
   }
   .user-list li i { color: var(--success); font-size: 14px; flex-shrink: 0; }
  
-  /* ===== TESTIMONIALS ===== */
+  /* ===== قسم آراء المتدربين (التقييمات) ===== */
   .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  /* بطاقة تقييم/رأي متدرب */
   .testimonial-card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
     padding: 24px; transition: all 0.2s;
@@ -228,7 +246,7 @@
   .testimonial-name { font-size: 14px; font-weight: 700; color: var(--text-dark); }
   .testimonial-role { font-size: 12px; color: var(--text-mid); }
  
-  /* ===== CTA SECTION ===== */
+  /* ===== قسم الدعوة للانضمام (CTA) - خلفية متدرجة بنفسجية ===== */
   .cta-section {
     background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
     padding: 80px 40px; text-align: center;
@@ -236,6 +254,7 @@
   .cta-title { font-size: clamp(26px, 3vw, 40px); font-weight: 900; color: white; margin-bottom: 16px; }
   .cta-sub { font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
   .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  /* الزر الأبيض داخل قسم CTA */
   .cta-btn-white {
     padding: 14px 32px; border-radius: var(--radius-md); font-size: 15px; font-weight: 700;
     color: var(--primary); background: white; border: none; cursor: pointer;
@@ -243,6 +262,7 @@
     transition: all 0.2s;
   }
   .cta-btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  /* الزر الشفاف داخل قسم CTA */
   .cta-btn-trans {
     padding: 14px 32px; border-radius: var(--radius-md); font-size: 15px; font-weight: 700;
     color: white; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
@@ -251,12 +271,13 @@
   }
   .cta-btn-trans:hover { background: rgba(255,255,255,0.25); }
  
-  /* ===== FOOTER ===== */
+  /* ===== التذييل (Footer) - يحتوي على معلومات المنصة وروابط مفيدة ===== */
   footer {
     background: var(--dark); padding: 60px 40px 30px;
     color: var(--text-muted);
   }
   .footer-inner { max-width: 1200px; margin: 0 auto; }
+  /* الجزء العلوي من التذييل (أعمدة المعلومات والروابط) */
   .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
   .footer-brand { }
   .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
@@ -268,6 +289,7 @@
   .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
   .footer-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
   .footer-links a:hover { color: white; }
+  /* الجزء السفلي من التذييل (حقوق النشر وأيقونات التواصل الاجتماعي) */
   .footer-bottom {
     border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px;
     display: flex; justify-content: space-between; align-items: center; font-size: 12px;
@@ -282,43 +304,50 @@
   .social-btn i { font-size: 16px; color: var(--text-muted); }
   .social-btn:hover i { color: white; }
  
-  /* ===== SCROLL ANIMATION ===== */
+  /* ===== أنيميشن الظهور عند التمرير (Scroll Animation) ===== */
   .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
   .fade-up.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
  
-<!-- NAVBAR -->
+<!-- ===== شريط التنقل العلوي (Navbar) ===== -->
 <nav class="navbar" id="navbar">
+  <!-- شعار المنصة مع رابط للصفحة الرئيسية -->
   <a href="01-home.html" class="nav-logo">
     <div class="nav-logo-icon"><i class="ti ti-briefcase"></i></div>
     <span class="nav-logo-text">TrainLink</span>
   </a>
+  <!-- روابط التنقل الرئيسية -->
   <div class="nav-links">
     <a href="#features" class="nav-link">المميزات</a>
     <a href="#how" class="nav-link">كيف يعمل</a>
     <a href="#users" class="nav-link">للمستخدمين</a>
     <a href="#testimonials" class="nav-link">آراء المتدربين</a>
   </div>
+  <!-- أزرار تسجيل الدخول والتسجيل (يتم تحديثها بالجافاسكريبت للمستخدمين المسجلين) -->
   <div class="nav-btns" id="navBtns">
     <a href="02-login.html" class="btn-outline">تسجيل الدخول</a>
     <a href="03-register-type.html" class="btn-primary">ابدأ مجاناً</a>
   </div>
 </nav>
  
-<!-- HERO -->
+<!-- ===== قسم البطل (Hero Section) ===== -->
 <section class="hero">
   <div class="hero-bg-glow"></div>
+  <!-- شارة "مدعوم بالذكاء الاصطناعي" -->
   <div class="hero-badge"><i class="ti ti-robot"></i> مدعوم بالذكاء الاصطناعي</div>
+  <!-- العنوان الرئيسي للصفحة -->
   <h1 class="hero-title">
     منصتك الذكية<br>
     <span>لفرص التدريب الميداني</span><br>
     في غزة والعالم
   </h1>
+  <!-- النص التوضيحي -->
   <p class="hero-subtitle">
     نربط الطلاب والخريجين بالشركات التي تقدم تدريباً مجانياً ومهنياً — بمطابقة ذكية تعتمد على مهاراتك وتخصصك
   </p>
+  <!-- أزرار الإجراء الرئيسي (البحث عن تدريب / نشر فرصة) -->
   <div class="hero-btns">
     <a href="03-register-trainee.html" class="hero-btn-main">
       <i class="ti ti-search"></i> ابحث عن تدريب
@@ -327,6 +356,7 @@
       <i class="ti ti-building"></i> انشر فرصة تدريب
     </a>
   </div>
+  <!-- الإحصائيات العامة للمنصة (يتم تحديثها من API) -->
   <div class="hero-stats" id="heroStats">
     <div class="hero-stat">
       <div class="hero-stat-num" id="statInternships">-</div>
@@ -347,7 +377,7 @@
   </div>
 </section>
  
-<!-- HOW IT WORKS -->
+<!-- ===== قسم "كيف يعمل" - أربع خطوات للوصول للتدريب المثالي ===== -->
 <div class="how-section" id="how">
   <div class="how-inner">
     <div class="section-header fade-up">
@@ -355,6 +385,7 @@
       <h2 class="section-title" style="color:white">أربع خطوات للوصول لتدريبك المثالي</h2>
       <p class="section-sub">من التسجيل حتى بدء التدريب — كل شيء منظم وذكي</p>
     </div>
+    <!-- الخطوات الأربع: إنشاء ملف، اكتشاف فرص، تقديم، بدء التدريب -->
     <div class="steps">
       <div class="step-card fade-up">
         <div class="step-num">01</div>
@@ -384,13 +415,14 @@
   </div>
 </div>
  
-<!-- FEATURES -->
+<!-- ===== قسم المميزات ===== -->
 <section class="section" id="features">
   <div class="section-header fade-up">
     <span class="section-badge">المميزات</span>
     <h2 class="section-title">كل ما تحتاجه في منصة واحدة</h2>
     <p class="section-sub">مصمم خصيصاً للطلاب والخريجين في غزة مع أدوات ذكاء اصطناعي حقيقية</p>
   </div>
+  <!-- بطاقات المميزات الستة: مطابقة AI، تحليل CV، دردشة، متابعة أداء، تقييمات، إشعارات -->
   <div class="features-grid">
     <div class="feature-card fade-up">
       <div class="feature-icon"><i class="ti ti-sparkles"></i></div>
@@ -425,7 +457,7 @@
   </div>
 </section>
  
-<!-- USER TYPES -->
+<!-- ===== قسم أنواع المستخدمين - أربعة فئات: متدرب، شركة، مشرف، أدمن ===== -->
 <div class="users-section" id="users">
   <div class="users-inner">
     <div class="section-header fade-up">
@@ -434,6 +466,7 @@
       <p class="section-sub">صُممت TrainLink لتخدم كل طرف في منظومة التدريب الميداني</p>
     </div>
     <div class="users-grid">
+      <!-- بطاقة المتدرب -->
       <div class="user-card fade-up">
         <div class="user-avatar" style="background:#EEF0FF"><i class="ti ti-school" style="font-size:32px;color:var(--primary)"></i></div>
         <div class="user-title">المتدرب</div>
@@ -445,6 +478,7 @@
           <li><i class="ti ti-check"></i> متابعة الأداء اليومي</li>
         </ul>
       </div>
+      <!-- بطاقة الشركة -->
       <div class="user-card fade-up">
         <div class="user-avatar" style="background:#FAECE7"><i class="ti ti-building" style="font-size:32px;color:#E8590C"></i></div>
         <div class="user-title">الشركة</div>
@@ -456,6 +490,7 @@
           <li><i class="ti ti-check"></i> تقديم تقارير الأداء</li>
         </ul>
       </div>
+      <!-- بطاقة مشرف المادة الأكاديمي -->
       <div class="user-card fade-up">
         <div class="user-avatar" style="background:#FEF3C7"><i class="ti ti-chalkboard" style="font-size:32px;color:#D97706"></i></div>
         <div class="user-title">مشرف المادة</div>
@@ -467,6 +502,7 @@
           <li><i class="ti ti-check"></i> دردشة مباشرة</li>
         </ul>
       </div>
+      <!-- بطاقة المشرف العام (مدير المنصة) -->
       <div class="user-card fade-up">
         <div class="user-avatar" style="background:#F3E8FF"><i class="ti ti-shield-star" style="font-size:32px;color:#7C3AED"></i></div>
         <div class="user-title">المشرف العام</div>
@@ -482,19 +518,20 @@
   </div>
 </div>
  
-<!-- TESTIMONIALS -->
+<!-- ===== قسم آراء المتدربين (التقييمات من API) ===== -->
 <section class="section" id="testimonials">
   <div class="section-header fade-up">
     <span class="section-badge">آراء المتدربين</span>
     <h2 class="section-title">ماذا يقولون عن TrainLink</h2>
     <p class="section-sub">تجارب حقيقية من طلاب وخريجين استخدموا المنصة</p>
   </div>
+  <!-- حاوية بطاقات التقييمات (يتم ملؤها ديناميكياً من API) -->
   <div class="testimonials-grid" id="testimonialsGrid">
     <!-- Will be populated from API -->
   </div>
 </section>
  
-<!-- CTA -->
+<!-- ===== قسم الدعوة للانضمام (CTA) ===== -->
 <div class="cta-section">
   <h2 class="cta-title fade-up">ابدأ رحلتك المهنية اليوم</h2>
   <p class="cta-sub fade-up">انضم لآلاف الطلاب الذين وجدوا تدريبهم المثالي مجاناً عبر TrainLink</p>
@@ -508,9 +545,10 @@
   </div>
 </div>
  
-<!-- FOOTER -->
+<!-- ===== التذييل (Footer) ===== -->
 <footer>
   <div class="footer-inner">
+    <!-- الجزء العلوي: شعار المنصة + روابط المتدربين + روابط الشركات + روابط التواصل -->
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-logo">
@@ -547,6 +585,7 @@
         </ul>
       </div>
     </div>
+    <!-- الجزء السفلي: حقوق النشر + أيقونات التواصل الاجتماعي -->
     <div class="footer-bottom">
       <span>© 2025 TrainLink — جامعة الأقصى، غزة</span>
       <div class="footer-socials">
@@ -559,18 +598,21 @@
 </footer>
  
 <script>
+// ===== التحقق من حالة تسجيل الدخول وتحديث الأزرار =====
 var token = localStorage.getItem('trainlink_token');
 var user = null;
 try { user = JSON.parse(localStorage.getItem('trainlink_user')); } catch(e) {}
 
+// إذا كان المستخدم مسجلاً، يتم توجيهه للوحة التحكم المناسبة حسب نوعه
 if(token && user) {
   var dashboards = {trainee:'../trainee/08-trainee-dashboard.html', company:'../company/18-company-dashboard.html', supervisor:'../supervisor/24-supervisor-dashboard.html', admin:'../admin/28-admin-dashboard.html'};
   var dashUrl = dashboards[user.person_type] || '../trainee/08-trainee-dashboard.html';
   var btns = document.getElementById('navBtns');
   if(btns) {
+    // استبدال أزرار التسجيل بزر لوحة التحكم وتسجيل الخروج
     btns.innerHTML = '<a href="'+dashUrl+'" class="btn-primary"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a><a href="#" class="btn-outline" onclick="localStorage.removeItem(\'trainlink_token\');localStorage.removeItem(\'trainlink_user\');window.location.reload();">تسجيل الخروج</a>';
   }
-  // Fix hero buttons for logged-in users
+  // تحديث روابط أزرار البطل وCTA حسب نوع المستخدم
   var allLinks = document.querySelectorAll('.hero-btns a, .cta-btn-trans, .cta-btn-white');
   allLinks.forEach(function(btn){
     var href = btn.getAttribute('href') || '';
@@ -586,12 +628,13 @@ if(token && user) {
   });
 }
 
-// Navbar scroll effect
+// ===== تأثير الظل على شريط التنقل عند التمرير =====
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
 });
  
-// Fade up animation
+// ===== أنيميشن الظهور عند التمرير (IntersectionObserver) =====
+// يراقب العناصر التي تحتوي على كلاس fade-up وتضيف كلاس visible عند ظهورها في الشاشة
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -600,9 +643,11 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
  
+// تطبيق المراقب على جميع عناصر fade-up
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-// Load public stats
+// ===== تحميل الإحصائيات العامة من الخادم =====
+// يقوم بجلب عدد الفرص والمتدربين والشركات وعرضها في قسم البطل
 (async function(){
   try {
     var res = await fetch('/api/admin-panel/public-stats/');
@@ -619,7 +664,9 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
   } catch(e) {}
 })();
 
-// Load testimonials from ratings
+// ===== تحميل آراء المتدربين (التقييمات) من الخادم =====
+// يجلب التقييمات ويعرضها كبطاقات في قسم آراء المتدربين
+// في حال عدم توفر تقييمات، يعرض تقييمات افتراضية
 (async function(){
   try {
     var res = await fetch('/api/community/ratings/');
@@ -628,6 +675,7 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
       var grid = document.getElementById('testimonialsGrid');
       if(grid && Array.isArray(ratings) && ratings.length) {
         grid.innerHTML = '';
+        // عرض أول 6 تقييمات
         ratings.slice(0,6).forEach(function(r){
           var stars = '';
           for(var i=0;i<5;i++) stars += i < r.score ? '★' : '☆';
@@ -639,8 +687,10 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
           card.innerHTML = '<div class="testimonial-stars">'+stars+'</div><p class="testimonial-text">"'+(r.review||'تجربة ممتازة مع المنصة')+'"</p><div class="testimonial-author"><div class="testimonial-avatar" style="background:'+color+'">'+initials+'</div><div><div class="testimonial-name">'+r.trainee_name+'</div><div class="testimonial-role">'+r.company_name+'</div></div></div>';
           grid.appendChild(card);
         });
+        // إضافة المراقب للأنيميشن على البطاقات الجديدة
         grid.querySelectorAll('.fade-up').forEach(function(el){ observer.observe(el); });
       } else if(grid) {
+        // عرض تقييمات افتراضية في حال عدم توفر تقييمات حقيقية
         grid.innerHTML = '<div class="testimonial-card fade-up"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"المنصة ممتازة وسهلة الاستخدام. ساعدتني في إيجاد فرصة تدريب رائعة."</p><div class="testimonial-author"><div class="testimonial-avatar" style="background:#5B4FCF">مت</div><div><div class="testimonial-name">متدرب</div><div class="testimonial-role">جامعة الأقصى</div></div></div></div><div class="testimonial-card fade-up"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"واجهة جميلة ونظام ذكي. أنصح الجميع بالاستخدام."</p><div class="testimonial-author"><div class="testimonial-avatar" style="background:#22C55E">شر</div><div><div class="testimonial-name">شركة شريكة</div><div class="testimonial-role">غزة</div></div></div></div>';
         grid.querySelectorAll('.fade-up').forEach(function(el){ observer.observe(el); });
       }

@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة لوحة تحكم الشركة (18-company-dashboard.html)
+  ========================================
+  الغرض: عرض نظرة عامة على فرص التدريب المنشورة، الطلبات الواردة، وإحصائيات الشركة.
+  تتصل بالـ API لجلب الفرص والطلبات والبيانات الحقيقية.
+  تحتوي على: إحصائيات، فرص منشورة مع أزرار تعديل/حذف، طلبات معلقة، أحدث المتدربين.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -229,7 +238,11 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
  
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
  
+<!-- ======================================== -->
+<!-- أكواد JavaScript — لوحة تحكم الشركة -->
+<!-- ======================================== -->
 <script>
+/* أكواد JavaScript — لوحة تحكم الشركة: جلب الملف الشخصي، الفرص، الطلبات */
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 const API_BASE='/api';
 function getToken(){return localStorage.getItem('trainlink_token');}

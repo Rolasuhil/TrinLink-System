@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة الدردشة (15-chat.html)
+  ========================================
+  الغرض: واجهة تواصل فورية بين المتدربين والشركات والمشرفين.
+  تتصل بالـ API لجلب القنوات والرسائل وإرسال رسائل جديدة.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -220,7 +228,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </div>
  
+<!-- ======================================== -->
+<!-- أكواد JavaScript — الدردشة -->
+<!-- ======================================== -->
 <script>
+/*
+ * أكواد JavaScript — الدردشة
+ * الدوال: جلب القنوات، فتح محادثة، إرسال رسالة، بحث في المحادثات
+ */
 (function(){
   var token = localStorage.getItem('trainlink_token');
   if(!token){ window.location.href = '../public/02-login.html'; return; }

@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة الإشعارات (16-notifications.html)
+  ========================================
+  الغرض: عرض جميع إشعارات المستخدم مع إمكانية التفاعل معها.
+  تتصل بالـ API لجلب الإشعارات وتحديث حالتها (مقروء/غير مقروء).
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -189,7 +197,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </div>
  
+<!-- ======================================== -->
+<!-- أكواد JavaScript — الإشعارات -->
+<!-- ======================================== -->
 <script>
+/*
+ * أكواد JavaScript — الإشعارات
+ * الدوال: جلب الإشعارات، الفلترة، تعليم كمقروء، تعليم الكل كمقروء
+ */
 (function(){
   var token = localStorage.getItem('trainlink_token');
   if(!token){ window.location.href = '../public/02-login.html'; return; }

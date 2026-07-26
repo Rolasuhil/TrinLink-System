@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة نشر فرصة تدريب جديدة (19-post-internship.html)
+  ========================================
+  الغرض: نموذج إنشاء فرصة تدريب جديدة من قبل الشركة.
+  تتصل بالـ API لإرسال بيانات الفرصة (العنوان، الوصف، المهارات، المدة، الموقع، etc).
+  تتضمن: حقول إلزامية واختيارية، اختيار المهارات، تحديد الشهادة، رفع الملفات.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -260,9 +269,14 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — نشر فرصة تدريب -->
+<!-- ======================================== -->
 <script>
+/* أكواد JavaScript — نشر فرصة تدريب: إرسال نموذج الفرصة إلى API */
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 const API='/api';
+/* --- معلومات المصادقة ونوع الفرصة الافتراضي --- */
 let authToken = localStorage.getItem('trainlink_token');
 let companyUser = null;
 let selectedInternType = 'free';

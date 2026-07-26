@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- صفحة تسجيل مشرف أكاديمي جديد في منصة TrainLink - نموذج يحتوي على المعلومات الشخصية والبيانات الأكاديمية وبيانات الدخول -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -9,10 +10,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين الأنماط الأساسية */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* المتغيرات اللونية والخطوط */
 :root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--success:#22C55E;--warning:#F59E0B;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif}
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+/* حاوية الصفحة: مقسمة للكتلة اليسرى واليمنى */
 .page{display:grid;grid-template-columns:340px 1fr;max-width:900px;width:100%;background:white;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(91,79,207,0.15)}
+/* ===== اللوحة اليسرى: معلومات ترويجية عن مميزات التسجيل كمشرف ===== */
 .left{background:linear-gradient(135deg,#0F0E1A,#2D1B69);padding:48px 32px;display:flex;flex-direction:column}
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:40px}
 .logo-icon{width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center}
@@ -21,6 +26,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
 .left-title{font-size:24px;font-weight:800;color:white;line-height:1.4;margin-bottom:12px}
 .left-title span{color:#A89CFF}
 .left-sub{font-size:13px;color:#9B96B8;line-height:1.8;margin-bottom:36px}
+/* قائمة مميزات التسجيل كمشرف */
 .benefits{display:flex;flex-direction:column;gap:14px}
 .benefit{display:flex;align-items:flex-start;gap:10px}
 .benefit-icon{width:34px;height:34px;border-radius:8px;background:rgba(91,79,207,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -29,9 +35,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
 .benefit-text{font-size:12px;color:#9B96B8;line-height:1.5}
 .left-bottom{margin-top:auto;padding-top:32px;font-size:13px;color:#9B96B8}
 .left-bottom a{color:#A89CFF;text-decoration:none;font-weight:600}
+/* ===== اللوحة اليمنى: نموذج تسجيل المشرف ===== */
 .right{padding:40px 36px;overflow-y:auto}
 .form-title{font-size:20px;font-weight:800;color:var(--text-dark);margin-bottom:4px}
 .form-sub{font-size:13px;color:var(--text-mid);margin-bottom:24px}
+/* تسمية القسم داخل النموذج */
 .section-label{font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .section-label::after{content:'';flex:1;height:1px;background:var(--primary-light)}
 .form-group{margin-bottom:14px}
@@ -42,83 +50,109 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);min-hei
 .form-input:focus{border-color:var(--primary);background:white}
 .form-select{width:100%;padding:10px 40px 10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:var(--text-dark);background:var(--bg);outline:none}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* معاينة الـ ID الخاص بالمشرف (يولد تلقائيا بعد التسجيل) */
 .id-preview{background:var(--primary-light);border:1.5px dashed var(--primary);border-radius:var(--radius-md);padding:14px;text-align:center;margin-bottom:14px}
 .id-preview-label{font-size:12px;color:var(--text-mid);margin-bottom:6px}
 .id-preview-val{font-size:22px;font-weight:800;color:var(--primary);letter-spacing:2px}
 .id-preview-hint{font-size:11px;color:var(--text-mid);margin-top:4px}
+/* مربع الموافقة على الشروط */
 .terms{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-mid);margin-bottom:14px}
 .terms input{margin-top:2px;accent-color:var(--primary);width:15px;height:15px;flex-shrink:0}
 .terms a{color:var(--primary);text-decoration:none;font-weight:600}
+/* زر انشاء الحساب */
 .btn-submit{width:100%;padding:12px;border-radius:var(--radius-md);font-size:14px;font-weight:700;color:white;background:var(--primary);border:none;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;box-shadow:0 4px 16px rgba(91,79,207,0.3)}
 .btn-submit:hover{background:var(--primary-dark);transform:translateY(-1px)}
 </style>
 </head>
 <body>
 <div class="page">
+  <!-- ===== اللوحة اليسرى: معلومات ترويجية ومميزات التسجيل كمشرف ===== -->
   <div class="left">
     <div class="logo"><div class="logo-icon"><i class="ti ti-briefcase"></i></div><span class="logo-text">TrainLink</span></div>
     <h2 class="left-title">انضم كمشرف<br><span>وتابع طلابك</span></h2>
     <p class="left-sub">راقب أداء طلابك خلال التدريب من مكان واحد مع تقارير ذكية أسبوعية</p>
+    <!-- المميزات الرئيسية للتسجيل كمشرف اكاديمي -->
     <div class="benefits">
-      <div class="benefit"><div class="benefit-icon"><i class="ti ti-users"></i></div><div><div class="benefit-title">إدارة المتدربين</div><div class="benefit-text">تابع جميع طلابك المرتبطين بك في مكان واحد</div></div></div>
-      <div class="benefit"><div class="benefit-icon"><i class="ti ti-chart-line"></i></div><div><div class="benefit-title">تقارير أسبوعية ذكية</div><div class="benefit-text">تقارير أداء تلقائية مُولَّدة بالذكاء الاصطناعي</div></div></div>
-      <div class="benefit"><div class="benefit-icon"><i class="ti ti-bell"></i></div><div><div class="benefit-title">تنبيهات فورية</div><div class="benefit-text">تنبيه تلقائي عند ضعف أداء أي متدرب</div></div></div>
+      <div class="benefit"><div class="benefit-icon"><i class="ti ti-users"></i></div><div><div class="benefit-title">ادارة المتدربين</div><div class="benefit-text">تابع جميع طلابك المرتبطين بك في مكان واحد</div></div></div>
+      <div class="benefit"><div class="benefit-icon"><i class="ti ti-chart-line"></i></div><div><div class="benefit-title">تقارير اسبوعية ذكية</div><div class="benefit-text">تقارير اداء تلقائية مولدة بالذكاء الاصطناعي</div></div></div>
+      <div class="benefit"><div class="benefit-icon"><i class="ti ti-bell"></i></div><div><div class="benefit-title">تنبيهات فورية</div><div class="benefit-text">تنبيه تلقائي عند ضعف اداء اي متدرب</div></div></div>
     </div>
+    <!-- رابط تسجيل الدخول -->
     <div class="left-bottom">لديك حساب؟ <a href="02-login.html">تسجيل الدخول</a></div>
   </div>
 
+  <!-- ===== اللوحة اليمنى: نموذج تسجيل المشرف ===== -->
   <div class="right">
     <div class="form-title">تسجيل حساب مشرف</div>
-    <div class="form-sub">سيحصل طلابك على ID الخاص بك لربط حساباتهم بك تلقائياً</div>
+    <div class="form-sub">سيحصل طلابك على ID الخاص بك لربط حساباتهم بك تلقائيا</div>
 
+    <!-- معاينة الـ ID الذي سيُولَّد تلقائيا بعد التسجيل -->
     <div class="id-preview">
-      <div class="id-preview-label">الـ ID الخاص بك (سيُولَّد تلقائياً بعد التسجيل)</div>
+      <div class="id-preview-label">الـ ID الخاص بك (سيولَّد تلقائيا بعد التسجيل)</div>
       <div class="id-preview-val">SUP-00XXX</div>
       <div class="id-preview-hint">شارك هذا الكود مع طلابك لربطهم بحسابك</div>
     </div>
 
+    <!-- ===== قسم المعلومات الشخصية ===== -->
     <div class="section-label">المعلومات الشخصية</div>
+    <!-- حقول الاسم الأول والأخير -->
     <div class="form-row">
-      <div class="form-group"><label class="form-label">الاسم الأول</label><div class="input-wrap"><i class="ti ti-user input-icon"></i><input type="text" class="form-input" id="firstName" placeholder="محمد" required></div></div>
-      <div class="form-group"><label class="form-label">الاسم الأخير</label><div class="input-wrap"><i class="ti ti-user input-icon"></i><input type="text" class="form-input" id="lastName" placeholder="أبو سمرة" required></div></div>
+      <div class="form-group"><label class="form-label">الاسم الاول</label><div class="input-wrap"><i class="ti ti-user input-icon"></i><input type="text" class="form-input" id="firstName" placeholder="محمد" required></div></div>
+      <div class="form-group"><label class="form-label">الاسم الاخير</label><div class="input-wrap"><i class="ti ti-user input-icon"></i><input type="text" class="form-input" id="lastName" placeholder="ابو سمرة" required></div></div>
     </div>
+    <!-- حقل البريد الإلكتروني -->
     <div class="form-group"><label class="form-label">البريد الإلكتروني</label><div class="input-wrap"><i class="ti ti-mail input-icon"></i><input type="email" class="form-input" id="email" placeholder="m.abusamra@university.edu.ps" required></div></div>
+    <!-- حقل رقم الهاتف -->
     <div class="form-group"><label class="form-label">رقم الهاتف</label><div class="input-wrap"><i class="ti ti-phone input-icon"></i><input type="tel" class="form-input" id="phone" placeholder="+970 59 000 0000"></div></div>
 
-    <div class="section-label" style="margin-top:8px">البيانات الأكاديمية</div>
-    <div class="form-group"><label class="form-label">الجامعة</label><div class="input-wrap"><i class="ti ti-building-bank input-icon"></i><select class="form-select" id="university"><option value="">اختر الجامعة</option><option value="aqsa">جامعة الأقصى</option><option value="islamic">الجامعة الإسلامية</option><option value="azhar">جامعة الأزهر</option><option value="palestine">جامعة فلسطين</option></select></div></div>
+    <!-- ===== قسم البيانات الاكاديمية ===== -->
+    <div class="section-label" style="margin-top:8px">البيانات الاكاديمية</div>
+    <!-- قائمة اختيار الجامعة -->
+    <div class="form-group"><label class="form-label">الجامعة</label><div class="input-wrap"><i class="ti ti-building-bank input-icon"></i><select class="form-select" id="university"><option value="">اختر الجامعة</option><option value="aqsa">جامعة الاقصى</option><option value="islamic">الجامعة الاسلامية</option><option value="azhar">جامعة الازهر</option><option value="palestine">جامعة فلسطين</option></select></div></div>
+    <!-- حقول القسم والكلية والتخصص -->
     <div class="form-row">
       <div class="form-group"><label class="form-label">القسم/الكلية</label><div class="input-wrap"><i class="ti ti-school input-icon"></i><input type="text" class="form-input" id="department" placeholder="كلية تكنولوجيا المعلومات"></div></div>
       <div class="form-group"><label class="form-label">التخصص</label><div class="input-wrap"><i class="ti ti-book input-icon"></i><input type="text" class="form-input" id="specialization" placeholder="هندسة البرمجيات"></div></div>
     </div>
 
+    <!-- ===== قسم بيانات الدخول ===== -->
     <div class="section-label" style="margin-top:8px">بيانات الدخول</div>
-    <div class="form-group"><label class="form-label">كلمة المرور</label><div class="input-wrap"><i class="ti ti-lock input-icon"></i><input type="password" class="form-input" id="password" placeholder="••••••••" required></div></div>
-    <div class="form-group"><label class="form-label">تأكيد كلمة المرور</label><div class="input-wrap"><i class="ti ti-lock input-icon"></i><input type="password" class="form-input" id="passwordConfirm" placeholder="••••••••" required></div></div>
+    <!-- حقل كلمة المرور -->
+    <div class="form-group"><label class="form-label">كلمة المرور</label><div class="input-wrap"><i class="ti ti-lock input-icon"></i><input type="password" class="form-input" id="password" placeholder="*******" required></div></div>
+    <!-- حقل تاكيد كلمة المرور -->
+    <div class="form-group"><label class="form-label">تاكيد كلمة المرور</label><div class="input-wrap"><i class="ti ti-lock input-icon"></i><input type="password" class="form-input" id="passwordConfirm" placeholder="*******" required></div></div>
 
-    <label class="terms"><input type="checkbox" id="termsCheck">أوافق على <a href="#">شروط الاستخدام</a> و<a href="#">سياسة الخصوصية</a></label>
-    <button class="btn-submit" id="submitBtn" onclick="handleRegister()"><i class="ti ti-check"></i>إنشاء الحساب</button>
+    <!-- مربع الموافقة على الشروط -->
+    <label class="terms"><input type="checkbox" id="termsCheck">اوافق على <a href="#">شروط الاستخدام</a> و<a href="#">سياسة الخصوصية</a></label>
+    <!-- زر انشاء الحساب -->
+    <button class="btn-submit" id="submitBtn" onclick="handleRegister()"><i class="ti ti-check"></i>انشاء الحساب</button>
   </div>
 </div>
 
 <script>
+// ===== الدالة الرئيسية لتسجيل المشرف =====
+// تقوم بالتحقق من صحة البيانات ثم ارسالها للخادم
 async function handleRegister() {
   const btn = document.getElementById('submitBtn');
   const pw = document.getElementById('password').value;
   const pwConf = document.getElementById('passwordConfirm').value;
 
+  // التحقق من الموافقة على الشروط
   if (!document.getElementById('termsCheck').checked) {
     alert('يرجى الموافقة على الشروط');
     return;
   }
+  // التحقق من تطابق كلمتي المرور
   if (pw !== pwConf) {
     alert('كلمتا المرور غير متطابقتين');
     return;
   }
 
+  // تعطيل الزر وعرض رسالة التحميل
   btn.disabled = true;
   btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> جاري التسجيل...';
 
+  // تجهيز بيانات المشرف للارسال
   const payload = {
     full_name: (document.getElementById('firstName').value.trim() + ' ' + document.getElementById('lastName').value.trim()).trim(),
     email: document.getElementById('email').value.trim(),
@@ -130,6 +164,7 @@ async function handleRegister() {
   };
 
   try {
+    // ارسال طلب التسجيل للخادم
     const res = await fetch('/api/auth/register/supervisor/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -137,15 +172,18 @@ async function handleRegister() {
     });
     const data = await res.json();
     if (res.ok) {
+      // عند النجاح: توجيه لصفحة التحقق من OTP
       window.location.href = '07-otp-verification.html?email=' + encodeURIComponent(payload.email);
     } else {
+      // عرض رسالة الخطأ من الخادم
       alert(data.detail || data.error || Object.values(data).flat().join(', ') || 'حدث خطأ');
     }
   } catch (err) {
     alert('حدث خطأ في الاتصال بالخادم');
   } finally {
+    // إعادة تفعيل الزر
     btn.disabled = false;
-    btn.innerHTML = '<i class="ti ti-check"></i>إنشاء الحساب';
+    btn.innerHTML = '<i class="ti ti-check"></i>انشاء الحساب';
   }
 }
 </script>

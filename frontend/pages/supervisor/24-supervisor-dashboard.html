@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+<!-- صفحة لوحة تحكم المشرف: تعرض نظرة عامة على المتدربين المرتبطين بالمشرف، التقارير، التنبيهات، ومتوسط الأداء -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,59 +8,89 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين الأنماط الأساسية */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* المتغيرات العامة: الألوان، الخطوط، أبعاد الشريط الجانبي */
 :root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+/* نمط الصفحة الأساسية: تخطيط مرن مع خلفية فاتحة */
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+/* الشريط الجانبي: شريط ثابت على اليمين يحتوي على شعار التطبيق ومعلومات المستخدم والتنقل */
 .sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+/* شعار التطبيق في الشريط الجانبي */
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
+/* أيقونة الشعار */
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
+/* نص الشعار */
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+/* قسم معلومات المستخدم في الشريط الجانبي */
 .sidebar-user{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center}
+/* صورة المستخدم الرمزية (الأحرف الأولى من الاسم) */
 .user-avatar{width:42px;height:42px;border-radius:50%;background:var(--warning);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;margin:0 auto 8px}
 .user-name{color:white;font-size:12px;font-weight:600}
+/* الدور الوظيفي للمستخدم */
 .user-role{color:rgba(255,255,255,0.4);font-size:10px;margin-top:2px}
+/* معرّف المستخدم مع إمكانية النسخ بالنقر */
 .user-id{background:rgba(245,158,11,0.2);color:var(--warning);font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:5px;cursor:pointer}
 .user-id:hover{background:rgba(245,158,11,0.35)}
+/* عناصر التنقل في الشريط الجانبي */
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
+/* العنصر النشط في التنقل */
 .nav-item.active{background:rgba(245,158,11,0.2)}
 .nav-item.active i,.nav-item.active span{color:var(--warning)!important}
 .nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
 .nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+/* شارة العدد في التنقل */
 .nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+/* عنوان قسم في الشريط الجانبي */
 .nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+/* أسفل الشريط الجانبي (زر تسجيل الخروج) */
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+/* المحتوى الرئيسي بجانب الشريط الجانبي */
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+/* الشريط العلوي الثابت */
 .topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
 .topbar-title{font-size:16px;font-weight:700}
 .topbar-sub{font-size:12px;color:var(--text-mid)}
+/* منطقة المحتوى الرئيسية */
 .content{padding:20px 24px;flex:1}
+/* شبكة إحصائيات: 4 بطاقات في صف واحد */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+/* بطاقة إحصائية */
 .stat-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;display:flex;align-items:center;gap:12px;transition:all 0.2s}
 .stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.06)}
+/* أيقونة الإحصائية */
 .stat-icon{width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .stat-icon i{font-size:22px}
 .stat-num{font-size:24px;font-weight:800;color:var(--text-dark)}
 .stat-label{font-size:11px;color:var(--text-mid);margin-top:2px}
+/* التخطيط الرئيسي: عمودان - المحتوى الرئيسي والشريط الجانبي الأيمن */
 .layout{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+/* البطاقة العامة */
 .card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:16px}
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
 .card-title i{color:var(--warning);font-size:16px}
 .card-action{font-size:12px;color:var(--primary);cursor:pointer;text-decoration:none;font-weight:600}
+/* صف المتدرب: يعرض معلومات متدرب واحد مع شريط التقدم والتقييم */
 .trainee-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all 0.15s}
 .trainee-row:last-child{border-bottom:none}
 .trainee-row:hover{padding-right:6px}
+/* صورة المتدرب الرمزية */
 .t-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0}
 .t-name{font-size:13px;font-weight:600;color:var(--text-dark)}
 .t-meta{font-size:11px;color:var(--text-mid);margin-top:2px}
+/* شريط التقدم */
 .progress-wrap{flex:1}
-.prog-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
+.prog-row{display:flex;justify-content:between;font-size:11px;margin-bottom:3px}
 .prog-track{height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
 .prog-fill{height:100%;border-radius:3px}
+/* شارة التقييم */
 .rating-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+/* شارة التنبيه */
 .alert-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0}
+/* بطاقة التقرير */
 .report-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.15s}
 .report-card:hover{border-color:var(--primary);background:var(--primary-light)}
 .report-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
@@ -67,49 +98,65 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .report-stars{color:var(--warning);font-size:12px}
 .report-meta{font-size:11px;color:var(--text-mid);display:flex;align-items:center;gap:6px;margin-bottom:6px}
 .report-content{font-size:12px;color:var(--text-mid);line-height:1.7}
+/* عنصر التنبيه */
 .alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:var(--radius-md);margin-bottom:8px}
+/* تنبيه عالي الخطورة */
 .alert-item.high{background:#FEF2F2;border:1px solid #FECACA}
 .alert-icon{font-size:18px;flex-shrink:0}
 .alert-title{font-size:12px;font-weight:700;margin-bottom:2px}
 .alert-text{font-size:11px;line-height:1.5}
+/* بطاقة تعريف المشرف: عرض معرّف المشرف مع إمكانية النسخ */
 .id-card{background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius-lg);padding:16px;margin-bottom:14px;text-align:center}
 .id-label{font-size:12px;color:var(--text-mid);margin-bottom:6px}
+/* قيمة المعرّف بخط كبير */
 .id-value{font-size:28px;font-weight:900;color:var(--warning);letter-spacing:3px;margin-bottom:6px}
 .id-hint{font-size:11px;color:var(--text-mid)}
+/* زر نسخ المعرّف */
 .btn-copy{margin-top:10px;padding:7px 16px;background:var(--warning);color:white;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);display:inline-flex;align-items:center;gap:5px}
+/* إشعار منبّه (Toast) يظهر في أسفل الشاشة */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
 .toast.show{display:flex}
 </style>
 </head>
 <body>
+
+<!-- الشريط الجانبي: يحتوي على شعار التطبيق ومعلومات المستخدم وقائمة التنقل -->
 <nav class="sidebar">
+  <!-- شعار TrainLink -->
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
+  <!-- معلومات المستخدم في الشريط الجانبي: الصورة الرمزية والاسم والدور والمعرّف -->
   <div class="sidebar-user">
     <div class="user-avatar" id="sideAvatar">مح</div>
     <div class="user-name" id="sideName">--</div>
     <div class="user-role" id="sideRole">مشرف أكاديمي</div>
     <div style="text-align:center"><span class="user-id" id="sideId" onclick="copyId()" title="اضغط للنسخ">--</span></div>
   </div>
+  <!-- قائمة التنقل الرئيسية -->
   <div class="nav-section">القائمة</div>
   <a href="#" class="nav-item active"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
   <a href="25-my-trainees.html" class="nav-item"><i class="ti ti-users"></i><span>متدربيّ</span><span class="nav-badge" id="navTraineeCount">0</span></a>
   <a href="26-progress-reports.html" class="nav-item"><i class="ti ti-chart-line"></i><span>تقارير الأداء</span></a>
   <a href="27-supervisor-chat.html" class="nav-item"><i class="ti ti-messages"></i><span>الدردشة</span></a>
+  <!-- زر تسجيل الخروج -->
   <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item" onclick="localStorage.clear()"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
 </nav>
 
 <div class="main">
+  <!-- الشريط العلوي: يعرض الترحيب واسم المشرف مع أيقونة الإشعارات -->
   <div class="topbar">
     <div><div class="topbar-title" id="greeting">مرحباً 👨‍🏫</div><div class="topbar-sub" id="topSub">جاري التحميل...</div></div>
     <div style="display:flex;align-items:center;gap:10px">
+      <!-- أيقونة الإشعارات -->
       <div style="width:34px;height:34px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative">
         <i class="ti ti-bell" style="color:var(--text-mid);font-size:16px"></i>
       </div>
+      <!-- صورة المستخدم في الشريط العلوي -->
       <div style="width:32px;height:32px;border-radius:50%;background:var(--warning);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white" id="topAvatar">مح</div>
     </div>
   </div>
 
   <div class="content">
+    <!-- شبكة الإحصائيات: تعرض عدد المتدربين النشطين ومتوسط الأداء وعدد التقارير الجديدة وعدد التنبيهات -->
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-icon" style="background:var(--warning-light)"><i class="ti ti-users" style="color:var(--warning)"></i></div><div><div class="stat-num" id="statTrainees">0</div><div class="stat-label">متدربون نشطون</div></div></div>
       <div class="stat-card"><div class="stat-icon" style="background:var(--success-light)"><i class="ti ti-chart-line" style="color:var(--success)"></i></div><div><div class="stat-num" id="statAvg">--</div><div class="stat-label">متوسط الأداء</div></div></div>
@@ -117,28 +164,34 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
       <div class="stat-card"><div class="stat-icon" style="background:#FEF2F2"><i class="ti ti-alert-triangle" style="color:var(--accent)"></i></div><div><div class="stat-num" id="statAlerts">0</div><div class="stat-label">تنبيهات أداء</div></div></div>
     </div>
 
+    <!-- التخطيط الرئيسي: عمودان - المحتوى الرئيسي (يسار) والشريط الجانبي الأيمن (يمين) -->
     <div class="layout">
       <div>
+        <!-- بطاقة قائمة المتدربين: عرض مختصر للمتدربين المرتبطين -->
         <div class="card">
           <div class="card-header"><div class="card-title"><i class="ti ti-users"></i>متدربيّ</div><a href="25-my-trainees.html" class="card-action">عرض الكل</a></div>
           <div id="traineesList"><div style="text-align:center;padding:20px;color:var(--text-mid);font-size:12px">جاري التحميل...</div></div>
         </div>
+        <!-- بطاقة آخر التقارير: عرض آخر تقارير أداء المتدربين -->
         <div class="card">
           <div class="card-header"><div class="card-title"><i class="ti ti-report"></i>آخر التقارير</div><a href="26-progress-reports.html" class="card-action">عرض الكل</a></div>
           <div id="reportsList"><div style="text-align:center;padding:20px;color:var(--text-mid);font-size:12px">جاري التحميل...</div></div>
         </div>
       </div>
       <div>
+        <!-- بطاقة معرّف المشرف: عرض المعرّف الفريد للمشرف مع زر النسخ -->
         <div class="id-card">
           <div class="id-label">ID المشرف الخاص بك</div>
           <div class="id-value" id="mySupId">--</div>
           <div class="id-hint">شارك هذا الكود مع طلابك لربطهم بحسابك</div>
           <button class="btn-copy" onclick="copyId()"><i class="ti ti-copy"></i>نسخ الكود</button>
         </div>
+        <!-- بطاقة تنبيهات الأداء: عرض تنبيهات المتدربين ذوي الأداء الضعيف -->
         <div class="card">
           <div class="card-header"><div class="card-title"><i class="ti ti-alert-triangle" style="color:var(--accent)"></i>تنبيهات الأداء</div></div>
           <div id="alertsList"><div style="text-align:center;padding:16px;color:var(--text-mid);font-size:12px">لا توجد تنبيهات</div></div>
         </div>
+        <!-- الإجراءات السريعة: روابط سريعة للتنقل بين الصفحات -->
         <div class="card">
           <div class="card-header"><div class="card-title"><i class="ti ti-bolt"></i>إجراءات سريعة</div></div>
           <a href="25-my-trainees.html" style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg);border-radius:var(--radius-md);text-decoration:none;margin-bottom:8px" onmouseover="this.style.background='var(--primary-light)'" onmouseout="this.style.background='var(--bg)'"><i class="ti ti-users" style="color:var(--primary);font-size:18px"></i><span style="font-size:13px;font-weight:600;color:var(--text-dark)">عرض متدربيّ</span></a>
@@ -150,32 +203,41 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </div>
 
+<!-- إشعار منبّه (Toast) يظهر مؤقتاً في أسفل الشاشة -->
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
+// عنوان API الأساسي
 const API='';
+// رمز المصادقة المخزّن في المتصفح
 let token=localStorage.getItem('trainlink_token');
+// بيانات المشرف الحالية
 let supervisorData=null;
 
+// دالة التهيئة الأولية: التحقق من تسجيل الدخول وتحميل البيانات
 (function init(){
   if(!token){window.location.href='../public/02-login.html';return;}
   loadProfile();loadTrainees();
 })();
 
+// دالة إنشاء رؤوس المصادقة للطلبات
 function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+token};}
 
+// دالة تحميل ملف المشرف الشخصي وعرض معلوماته في الواجهة
 async function loadProfile(){
   try{
     const res=await fetch(`${API}/api/auth/profile/`,{headers:authHeaders()});
     if(!res.ok){window.location.href='../public/02-login.html';return;}
     const data=await res.json();
     supervisorData=data;
+    // استخراج الاسم والأحرف الأولى لعرضها
     const name=data.full_name||'المشرف';
     const initials=name.substring(0,2);
     document.getElementById('sideName').textContent=name;
     document.getElementById('sideAvatar').textContent=initials;
     document.getElementById('topAvatar').textContent=initials;
     document.getElementById('greeting').textContent='مرحباً، '+name+' 👨\u200D🏫';
+    // عرض معرّف المشرف بتنسيق موحّد
     const supId=data.supervisor_id;
     if(supId){
       const formattedId='SUP-'+String(supId).padStart(5,'0');
@@ -188,23 +250,29 @@ async function loadProfile(){
   }catch(e){}
 }
 
+// دالة تحميل قائمة المتدربين وعرضهم في لوحة التحكم
 async function loadTrainees(){
   try{
     const res=await fetch(`${API}/api/performance/supervisor/trainees/`,{headers:authHeaders()});
     if(!res.ok)return;
     const data=await res.json();
+    // تحويل البيانات إلى مصفوفة إذا لم تكن كذلك
     const trainees=Array.isArray(data)?data:(data.results||[]);
+    // تحديث عداد المتدربين
     document.getElementById('statTrainees').textContent=trainees.length;
     document.getElementById('navTraineeCount').textContent=trainees.length;
     if(trainees.length===0){
       document.getElementById('traineesList').innerHTML='<div style="text-align:center;padding:20px;color:var(--text-mid);font-size:12px">لا يوجد متدربون بعد</div>';
       return;
     }
+    // ألوان دورية للصور الرمزية
     const tColors=['#5B4FCF','#22C55E','#FF6B6B','#7C3AED','#F59E0B'];
+    // عرض كل متدرب في صف يحتوي على الصورة والاسم والتخصص وشريط التقدم والتقييم
     document.getElementById('traineesList').innerHTML=trainees.map((t,i)=>{
       const name=t.name||'متدرب';
       const initials=name.substring(0,2);
       const color=tColors[i%tColors.length];
+      // حساب نسبة التقدم من المعدل
       const progress=t.progress||t.gpa?Math.round((t.gpa||0)/4*100):0;
       const rating=t.avg_rating||t.rating||'--';
       return`<div class="trainee-row" onclick="window.location.href='26-progress-reports.html'">
@@ -217,6 +285,7 @@ async function loadTrainees(){
   }catch(e){}
 }
 
+// دالة نسخ معرّف المشرف إلى الحافظة
 function copyId(){
   const id=document.getElementById('mySupId').textContent;
   if(id&&id!=='غير محدد'&&id!=='--'){
@@ -225,6 +294,7 @@ function copyId(){
   }
 }
 
+// دالة عرض إشعار منبّه مؤقت
 function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
 </body>

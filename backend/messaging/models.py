@@ -1,8 +1,16 @@
+"""
+نماذج قاعدة البيانات لتطبيق الرسائل
+تتضمن نماذج قنوات الدردشة والرسائل والإشعارات
+"""
+
 from django.db import models
 from accounts.models import Person
 
 
+# نموذج قنوات الدردشة (فردية أو مجموعة)
 class ChatChannel(models.Model):
+    """يمثل قناة دردشة يمكن أن تكون فردية (بين شخصين) أو جماعية (مجموعة أشخاص)"""
+    # خيارات نوع القناة: فردية أو جماعية
     TYPE_CHOICES = [
         ('direct', 'فردي'),
         ('group', 'مجموعة'),
@@ -18,6 +26,7 @@ class ChatChannel(models.Model):
     class Meta:
         verbose_name = 'قناة دردشة'
         verbose_name_plural = 'قنوات الدردشة'
+        # ترتيب القنوات حسب آخر تحديث (الأحدث أولاً)
         ordering = ['-updated_at']
 
     def __str__(self):
@@ -25,10 +34,13 @@ class ChatChannel(models.Model):
 
     @property
     def last_message(self):
+        """إرجاع آخر رسالة في القناة"""
         return self.messages.first()
 
 
+# نموذج الرسائل داخل قنوات الدردشة
 class Message(models.Model):
+    """يمثل رسالة نصية مرسلة داخل قناة دردشة"""
     id = models.AutoField(primary_key=True)
     channel = models.ForeignKey(ChatChannel, on_delete=models.CASCADE, related_name='messages', verbose_name='القناة')
     sender = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='sent_messages', verbose_name='المرسل')
@@ -40,13 +52,17 @@ class Message(models.Model):
     class Meta:
         verbose_name = 'رسالة'
         verbose_name_plural = 'الرسائل'
+        # ترتيب الرسائل تصاعدياً حسب وقت الإرسال
         ordering = ['sent_at']
 
     def __str__(self):
         return f'{self.sender.full_name}: {self.content[:50]}'
 
 
+# نموذج الإشعارات للمستخدمين
 class Notification(models.Model):
+    """يمثل إشعاراً يُرسل للمستخدمين لتنبيههم بأحداث مختلفة"""
+    # أنواع الإشعارات المتاحة
     TYPE_CHOICES = [
         ('application', 'طلب تقديم'),
         ('message', 'رسالة'),
@@ -67,6 +83,7 @@ class Notification(models.Model):
     class Meta:
         verbose_name = 'إشعار'
         verbose_name_plural = 'الإشعارات'
+        # ترتيب الإشعارات من الأحدث إلى الأقدم
         ordering = ['-created_at']
 
     def __str__(self):

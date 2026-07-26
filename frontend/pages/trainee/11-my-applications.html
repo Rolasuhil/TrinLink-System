@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة طلباتي للتدريب (11-my-applications.html)
+  ========================================
+  الغرض: عرض جميع طلبات التدريب المقدمة من المتدرب وحالتها.
+  تتصل بالـ API لجلب الطلبات مع نسبة مطابقة AI لكل فرصة.
+  تتضمن: بطاقات الطلبات، إحصائيات، فلترة حسب الحالة.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -269,12 +278,27 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — طلباتي للتدريب -->
+<!-- ======================================== -->
 <script>
+/*
+ * ===========================================
+ * أكواد JavaScript — طلباتي للتدريب
+ * ===========================================
+ * الدوال الرئيسية:
+ * 1. جلب جميع طلبات التدريب المقدمة
+ * 2. عرض البطاقات مع نسبة مطابقة AI
+ * 3. الفلترة حسب الحالة (الكل/قيد المراجعة/مقبول/مرفوض)
+ * 4. سحب طلب التقديم
+ * ===========================================
+ */
 (function(){
   var token = localStorage.getItem('trainlink_token');
   if(!token){ window.location.href = '../public/02-login.html'; return; }
 })();
 
+/* --- ثوابت ومتغيرات عامة --- */
 const API_BASE = '/api';
 function getToken() { return localStorage.getItem('trainlink_token'); }
 function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
@@ -424,6 +448,7 @@ async function withdrawApp(btn) {
   } catch(e) { showToast('حدث خطأ'); }
 }
 
+// عند تحميل الصفحة: جلب الملف الشخصي ثم جلب الطلبات وعرضها
 document.addEventListener('DOMContentLoaded', async function() {
   if (!getToken()) { window.location.href = '../public/02-login.html'; return; }
 

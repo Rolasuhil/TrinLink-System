@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة مساعد الذكاء الاصطناعي (13-ai-assistant.html)
+  ========================================
+  الغرض: مساعد ذكي يقدم تحليل CV، توصيات فرق، ونصائح مهنية.
+  يتصل بمحرك Gemini AI عبر API لتحليل السيرة الذاتية واقتراح فرص مناسبة.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -199,15 +207,32 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — مساعد الذكاء الاصطناعي -->
+<!-- ======================================== -->
 <script>
+/*
+ * ===========================================
+ * أكواد JavaScript — مساعد الذكاء الاصطناعي
+ * ===========================================
+ * الدوال الرئيسية:
+ * 1. التبديل بين أقسام المساعد (تحليل CV / توصيات / مقارنة)
+ * 2. رفع ملف السيرة الذاتية وتحليلها بالـ AI
+ * 3. جلب توصيات فرص مطابقة للمهارات
+ * 4. عرض نتائج التحليل والتوصيات
+ * ===========================================
+ */
 (function(){
   var token = localStorage.getItem('trainlink_token');
   if(!token){ window.location.href = '../public/02-login.html'; return; }
 })();
 
+/* --- ثوابت ومتغيرات عامة --- */
 const API_BASE = '/api';
+/* --- دوال المصادقة --- */
 function getToken(){ return localStorage.getItem('trainlink_token'); }
 function authHeaders(){ return { 'Authorization': 'Bearer ' + getToken() }; }
+/* --- متغير لتخزين ملف السيرة الذاتية المحدد --- */
 let selectedFile = null;
 
 function showSection(btn,id){
@@ -232,6 +257,7 @@ function handleDrop(e){
   if(file) processFile(file);
 }
 
+// معالجة ملف السيرة الذاتية المرفوع وتحليله
 function processFile(file){
   const allowed = ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
   if(!allowed.includes(file.type)){
@@ -256,6 +282,7 @@ function processFile(file){
   btn.disabled=false;
 }
 
+// بدء تحليل السيرة الذاتية بالذكاء الاصطناعي
 function startAnalysis(){
   if(!selectedFile){ showToast('يرجى اختيار ملف أولاً'); return; }
   document.getElementById('emptyState').style.display='none';
@@ -290,6 +317,7 @@ function startAnalysis(){
   });
 }
 
+// عرض نتائج تحليل السيرة الذاتية في الصفحة
 function renderResults(analysis){
   const score = analysis.overall_score || 0;
   const circumference = 2 * Math.PI * 34;
@@ -344,6 +372,7 @@ function renderResults(analysis){
   document.getElementById('resultsState').className = 'result-visible';
 }
 
+// جلب فرص التدريب الموصى بها من API بناءً على مهارات المتدرب
 function loadMatches(){
   const grid = document.querySelector('.match-grid');
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px"><div class="loading-spinner" style="margin:0 auto 16px"></div><div style="color:var(--text-mid)">جارٍ تحميل التوصيات...</div></div>';

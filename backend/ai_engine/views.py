@@ -1,3 +1,6 @@
+# ملف واجهات برمجة التطبيقات لمحرك الذكاء الاصطناعي
+# يحتوي على منطق رفع وتحليل السير الذاتية والمطابقة الذكية للمتدربين بالفرص التدريبية
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,6 +14,9 @@ import json
 
 
 def get_user(request):
+    """دالة مساعدة لاستخراج بيانات المستخدم من رمز JWT في طلب التصريح
+    ترجع كائن الشخص إذا كان الرمز صالحاً، أو None إذا لم يكن كذلك
+    """
     auth = request.headers.get('Authorization', '')
     if not auth.startswith('Bearer '):
         return None
@@ -22,7 +28,18 @@ def get_user(request):
 
 
 class CVUploadView(APIView):
+    """واجهة رفع وتحليل السيرة الذاتية
+    تسمح للمتدربين برفع ملف سيرتهم الذاتية وتحليلها بالذكاء الاصطناعي
+    """
+
     def post(self, request):
+        """معالجة طلب رفع السيرة الذاتية
+        - التحقق من صلاحية المستخدم (متدرب فقط)
+        - التحقق من وجود الملف وصيغته (PDF أو Word) وحجمه (أقصاه 5MB)
+        - إنشاء سجل السيرة الذاتية في قاعدة البيانات
+        - تحليل السيرة الذاتية بالذكاء الاصطناعي
+        - حفظ نتائج التحليل في نموذج CVAnalysis
+        """
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -31,25 +48,30 @@ class CVUploadView(APIView):
         if not cv_file:
             return Response({'error': 'يرجى رفع ملف السيرة الذاتية'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # التحقق من صيغة الملف المدعومة
         allowed = ['.pdf', '.doc', '.docx']
         ext = '.' + cv_file.name.rsplit('.', 1)[-1].lower() if '.' in cv_file.name else ''
         if ext not in allowed:
             return Response({'error': 'صيغة الملف غير مدعومة. يرجى استخدام PDF أو Word'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # التحقق من حجم الملف (الحد الأقصى 5 ميجابايت)
         if cv_file.size > 5 * 1024 * 1024:
             return Response({'error': 'حجم الملف يتجاوز 5MB'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # إنشاء سجل السيرة الذاتية في قاعدة البيانات
         cv = CV.objects.create(
             trainee=user.trainee_profile,
             file=cv_file,
             file_path=cv_file.name,
         )
 
+        # تحليل السيرة الذاتية بالذكاء الاصطناعي وحفظ النتائج
         analysis = self.analyze_cv(cv, user)
         cv.ai_analysis = analysis
         cv.ai_score = analysis.get('overall_score', 0)
         cv.save()
 
+        # إنشاء سجل تحليل السيرة الذاتية بالتفصيل
         CVAnalysis.objects.create(
             cv=cv,
             overall_score=analysis.get('overall_score', 0),
@@ -67,6 +89,10 @@ class CVUploadView(APIView):
         }, status=status.HTTP_201_CREATED)
 
     def analyze_cv(self, cv, user):
+        """تحليل السيرة الذاتية باستخدام Google Gemini AI
+        يرسل معلومات المتدرب وprompt متخصص إلى Gemini ويستخرج تقييماً شاملاً
+        يرجع قاموساً بالنتيجة يشمل التقييم العام والتقييمات الفرعية والاقتراحات
+        """
         gemini_key = getattr(settings, 'GEMINI_API_KEY', '')
         if gemini_key:
             try:
@@ -74,6 +100,7 @@ class CVUploadView(APIView):
                 from google.genai import types
                 client = genai.Client(api_key=gemini_key)
                 trainee = user.trainee_profile
+                # بناء الطلب (prompt) لتحليل السيرة الذاتية بالعربية
                 prompt = f"""أنت خبير في تحليل السيرة الذاتية لطلاب التدريب في فلسطين.
 حلل السيرة الذاتية وقدم تقييماً شاملاً.
 
@@ -96,24 +123,31 @@ class CVUploadView(APIView):
   "strengths": ["نقطة قوة 1", "نقطة قوة 2"],
   "weaknesses": ["نقطة ضعف 1", "نقطة ضعف 2"]
 }}"""
+                # إرسال الطلب إلى Gemini واستخراج النتيجة
                 response = client.models.generate_content(
                     model='gemini-2.0-flash',
                     contents=prompt,
                 )
                 text = response.text.strip()
+                # إزالة علامات الكود البرمجي إذا وُجدت في الاستجابة
                 if text.startswith('```'):
                     text = text.split('\n', 1)[1].rsplit('```', 1)[0].strip()
                 return json.loads(text)
             except Exception as e:
                 pass
 
+        # استخدام التحليل الاحتياطي إذا فشل الاتصال بـ Gemini
         return self.get_fallback_analysis(user)
 
     def get_fallback_analysis(self, user):
+        """تحليل احتياطي للسيرة الذاتية بدون استخدام الذكاء الاصطناعي
+        يعتمد فقط على بيانات المتدرب (المعدل والتخصص) لإعطاء تقييم تقريبي
+        """
         trainee = getattr(user, 'trainee_profile', None)
         major = trainee.major if trainee else ''
         gpa = trainee.gpa if trainee else 0
 
+        # حساب درجات الأقسام بناءً على المعدل والتخصص
         edu_score = 80 if gpa and gpa >= 3.0 else 65 if gpa and gpa >= 2.5 else 50
         exp_score = 45
         skills_score = 60 if major else 50
@@ -121,6 +155,7 @@ class CVUploadView(APIView):
 
         overall = round((edu_score + exp_score + skills_score + fmt_score) / 4)
 
+        # اقتراحات عامة لتحسين السيرة الذاتية
         suggestions = [
             'أضف خبرات تطوعية أو مشاريع عملية تثبت مهاراتك',
             'حسّن المهارات التقنية وحدد مستويات إتقان كل أداة',
@@ -129,6 +164,7 @@ class CVUploadView(APIView):
             'أضف رابط GitHub أو Portfolio لعرض أعمالك',
         ]
 
+        # تحديد نقاط القوة بناءً على البيانات المتاحة
         strengths = []
         if gpa and gpa >= 3.0:
             strengths.append('معدل تراكمي ممتاز')
@@ -136,6 +172,7 @@ class CVUploadView(APIView):
             strengths.append(f'تخصص {major} موثق')
         strengths.extend(['التنسيق الأساسي جيد', 'المعلومات الشخصية موجودة'])
 
+        # تحديد نقاط الضعف
         weaknesses = []
         if exp_score < 60:
             weaknesses.append('يحتاج إلى خبرات عملية أكثر')
@@ -156,7 +193,17 @@ class CVUploadView(APIView):
 
 
 class AIMatchView(APIView):
+    """واجهة المطابقة الذكية للمتدربين بالفرص التدريبية
+    تحسب نسبة توافق كل متدرب مع كل فرصة تدريبية مفتوحة
+    """
+
     def get(self, request):
+        """جلب أفضل فرص التدريب المتوافقة مع المتدرب
+        - التحقق من صلاحية المستخدم (متدرب فقط)
+        - حساب نسبة المطابقة مع كل فرصة مفتوحة
+        - تصفية الفرص ذات النسبة العالية (أكثر من 30%)
+        - ترتيب النتائج و返回 أعلى 10 فرص
+        """
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -167,6 +214,7 @@ class AIMatchView(APIView):
         matches = []
         for internship in internships:
             score = self.calculate_match(trainee, internship)
+            # فقط الفرص التي نسبة مطابقتها أكثر من 30%
             if score > 30:
                 matches.append({
                     'internship_id': internship.id,
@@ -183,25 +231,36 @@ class AIMatchView(APIView):
                     'reason': self.get_match_reason(trainee, internship, score),
                 })
 
+        # ترتيب النتائج من أعلى نسبة مطابقة إلى أقلها
         matches.sort(key=lambda x: x['match_score'], reverse=True)
         return Response({'matches': matches[:10]})
 
     def calculate_match(self, trainee, internship):
+        """حساب نسبة مطابقة المتدرب مع فرصة تدريبية معينة
+        تبدأ من 50% وتزداد بناءً على: تطابق التخصص، المعدل التراكمي، الجامعة، ونوع الفرصة
+        """
         score = 50
+        # مكافأة تطابق التخصص مع فئة الفرصة
         if trainee.major and internship.category:
             if trainee.major.lower() in internship.category.name.lower() or internship.category.name.lower() in trainee.major.lower():
                 score += 25
+        # مكافأة المعدل التراكمي العالي
         if trainee.gpa and trainee.gpa >= 3.0:
             score += 10
         elif trainee.gpa and trainee.gpa >= 2.5:
             score += 5
+        # مكافأة وجود الجامعة
         if trainee.university:
             score += 5
+        # مكافأة الفرصة عن بُعد
         if internship.internship_type == 'remote':
             score += 5
         return min(score, 98)
 
     def get_match_reason(self, trainee, internship, score):
+        """توليد سبب المطابقة بناءً على تفاصيل المتدرب والفرصة
+        ترجع نصاً يشرح لماذا هذه الفرصة مناسبة للمتدرب
+        """
         reasons = []
         if trainee.major and internship.category:
             if trainee.major.lower() in internship.category.name.lower():
@@ -216,7 +275,14 @@ class AIMatchView(APIView):
 
 
 class CVAnalysisListView(APIView):
+    """واجهة جلب قائمة تحليلات السير الذاتية
+    ترجع جميع تحليلات السير الذاتية للمتدرب المسجل
+    """
+
     def get(self, request):
+        """جلب جميع تحليلات السير الذاتية للمتدرب
+        ترجع قائمة بجميع التحليلات مع التقييمات والاقتراحات
+        """
         user = get_user(request)
         if not user or user.person_type != 'trainee':
             return Response({'error': 'غير مصرح'}, status=status.HTTP_401_UNAUTHORIZED)

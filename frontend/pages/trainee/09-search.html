@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة البحث عن فرصة تدريب (09-search.html)
+  ========================================
+  الغرض: البحث والتصفية عن فرص التدريب المتاحة.
+  تتصل بالـ API لجلب الفرص من قاعدة البيانات مع فلترة حسب التخصص والموقع والنوع.
+  تحتوي على شريط بحث، فلاتر جانبية، وشبكة نتائج بالفرص المطابقة.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -324,12 +333,28 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — صفحة البحث عن تدريب -->
+<!-- ======================================== -->
 <script>
+/*
+ * ===========================================
+ * أكواد JavaScript — صفحة البحث عن تدريب
+ * ===========================================
+ * الدوال الرئيسية:
+ * 1. جلب فرص التدريب من API مع الفلاتر
+ * 2. عرض البطاقات (renderJobs)
+ * 3. التصفية حسب النوع والموقع والكلمات
+ * 4. حفظ/إلغاء حفظ فرصة
+ * 5. الترتيب حسب التاريخ أو التقييم
+ * ===========================================
+ */
 (function(){
   var token = localStorage.getItem('trainlink_token');
   if(!token){ window.location.href = '../public/02-login.html'; return; }
 })();
 
+/* --- ثوابت ومتغيرات عامة --- */
 const API_BASE = '/api';
 function getToken() { return localStorage.getItem('trainlink_token'); }
 function getUser() { const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
@@ -377,6 +402,7 @@ function renderJobCard(item, idx) {
   '</div>';
 }
 
+// عرض جميع فرص التدريب في شبكة البطاقات
 function renderJobs(jobs) {
   const grid = document.getElementById('jobsGrid');
   if (!jobs.length) {
@@ -387,6 +413,7 @@ function renderJobs(jobs) {
   document.querySelector('.results-count').innerHTML = 'عُثر على <strong>' + jobs.length + '</strong> فرصة تدريب';
 }
 
+// جلب فرص التدريب من API حسب الفلاتر النشطة
 async function fetchInternships(params) {
   const grid = document.getElementById('jobsGrid');
   grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-mid);grid-column:1/-1">جارٍ التحميل...</div>';

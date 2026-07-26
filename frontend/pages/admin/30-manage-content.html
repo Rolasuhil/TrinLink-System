@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿<!-- صفحة إدارة المحتوى - تتيح للمدير إدارة Opportunities التدريبية والمنشورات والأقسام مع إمكانية الحذف والتنقل بين التبويبات -->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,14 +8,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين شاملة لجميع العناصر */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* المتغيرات العامة: الألوان والخطوط والأبعاد */
 :root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+
+/* تخطيط الصفحة الأساسي مع خلفية فاتحة */
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+
+/* --- أنماط القائمة الجانبية --- */
+/* حاوية القائمة الجانبية المظلمة */
 .sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+
+/* شعار التطبيق */
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+
+/* عناصر التنقل */
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
 .nav-item.active{background:var(--primary)}
@@ -22,26 +35,47 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .nav-item.active i,.nav-item.active span{color:white}
 .nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
 .nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+
+/* عنوان أقسام التنقل */
 .nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+
+/* الجزء السفلي من القائمة الجانبية */
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+
+/* --- أنماط المحتوى الرئيسي --- */
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+
+/* شريط العنوان العلوي */
 .topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
 .topbar-title{font-size:16px;font-weight:700}
 .topbar-sub{font-size:12px;color:var(--text-mid)}
+
+/* حاوية المحتوى */
 .content{padding:20px 24px;flex:1}
+
+/* --- التبويبات --- */
+/* حاوية التبويبات للتنقل بين فرص التدريب والمنشورات والأقسام */
 .tabs{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:4px;margin-bottom:16px;width:fit-content}
 .tab{padding:7px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-mid);font-family:var(--font);transition:all 0.15s}
 .tab.active{background:var(--primary);color:white}
+
+/* --- أنماط البطاقة والجدول --- */
 .card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:14px}
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
 .card-title i{color:var(--primary);font-size:16px}
+
+/* جدول عرض المحتوى */
 .table{width:100%;border-collapse:collapse}
 .table th{text-align:right;padding:10px 12px;font-size:11px;font-weight:700;color:var(--text-mid);border-bottom:2px solid var(--border);text-transform:uppercase}
 .table td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
 .table tr:last-child td{border-bottom:none}
 .table tr:hover td{background:var(--bg)}
+
+/* شارة الحالة */
 .status-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;display:inline-block}
+
+/* أزرار الإجراءات في الجدول */
 .action-btns{display:flex;gap:4px}
 .action-btn{width:30px;height:30px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
 .action-btn i{font-size:14px;color:var(--text-mid)}
@@ -49,22 +83,29 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .action-btn:hover i{color:var(--primary)}
 .action-btn.danger:hover{border-color:var(--accent);background:#FEE2E2}
 .action-btn.danger:hover i{color:var(--accent)}
+
+/* صف الإحصائيات المصغرة */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 .stat-mini{background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;text-align:center}
 .stat-mini-num{font-size:20px;font-weight:800;color:var(--primary)}
 .stat-mini-label{font-size:11px;color:var(--text-mid);margin-top:2px}
+
+/* رسالة التنبيه العائمة */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
 .toast.show{display:flex}
 </style>
 </head>
 <body>
 
+<!-- === القائمة الجانبية === -->
 <nav class="sidebar">
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
+  <!-- معلومات المدير -->
   <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
     <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
     <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
   </div>
+  <!-- روابط التنقل -->
   <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
   <a href="28-admin-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
   <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span><span class="nav-badge">5</span></a>
@@ -78,7 +119,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </nav>
 
+<!-- === المحتوى الرئيسي === -->
 <div class="main">
+  <!-- شريط العنوان -->
   <div class="topbar">
     <div>
       <div class="topbar-title">إدارة المحتوى 📄</div>
@@ -87,24 +130,28 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 
   <div class="content">
+    <!-- === شريط التبويبات للتنقل بين الأقسام === -->
     <div class="tabs">
       <button class="tab active" onclick="switchTab(this,'internships')">الفرص التدريبية</button>
       <button class="tab" onclick="switchTab(this,'posts')">المنشورات</button>
       <button class="tab" onclick="switchTab(this,'categories')">الأقسام</button>
     </div>
 
-    <!-- INTERNSHIPS TAB -->
+    <!-- === تبويب الفرص التدريبية === -->
     <div id="internships">
+      <!-- إحصائيات فرص التدريب -->
       <div class="stats-row">
         <div class="stat-mini"><div class="stat-mini-num">186</div><div class="stat-mini-label">إجمالي الفرص</div></div>
         <div class="stat-mini"><div class="stat-mini-num" style="color:var(--success)">156</div><div class="stat-mini-label">نشطة</div></div>
         <div class="stat-mini"><div class="stat-mini-num" style="color:var(--text-mid)">22</div><div class="stat-mini-label">مسودات</div></div>
         <div class="stat-mini"><div class="stat-mini-num" style="color:var(--accent)">8</div><div class="stat-mini-label">منتهية</div></div>
       </div>
+      <!-- جدول فرص التدريب -->
       <div class="card" style="padding:0;overflow-x:auto">
         <table class="table">
           <thead><tr><th>الفرصة</th><th>الشركة</th><th>الموقع</th><th>الحالة</th><th>إجراءات</th></tr></thead>
           <tbody>
+            <!-- فرصة: مطور Frontend في TechPal - نشطة -->
             <tr>
               <td><span style="font-weight:700;color:var(--text-dark)">مطور Frontend — React</span></td>
               <td><span style="font-size:12px">TechPal</span></td>
@@ -112,6 +159,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
               <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
               <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn"><i class="ti ti-edit"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
             </tr>
+            <!-- فرصة: مصمم UI/UX في DesignHub - نشطة -->
             <tr>
               <td><span style="font-weight:700;color:var(--text-dark)">مصمم UI/UX</span></td>
               <td><span style="font-size:12px">DesignHub</span></td>
@@ -119,6 +167,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
               <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
               <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn"><i class="ti ti-edit"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
             </tr>
+            <!-- فرصة: مطور Backend في TechPal - نشطة -->
             <tr>
               <td><span style="font-weight:700;color:var(--text-dark)">مطور Backend — Django</span></td>
               <td><span style="font-size:12px">TechPal</span></td>
@@ -126,6 +175,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
               <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
               <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn"><i class="ti ti-edit"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
             </tr>
+            <!-- فرصة: محلل بيانات في DataSoft - مسودة -->
             <tr>
               <td><span style="font-weight:700;color:var(--text-dark)">محلل بيانات</span></td>
               <td><span style="font-size:12px">DataSoft</span></td>
@@ -133,6 +183,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
               <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">مسودة</span></td>
               <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn"><i class="ti ti-edit"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
             </tr>
+            <!-- فرصة: مطور Mobile في NetSoft - منتهية -->
             <tr>
               <td><span style="font-weight:700;color:var(--text-dark)">مطور Mobile — Flutter</span></td>
               <td><span style="font-size:12px">NetSoft</span></td>
@@ -145,18 +196,21 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
       </div>
     </div>
 
-    <!-- POSTS TAB -->
+    <!-- === تبويب المنشورات === -->
     <div id="posts" style="display:none">
+      <!-- إحصائيات المنشورات -->
       <div class="stats-row">
         <div class="stat-mini"><div class="stat-mini-num">234</div><div class="stat-mini-label">إجمالي المنشورات</div></div>
         <div class="stat-mini"><div class="stat-mini-num" style="color:var(--success)">210</div><div class="stat-mini-label">نشطة</div></div>
         <div class="stat-mini"><div class="stat-mini-num" style="color:var(--accent)">12</div><div class="stat-mini-label">محذوفة</div></div>
         <div class="stat-mini"><div class="stat-mini-num" style="color:var(--warning)">12</div><div class="stat-mini-label">مُبلّغ عنها</div></div>
       </div>
+      <!-- جدول المنشورات -->
       <div class="card" style="padding:0;overflow-x:auto">
         <table class="table">
           <thead><tr><th>المنشور</th><th>الكاتب</th><th>النوع</th><th>الحالة</th><th>إجراءات</th></tr></thead>
           <tbody>
+            <!-- منشور: تجربة تدريبية -->
             <tr>
               <td><span style="font-weight:600;color:var(--text-dark)">تجربتي الممتازة في TechPal...</span></td>
               <td><span style="font-size:12px">أحمد حسن</span></td>
@@ -164,6 +218,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
               <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
               <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
             </tr>
+            <!-- منشور: تقييم شركة -->
             <tr>
               <td><span style="font-weight:600;color:var(--text-dark)">تقييم DesignHub — 5 نجوم</span></td>
               <td><span style="font-size:12px">منى ناصر</span></td>
@@ -171,6 +226,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
               <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
               <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
             </tr>
+            <!-- منشور: سؤال مُبلّغ عنه -->
             <tr>
               <td><span style="font-weight:600;color:var(--text-dark)">هل يطلبون خبرة في TechPal؟</span></td>
               <td><span style="font-size:12px">خالد عمر</span></td>
@@ -183,31 +239,38 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
       </div>
     </div>
 
-    <!-- CATEGORIES TAB -->
+    <!-- === تبويب الأقسام === -->
     <div id="categories" style="display:none">
+      <!-- شبكة الأقسام التخصصية مع عدد الفرص في كل قسم -->
       <div class="card">
         <div class="card-header"><div class="card-title"><i class="ti ti-folder"></i>الأقسام</div></div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <!-- قسم تطوير الويب -->
           <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
             <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--primary-light);display:flex;align-items:center;justify-content:center"><i class="ti ti-code" style="color:var(--primary);font-size:18px"></i></div>
             <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">تطوير الويب</div><div style="font-size:11px;color:var(--text-mid)">56 فرصة</div></div>
           </div>
+          <!-- قسم تطوير الموبايل -->
           <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
             <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--success-light);display:flex;align-items:center;justify-content:center"><i class="ti ti-device-mobile" style="color:var(--success);font-size:18px"></i></div>
             <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">تطوير الموبايل</div><div style="font-size:11px;color:var(--text-mid)">32 فرصة</div></div>
           </div>
+          <!-- قسم تصميم UI/UX -->
           <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
             <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:#FFF0F0;display:flex;align-items:center;justify-content:center"><i class="ti ti-palette" style="color:var(--accent);font-size:18px"></i></div>
             <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">تصميم UI/UX</div><div style="font-size:11px;color:var(--text-mid)">28 فرصة</div></div>
           </div>
+          <!-- قسم تحليل البيانات -->
           <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
             <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--warning-light);display:flex;align-items:center;justify-content:center"><i class="ti ti-database" style="color:var(--warning);font-size:18px"></i></div>
             <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">تحليل البيانات</div><div style="font-size:11px;color:var(--text-mid)">24 فرصة</div></div>
           </div>
+          <!-- قسم أمن المعلومات -->
           <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
             <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:#FEE2E2;display:flex;align-items:center;justify-content:center"><i class="ti ti-shield-lock" style="color:#DC2626;font-size:18px"></i></div>
             <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">أمن المعلومات</div><div style="font-size:11px;color:var(--text-mid)">18 فرصة</div></div>
           </div>
+          <!-- قسم الذكاء الاصطناعي -->
           <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
             <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:#E0F2FE;display:flex;align-items:center;justify-content:center"><i class="ti ti-robot" style="color:#0EA5E9;font-size:18px"></i></div>
             <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">الذكاء الاصطناعي</div><div style="font-size:11px;color:var(--text-mid)">14 فرصة</div></div>
@@ -218,20 +281,33 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </div>
 
+<!-- رسالة التنبيه العائمة -->
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
+// === ملف جافاسكريبت لإدارة المحتوى ===
+
+// التحقق من صحة تسجيل الدخول
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+
+// عنوان واجهة برمجة التطبيقات
 const API_BASE='/api';
+
+// دالة الحصول على رمز المصادقة
 function getToken(){return localStorage.getItem('trainlink_token')}
+
+// دالة إنشاء رؤوس طلب المصادقة
 function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
 
+// === عند تحميل الصفحة بالكامل ===
 document.addEventListener('DOMContentLoaded',async function(){
   try{
+    // جلب بيانات المحتوى من الخادم (الفرص، المنشورات، الأقسام، الإحصائيات)
     var res=await fetch(API_BASE+'/admin-panel/content/',{headers:authHeaders()});
     if(!res.ok)throw new Error('Failed');
     var data=await res.json();
 
+    // تحديث إحصائيات فرص التدريب
     var stats=data.stats||{};
     var statNums=document.querySelectorAll('.stat-mini-num');
     if(statNums[0])statNums[0].textContent=stats.total_internships||0;
@@ -239,6 +315,7 @@ document.addEventListener('DOMContentLoaded',async function(){
     if(statNums[2])statNums[2].textContent=stats.draft_internships||0;
     if(statNums[3])statNums[3].textContent=stats.closed_internships||0;
 
+    // إنشاء صفوف جدول فرص التدريب من البيانات
     var internships=data.internships||[];
     var internshipBody=document.querySelector('#internships tbody');
     if(internshipBody&&internships.length){
@@ -252,6 +329,7 @@ document.addEventListener('DOMContentLoaded',async function(){
       });
     }
 
+    // إنشاء صفوف جدول المنشورات من البيانات
     var posts=data.posts||[];
     var postsBody=document.querySelector('#posts tbody');
     if(postsBody&&posts.length){
@@ -263,6 +341,7 @@ document.addEventListener('DOMContentLoaded',async function(){
       });
     }
 
+    // إنشاء بطاقات الأقسام من البيانات
     var categories=data.categories||[];
     var catContainer=document.querySelector('#categories div[style*="grid-template-columns"]');
     if(catContainer&&categories.length){
@@ -280,6 +359,7 @@ document.addEventListener('DOMContentLoaded',async function(){
       });
     }
 
+    // تحديث إحصائيات المنشورات
     var postStatNums=document.querySelectorAll('#posts .stat-mini-num');
     if(postStatNums[0])postStatNums[0].textContent=stats.total_posts||0;
     if(postStatNums[1])postStatNums[1].textContent=stats.total_posts||0;
@@ -287,6 +367,7 @@ document.addEventListener('DOMContentLoaded',async function(){
   }catch(e){console.log('Error loading content:',e)}
 });
 
+// دالة حذف محتوى (فرصة تدريبية أو منشور) بعد التأكيد
 async function deleteItem(type,id){
   if(!confirm('هل أنت متأكد من الحذف؟'))return;
   try{
@@ -296,6 +377,7 @@ async function deleteItem(type,id){
   }catch(e){console.log(e);showToast('حدث خطأ');}
 }
 
+// دالة التبديل بين التبويبات (فرص تدريبية، منشورات، أقسام)
 function switchTab(btn,id){
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
   btn.classList.add('active');
@@ -304,6 +386,7 @@ function switchTab(btn,id){
   });
 }
 
+// دالة عرض رسالة تنبيه عائمة
 function showToast(msg){
   var t=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;

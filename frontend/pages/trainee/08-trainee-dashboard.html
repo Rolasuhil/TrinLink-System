@@ -1,3 +1,11 @@
+<!--
+  ========================================
+  صفحة لوحة تحكم المتدرب (08-trainee-dashboard.html)
+  ========================================
+  الغرض: عرض نظرة عامة للمتدرب على حالته، فرص التدريب الموصى بها، طلباته، وملفه الشخصي.
+  تتصل بالـ API لجلب البيانات الحقيقية: إحصائيات، فرص مطابقة، طلبات مقدمة.
+  ========================================
+-->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -325,12 +333,31 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 
 <div id="toast" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:12px;font-size:13px;display:none;z-index:9999;font-family:'Cairo',sans-serif;border:1px solid rgba(255,255,255,0.1)"><span id="toastMsg"></span></div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — لوحة تحكم المتدرب -->
+<!-- ======================================== -->
 <script>
+/*
+ * ===========================================
+ * أكواد JavaScript — لوحة تحكم المتدرب
+ * ===========================================
+ * هذا القسم يحتوي على الدوال التالية:
+ * 1. التحقق من تسجيل الدخول (localStorage)
+ * 2. جلب الملف الشخصي من API
+ * 3. جلب الطلبات المقدمة من API
+ * 4. جلب فرص التدريب المتاحة
+ * 5. عرض التقويم والمواعيد النهائية
+ * 6. عرض التوصيات المطابقة
+ * 7. التبديل بين التبويبات
+ * 8. جلب الإشعارات والرسائل
+ * ===========================================
+ */
 (function(){
   var token = localStorage.getItem('trainlink_token');
   if(!token){ window.location.href = '../public/02-login.html'; return; }
 })();
 
+/* --- ثوابت ومتغيرات عامة --- */
 const API_BASE = '/api';
 function getToken(){ return localStorage.getItem('trainlink_token'); }
 function getUser(){ const u = localStorage.getItem('trainlink_user'); return u ? JSON.parse(u) : null; }
@@ -379,6 +406,9 @@ document.addEventListener('DOMContentLoaded', async function(){
   }
 });
 
+/* --- دوال جلب البيانات من API --- */
+
+// جلب الملف الشخصي للمتدرب وعرض معلوماته في الشريط الجانبي والبطاقات
 async function loadProfile(){
   try{
     const res = await fetch(API_BASE+'/auth/profile/', {headers:authHeaders()});
@@ -413,6 +443,7 @@ async function loadProfile(){
   }catch(e){}
 }
 
+// جلب طلبات التدريب المقدمة من المتدرب وعرضها في القائمة
 async function loadApplications(){
   try{
     const res = await fetch(API_BASE+'/internships/applications/', {headers:authHeaders()});
@@ -471,6 +502,7 @@ async function loadApplications(){
   }catch(e){}
 }
 
+// جلب فرص التدريب المتاحة وعرضها كتوصيات مطابقة
 async function loadInternships(){
   try{
     const res = await fetch(API_BASE+'/internships/', {headers:authHeaders()});
@@ -485,6 +517,7 @@ async function loadInternships(){
 }
 
 const arMonths = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+// عرض المواعيد النهائية للفرص في قسم التقويم
 function renderCalendar(list){
   const container = document.getElementById('calendarContainer');
   if(!container) return;
@@ -511,6 +544,7 @@ function renderCalendar(list){
   });
 }
 
+// عرض فرص التدريب الموصى بها في قسم التوصيات
 function renderRecs(list){
   const container = document.getElementById('recsContainer');
   if(!container) return;

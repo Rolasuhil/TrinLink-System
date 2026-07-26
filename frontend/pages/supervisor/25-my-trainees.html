@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+<!-- صفحة متدربيّ: تعرض قائمة كاملة بجميع المتدربين المرتبطين بالمشرف مع إمكانية البحث والفلترة وعرض التفاصيل -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,75 +8,109 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين الأنماط الأساسية */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* المتغيرات العامة: الألوان، الخطوط، أبعاد الشريط الجانبي */
 :root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+/* نمط الصفحة الأساسي */
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+/* الشريط الجانبي: شريط ثابت على اليمين */
 .sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+/* شعار التطبيق */
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+/* عناصر التنقل في الشريط الجانبي */
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
+/* العنصر النشط */
 .nav-item.active i,.nav-item.active span{color:var(--warning)!important}
 .nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
 .nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+/* شارة العدد */
 .nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
+/* عنوان قسم في الشريط الجانبي */
 .nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+/* قسم المستخدم في الشريط الجانبي */
 .sidebar-user{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center}
 .user-avatar{width:42px;height:42px;border-radius:50%;background:var(--warning);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;margin:0 auto 8px}
 .user-name{color:white;font-size:12px;font-weight:600}
 .user-role{color:rgba(255,255,255,0.4);font-size:10px;margin-top:2px}
 .user-id{background:rgba(245,158,11,0.2);color:var(--warning);font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:5px;cursor:pointer}
 .user-id:hover{background:rgba(245,158,11,0.35)}
+/* أسفل الشريط الجانبي */
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+/* المحتوى الرئيسي */
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
+/* الشريط العلوي */
 .topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
 .topbar-title{font-size:16px;font-weight:700}
 .topbar-sub{font-size:12px;color:var(--text-mid)}
+/* منطقة المحتوى */
 .content{padding:20px 24px;flex:1}
+/* صف الفلاتر: يحتوي على حقل البحث وقائمة الفرز */
 .filters-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+/* حاوية البحث */
 .search-wrap{flex:1;min-width:200px;position:relative}
 .search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-mid);font-size:16px}
+/* حقل البحث */
 .search-input{width:100%;padding:9px 38px 9px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:var(--text-dark);background:white;outline:none}
 .search-input:focus{border-color:var(--primary)}
+/* قائمة الفرز المنسدلة */
 .filter-select{padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:var(--text-mid);background:white;outline:none}
+/* شريط التبويبات للفلترة */
 .tab-bar{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:4px;margin-bottom:16px;width:fit-content}
 .tab{padding:7px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-mid);font-family:var(--font);transition:all 0.15s}
+/* التبويب النشط */
 .tab.active{background:var(--warning);color:white}
+/* شبكة المتدربين: بطاقات مرنة تتكيف مع حجم الشاشة */
 .trainee-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+/* بطاقة المتدرب */
 .trainee-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;transition:all 0.2s}
 .trainee-card:hover{border-color:var(--warning);box-shadow:0 4px 16px rgba(245,158,11,0.1);transform:translateY(-2px)}
+/* الجزء العلوي من البطاقة: الصورة والاسم والتخصص */
 .card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
 .t-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;flex-shrink:0}
 .t-name{font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
 .t-meta{font-size:12px;color:var(--text-mid);line-height:1.6}
+/* إحصائيات البطاقة: 3 أعمدة للمعدل والتخصص وتاريخ الربط */
 .card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .cs{background:var(--bg);border-radius:var(--radius-sm);padding:8px;text-align:center}
 .cs-num{font-size:16px;font-weight:800;color:var(--text-dark)}
 .cs-label{font-size:10px;color:var(--text-mid);margin-top:2px}
+/* الجزء السفلي من البطاقة: أزرار الإجراءات */
 .card-footer{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
+/* الأزرار الصغيرة */
 .btn-sm{padding:7px 12px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:5px;transition:all 0.15s;border:none}
+/* زر تحذيري */
 .btn-warning{background:var(--warning);color:white}
 .btn-warning:hover{background:#D97706}
+/* زر مخطط */
 .btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
 .btn-outline:hover{background:var(--primary-light)}
+/* حالة فارغة: تظهر عندما لا توجد بيانات */
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-mid)}
 .empty-state i{font-size:48px;margin-bottom:12px;display:block;color:var(--border)}
 .empty-state p{font-size:14px}
+/* إشعار منبّه مؤقت */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
 .toast.show{display:flex}
 </style>
 </head>
 <body>
+
+<!-- الشريط الجانبي: يحتوي على شعار التطبيق ومعلومات المستخدم وقائمة التنقل -->
 <nav class="sidebar">
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
+  <!-- معلومات المستخدم في الشريط الجانبي -->
   <div class="sidebar-user">
     <div class="user-avatar" id="sideAvatar">مح</div>
     <div class="user-name" id="sideName">--</div>
     <div class="user-role" id="sideRole">مشرف أكاديمي</div>
     <div style="text-align:center"><span class="user-id" id="sideId" onclick="copyId()" title="اضغط للنسخ">--</span></div>
   </div>
+  <!-- قائمة التنقل -->
   <div class="nav-section">القائمة</div>
   <a href="24-supervisor-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
   <a href="#" class="nav-item active"><i class="ti ti-users"></i><span>متدربيّ</span><span class="nav-badge" id="navTraineeCount">0</span></a>
@@ -85,37 +120,54 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </nav>
 
 <div class="main">
+  <!-- الشريط العلوي: عنوان الصفحة وعداد المتدربين -->
   <div class="topbar">
     <div><div class="topbar-title">متدربيّ 👨‍🎓</div><div class="topbar-sub" id="traineeCount">جاري التحميل...</div></div>
   </div>
   <div class="content">
+    <!-- صف الفلاتر: حقل البحث وقائمة الفرز -->
     <div class="filters-row">
       <div class="search-wrap"><i class="ti ti-search search-icon"></i><input class="search-input" placeholder="بحث باسم المتدرب..." oninput="filterTrainees()"></div>
       <select class="filter-select" id="sortSelect" onchange="renderTrainees()"><option>ترتيب: الاسم</option><option>ترتيب: الجامعة</option></select>
     </div>
+    <!-- شريط التبويبات للفلترة حسب الحالة -->
     <div class="tab-bar">
       <button class="tab active" onclick="filterByTab(this,'all')">الكل</button>
     </div>
+    <!-- شبكة عرض المتدربين: يتم ملؤها ديناميكياً بالبيانات -->
     <div class="trainee-grid" id="grid"></div>
   </div>
 </div>
 
+<!-- إشعار منبّه مؤقت -->
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+
 <script>
+// عنوان API الأساسي
 const API='/api/performance';
+// مصفوفة لتخزين جميع المتدربين
 let allTrainees=[];
+// دالة جلب رمز المصادقة من المتصفح
 function getToken(){return localStorage.getItem('trainlink_token')}
+// دالة تسجيل الخروج: مسح البيانات المخزّنة والتحويل لصفحة تسجيل الدخول
 function logout(){localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user');window.location.href='../public/02-login.html'}
+// دالة عرض إشعار منبّه مؤقت
 function showToast(msg){const t=document.getElementById('toast');document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
 
+// دالة استخراج الأحرف الأولى من اسم المتدرب
 function getInitials(name){if(!name)return'?';const p=name.split(' ');return p.length>1?(p[0][0]+p[1][0]):p[0].substring(0,2)}
+// ألوان دورية للصور الرمزية
 const colors=['#5B4FCF','#FF6B6B','#22C55E','#7C3AED','#F59E0B','#0EA5E9','#EC4899','#14B8A6'];
 
+// دالة عرض المتدربين: تصفية حسب البحث ثم إنشاء بطاقات لكل متدرب
 function renderTrainees(){
+  // تطبيق فلتر البحث
   const q=document.querySelector('.search-input').value.toLowerCase();
   let list=allTrainees.filter(t=>!q||t.name.toLowerCase().includes(q));
   const grid=document.getElementById('grid');
+  // عرض حالة فارغة إذا لم يُعثر على نتائج
   if(!list.length){grid.innerHTML='<div class="empty-state"><i class="ti ti-users"></i><p>لا يوجد متدربون مرتبطون بحسابك</p></div>';return}
+  // إنشاء بطاقة لكل متدرب تحتوي على: الصورة، الاسم، التخصص، الجامعة، المعدل، وتاريخ الربط
   grid.innerHTML=list.map((t,i)=>{const c=colors[i%colors.length];const ini=getInitials(t.name);return `
     <div class="trainee-card">
       <div class="card-top">
@@ -134,26 +186,32 @@ function renderTrainees(){
         <button class="btn-sm btn-warning" onclick="window.location.href='26-progress-reports.html'"><i class="ti ti-chart-line"></i>التقارير</button>
         <button class="btn-sm btn-outline" onclick="showToast('اختر متدرباً أولاً')"><i class="ti ti-messages"></i>مراسلة</button>
       </div>
-    </div>`}).join('');
+    </>`}).join('');
 }
 
+// دالة فلترة حسب التبويب: تنشيط التبويب المختار ثم إعادة العرض
 function filterByTab(btn,status){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   renderTrainees();
 }
 
+// دالة تطبيق فلتر البحث
 function filterTrainees(){renderTrainees()}
 
+// عند تحميل الصفحة: التحقق من تسجيل الدخول وجلب المتدربين من الخادم
 document.addEventListener('DOMContentLoaded',async()=>{
   if(!getToken()){window.location.href='../public/02-login.html';return}
   try{
+    // جلب قائمة المتدربين من واجهة API
     const res=await fetch(API+'/supervisor/trainees/',{headers:{'Authorization':'Bearer '+getToken()}});
     if(!res.ok)throw new Error('fail');
     allTrainees=await res.json();
+    // تحديث عداد المتدربين وعرض القائمة
     document.getElementById('traineeCount').textContent=allTrainees.length+' متدربون مرتبطون بحسابك';
     renderTrainees();
   }catch(e){
+    // عرض رسالة خطأ في حال فشل تحميل البيانات
     document.getElementById('grid').innerHTML='<div class="empty-state"><i class="ti ti-alert-circle"></i><p>حدث خطأ في تحميل البيانات</p></div>';
   }
 });

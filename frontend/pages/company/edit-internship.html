@@ -1,3 +1,12 @@
+<!--
+  ========================================
+  صفحة تعديل فرصة التدريب (edit-internship.html)
+  ========================================
+  الغرض: تعديل بيانات فرصة تدريب موجودة (صفحة مستقلة بتصميم داكن).
+  تقرأ الفرصة من API عبر ?id= في الرابط، تعرض النموذج ممتلئاً بالبيانات الحالية.
+  تتضمن: حفظ التعديلات أو حذف الفرصة بالكامل.
+  ========================================
+-->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -252,7 +261,11 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — تعديل فرصة التدريب -->
+<!-- ======================================== -->
 <script>
+/* أكواد JavaScript — تعديل فرصة التدريب: جلب البيانات، التعديل، الحفظ، الحذف */
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 const API='/api';
 let authToken=localStorage.getItem('trainlink_token');

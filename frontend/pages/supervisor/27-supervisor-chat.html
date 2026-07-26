@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+<!-- صفحة دردشة المشرف: واجهة تواصل فورية تتيح للمشرف مراسلة المتدربين والشركات مع عرض المحادثات والرسائل -->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -7,14 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
+/* إعادة تعيين الأنماط الأساسية */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* المتغيرات العامة */
 :root{--primary:#5B4FCF;--accent:#FF6B6B;--success:#22C55E;--warning:#F59E0B;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+/* الصفحة: ملء الشاشة بالكامل مع إخفاء التمرير */
 body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;height:100vh;overflow:hidden}
+/* الشريط الجانبي */
 .sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+/* عناصر التنقل */
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
 .nav-item.active i,.nav-item.active span{color:var(--warning)!important}
@@ -29,61 +35,91 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .user-id{background:rgba(245,158,11,0.2);color:var(--warning);font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:5px;cursor:pointer}
 .user-id:hover{background:rgba(245,158,11,0.35)}
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+/* المحتوى الرئيسي */
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column;overflow:hidden}
+/* الشريط العلوي */
 .topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
 .topbar-title{font-size:16px;font-weight:700}
-.topbar-sub{font-size:12px;color:var(--text-mid)}
+.topbar-sub{font-size:12px;color:var(--text-mid}
+/* تخطيط الدردشة: عمودان - قائمة المحادثات (280px) ومنطقة المحادثة */
 .chat-layout{display:grid;grid-template-columns:280px 1fr;flex:1;overflow:hidden}
+/* قائمة المحادثات على اليمين */
 .conv-list{border-left:1px solid var(--border);background:white;display:flex;flex-direction:column;overflow:hidden}
+/* حقل البحث في المحادثات */
 .conv-search{padding:12px;border-bottom:1px solid var(--border)}
 .search-input{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none;background:var(--bg)}
 .search-input:focus{border-color:var(--warning)}
+/* عنوان قسم في قائمة المحادثات */
 .conv-section{padding:8px 12px 4px;font-size:10px;color:var(--text-mid);letter-spacing:0.5px;text-transform:uppercase;font-weight:600}
+/* عنصر المحادثة في القائمة */
 .conv-item{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border);transition:all 0.15s;position:relative}
 .conv-item:hover{background:var(--bg)}
+/* المحادثة النشطة */
 .conv-item.active{background:#FEF3C7;border-right:3px solid var(--warning)}
+/* صورة المراسل */
 .conv-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;position:relative}
+/* نقطة الاتصال (أخضر) */
 .online-dot{position:absolute;bottom:0;left:0;width:10px;height:10px;border-radius:50%;background:var(--success);border:2px solid white}
 .conv-name{font-size:12px;font-weight:700;color:var(--text-dark);margin-bottom:2px}
+/* معاينة آخر رسالة */
 .conv-preview{font-size:11px;color:var(--text-mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
 .conv-time{position:absolute;top:10px;left:12px;font-size:10px;color:var(--text-mid)}
+/* شارة نوع المستخدم */
 .type-badge{font-size:9px;padding:2px 6px;border-radius:20px;margin-top:3px;display:inline-block}
+/* منطقة المحادثة الرئيسية */
 .chat-area{display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+/* رأس المحادثة: صورة واسم المرسل وحالة الاتصال */
 .chat-header{background:white;padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
 .chat-header-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;position:relative}
 .chat-header-name{font-size:14px;font-weight:700;color:var(--text-dark)}
 .chat-header-sub{font-size:11px;color:var(--text-mid);display:flex;align-items:center;gap:4px;margin-top:2px}
 .chat-header-actions{margin-right:auto;display:flex;gap:6px}
+/* زر أيقونة */
 .icon-btn{width:32px;height:32px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .icon-btn i{color:var(--text-mid);font-size:15px}
 .icon-btn:hover{background:#FEF3C7;border-color:var(--warning)}
 .icon-btn:hover i{color:var(--warning)}
+/* منطقة عرض الرسائل */
 .messages-area{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+/* تاريخ الرسالة */
 .msg-date{text-align:center;font-size:10px;color:var(--text-mid);background:white;padding:4px 12px;border-radius:20px;align-self:center;border:1px solid var(--border)}
+/* حاوية الرسالة */
 .msg-wrap{display:flex;align-items:flex-end;gap:8px}
+/* رسائلي (على اليسار بتنسيق RTL) */
 .msg-wrap.mine{flex-direction:row-reverse}
+/* صورة المرسل الصغيرة */
 .msg-avatar-sm{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:white;flex-shrink:0}
+/* فقاعة الرسالة */
 .msg-bubble{max-width:380px;padding:10px 14px;border-radius:var(--radius-lg);font-size:13px;line-height:1.6}
+/* رسائل الآخرين */
 .msg-wrap.other .msg-bubble{background:white;color:var(--text-dark);border-bottom-right-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+/* رسائلي (المرسل = أنا) */
 .msg-wrap.mine .msg-bubble{background:var(--warning);color:white;border-bottom-left-radius:4px}
 .msg-time{font-size:10px;margin-top:4px;opacity:0.6}
 .msg-wrap.other .msg-time{color:var(--text-mid)}
 .msg-wrap.mine .msg-time{color:rgba(255,255,255,0.7);text-align:right}
+/* منطقة إدخال الرسالة */
 .chat-input-area{background:white;padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:flex-end;gap:8px;flex-shrink:0}
+/* زر المرفقات */
 .attach-btn{width:34px;height:34px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .attach-btn i{color:var(--text-mid);font-size:17px}
 .attach-btn:hover{background:#FEF3C7;border-color:var(--warning)}
 .attach-btn:hover i{color:var(--warning)}
+/* حقل كتابة الرسالة */
 .msg-input{flex:1;border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:9px 14px;font-size:13px;font-family:var(--font);outline:none;resize:none;min-height:38px;max-height:100px;background:var(--bg)}
 .msg-input:focus{border-color:var(--warning)}
+/* زر الإرسال */
 .send-btn{width:38px;height:38px;border-radius:50%;background:var(--warning);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.15s}
 .send-btn i{color:white;font-size:17px}
 .send-btn:hover{background:#D97706;transform:scale(1.05)}
+/* حالة فارغة: لا توجد محادثة محددة */
 .empty-chat{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--text-mid)}
 .empty-chat i{font-size:48px;margin-bottom:12px;color:var(--border)}
 </style>
 </head>
 <body>
+
+<!-- الشريط الجانبي -->
 <nav class="sidebar">
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
   <div class="sidebar-user">
@@ -101,15 +137,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </nav>
 
 <div class="main">
+  <!-- الشريط العلوي: عنوان الصفحة والوصف -->
   <div class="topbar">
     <div><div class="topbar-title">الدردشة 💬</div><div class="topbar-sub">التواصل مع المتدربين والشركات</div></div>
   </div>
+  <!-- تخطيط الدردشة: قائمة المحادثات ومنطقة المحادثة -->
   <div class="chat-layout">
+    <!-- قائمة المحادثات: تحتوي على حقل البحث وقائمة المحادثات -->
     <div class="conv-list">
       <div class="conv-search"><input class="search-input" placeholder="🔍 بحث في المحادثات..." oninput="filterConversations(this.value)"></div>
       <div id="convContainer"></div>
     </div>
+    <!-- منطقة المحادثة الرئيسية -->
     <div class="chat-area">
+      <!-- رأس المحادثة: يظهر عند اختيار محادثة -->
       <div class="chat-header" id="chatHeader" style="display:none">
         <div class="chat-header-avatar" id="chatAvatar" style="background:var(--primary)"></div>
         <div>
@@ -117,13 +158,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
           <div class="chat-header-sub" id="chatSub"></div>
         </div>
         <div class="chat-header-actions">
+          <!-- أزرار الاتصال والخيارات -->
           <div class="icon-btn"><i class="ti ti-phone"></i></div>
           <div class="icon-btn"><i class="ti ti-dots-vertical"></i></div>
         </div>
       </div>
+      <!-- منطقة عرض الرسائل -->
       <div class="messages-area" id="messagesArea">
         <div class="empty-chat"><i class="ti ti-messages"></i><p>اختر محادثة للبدء</p></div>
       </div>
+      <!-- منطقة إدخال الرسالة: حقل الكتابة وزر المرفقات وزر الإرسال -->
       <div class="chat-input-area" id="chatInputArea" style="display:none">
         <div class="attach-btn"><i class="ti ti-paperclip"></i></div>
         <textarea class="msg-input" id="msgInput" placeholder="اكتب رسالتك..." rows="1" onkeydown="handleEnter(event)"></textarea>
@@ -134,25 +178,39 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 </div>
 
 <script>
+// عنوان API الخاص بالدردشة
 const API='/api/chat';
+// قائمة القنوات (المحادثات)
 let channels=[];
+// معرّف المحادثة الحالية المفتوحة
 let currentChannelId=null;
+// رسائل المحادثة الحالية
 let currentMessages=[];
+// اسم المستخدم الحالي
 let myName='';
+// ألوان دورية للصور الرمزية
 const colors=['#5B4FCF','#FF6B6B','#22C55E','#7C3AED','#F59E0B','#0EA5E9','#EC4899','#14B8A6'];
 
+// دالة جلب رمز المصادقة
 function getToken(){return localStorage.getItem('trainlink_token')}
+// دالة جلب بيانات المستخدم المخزّنة
 function getUser(){const u=localStorage.getItem('trainlink_user');return u?JSON.parse(u):null}
+// دالة تسجيل الخروج
 function logout(){localStorage.removeItem('trainlink_token');localStorage.removeItem('trainlink_user');window.location.href='../public/02-login.html'}
 
+// دالة استخراج الأحرف الأولى من الاسم
 function getInitials(name){if(!name)return'?';const p=name.split(' ');return p.length>1?(p[0][0]+p[1][0]):p[0].substring(0,2)}
 
+// دالة عرض قائمة المحادثات: تصفية حسب البحث ثم إنشاء عناصر القائمة
 function renderConversations(filter){
   const q=(filter||'').toLowerCase();
   const container=document.getElementById('convContainer');
   let list=channels;
+  // تطبيق فلتر البحث على أسماء المحادثات
   if(q)list=list.filter(c=>(c.name||c.channel_name||'').toLowerCase().includes(q));
+  // عرض حالة فارغة إذا لم توجد محادثات
   if(!list.length){container.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-mid);font-size:13px">لا توجد محادثات</div>';return}
+  // إنشاء عنصر لكل محادثة يعرض: الصورة، الاسم، معاينة آخر رسالة، والوقت
   container.innerHTML=list.map((c,i)=>{
     const name=c.name||c.channel_name||'محادثة '+(i+1);
     const ini=getInitials(name);
@@ -167,18 +225,24 @@ function renderConversations(filter){
   }).join('');
 }
 
+// دالة فلترة المحادثات
 function filterConversations(q){renderConversations(q)}
 
+// دالة فتح محادثة: جلب الرسائل من الخادم وعرضها
 async function openChannel(id,name,ini,color){
   currentChannelId=id;
+  // إظهار رأس المحادثة ومنطقة الإدخال
   document.getElementById('chatHeader').style.display='flex';
   document.getElementById('chatInputArea').style.display='flex';
+  // تحديث معلومات المرسل في الرأس
   document.getElementById('chatAvatar').textContent=ini;
   document.getElementById('chatAvatar').style.background=color;
   document.getElementById('chatName').textContent=name;
   document.getElementById('chatSub').textContent='متصل الآن';
+  // تحديث حالة النشاط في قائمة المحادثات
   renderConversations(document.querySelector('.search-input')?.value);
 
+  // جلب الرسائل من الخادم
   try{
     const res=await fetch(API+'/channels/'+id+'/messages/',{headers:{'Authorization':'Bearer '+getToken()}});
     if(res.ok)currentMessages=await res.json();
@@ -186,10 +250,13 @@ async function openChannel(id,name,ini,color){
   renderMessages();
 }
 
+// دالة عرض الرسائل في منطقة المحادثة
 function renderMessages(){
   const area=document.getElementById('messagesArea');
+  // عرض حالة فارغة إذا لم توجد رسائل
   if(!currentMessages.length){area.innerHTML='<div class="empty-chat"><i class="ti ti-message-circle"></i><p>لا توجد رسائل بعد</p></div>';return}
   const user=getUser();
+  // إنشاء فقاعة رسالتك لكل رسالة: تمييز رسائلي عن رسائل الآخرين
   area.innerHTML=currentMessages.map(m=>{
     const isMine=m.sender_name===user?.full_name;
     const ini=getInitials(m.sender_name||'');
@@ -199,33 +266,41 @@ function renderMessages(){
       <div><div class="msg-bubble">${m.content||''}</div><div class="msg-time">${time}</div></div>
     </div>`;
   }).join('');
+  // التمرير التلقائي إلى أسفل الرسائل
   area.scrollTop=area.scrollHeight;
 }
 
+// دالة إرسال رسالة: إرسال النص إلى الخادم ثم إعادة جلب الرسائل
 async function sendMessage(){
   if(!currentChannelId)return;
   const input=document.getElementById('msgInput');
   const text=input.value.trim();
   if(!text)return;
+  // مسح حقل الإدخال فوراً
   input.value='';
   try{
+    // إرسال الرسالة إلى الخادم
     await fetch(API+'/channels/'+currentChannelId+'/messages/',{
       method:'POST',
       headers:{'Authorization':'Bearer '+getToken(),'Content-Type':'application/json'},
       body:JSON.stringify({content:text})
     });
+    // إعادة جلب الرسائل بعد الإرسال
     const res=await fetch(API+'/channels/'+currentChannelId+'/messages/',{headers:{'Authorization':'Bearer '+getToken()}});
     if(res.ok)currentMessages=await res.json();
     renderMessages();
   }catch(e){}
 }
 
+// دالة معالجة الضغط على مفتاح Enter: إرسال الرسالة (مع Shift+Enter لسطر جديد)
 function handleEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}}
 
+// عند تحميل الصفحة: التحقق من تسجيل الدخول وجلب القنوات
 document.addEventListener('DOMContentLoaded',async()=>{
   if(!getToken()){window.location.href='../public/02-login.html';return}
   const user=getUser();
   myName=user?.full_name||'';
+  // جلب قائمة القنوات من الخادم
   try{
     const res=await fetch(API+'/channels/',{headers:{'Authorization':'Bearer '+getToken()}});
     if(res.ok)channels=await res.json();
@@ -233,7 +308,9 @@ document.addEventListener('DOMContentLoaded',async()=>{
   renderConversations();
 });
 </script>
+<!-- إشعار منبّه مؤقت -->
 <div id="toast" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:12px;font-size:13px;display:none;z-index:9999;font-family:'Cairo',sans-serif;border:1px solid rgba(255,255,255,0.1)"><span id="toastMsg"></span></div>
+<!-- دالة عرض الإشعار المنبّه -->
 <script>function showToast(msg){var t=document.getElementById('toast');if(!t)return;document.getElementById('toastMsg').textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none'},3000);}</script>
 </body>
 </html>

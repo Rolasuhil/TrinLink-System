@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة المجتمع (14-community.html)
+  ========================================
+  الغرض: منصة للمنشورات والنقاشات بين المستخدمين (متدربين، شركات، مشرفين).
+  تتصل بالـ API لجلب المنشورات، التعليقات، التقييمات، والإعجابات.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -295,7 +303,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
  
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
  
+<!-- ======================================== -->
+<!-- أكواد JavaScript — المجتمع -->
+<!-- ======================================== -->
 <script>
+/*
+ * أكواد JavaScript — المجتمع
+ * الدوال: جلب المنشورات، الإعجاب، التعليقات، تقييم الشركات
+ */
 (function(){
   var token = localStorage.getItem('trainlink_token');
   if(!token){ window.location.href = '../public/02-login.html'; return; }

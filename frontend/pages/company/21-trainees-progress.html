@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿<!--
+  ========================================
+  صفحة متابعة تقدم المتدربين (21-trainees-progress.html)
+  ========================================
+  الغرض: متابعة تقدم المتدربين المقبولين في فرص تدريب الشركة.
+  تعرض: نسبة الإنجاز، تقييمات الأداء، سجل الحضور، وتقارير العمل.
+  ========================================
+-->
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -175,8 +183,13 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
+<!-- ======================================== -->
+<!-- أكواد JavaScript — متابعة المتدربين -->
+<!-- ======================================== -->
 <script>
+/* أكواد JavaScript — متابعة المتدربين: جلب المتدربين وعرض تقدمهم */
 const API='/api';
+/* --- رمز المصادقة --- */
 let token=localStorage.getItem('trainlink_token');
 let trainees=[];
 let selectedTraineeId=null;
