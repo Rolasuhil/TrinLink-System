@@ -415,6 +415,14 @@ async function loadInternship(){
 
     loadSimilar(d.company_id);
     loadCompanyReviews(d.company_id);
+
+    document.getElementById('companyTabLogo').textContent=ini;
+    document.getElementById('companyTabName').innerHTML=d.company+' <i class="ti ti-shield-check" style="color:var(--success);font-size:14px"></i>';
+    var cInfoParts=[];
+    if(d.company_industry)cInfoParts.push(d.company_industry);
+    if(d.company_location)cInfoParts.push(d.company_location);
+    document.getElementById('companyTabInfo').textContent=cInfoParts.join(' · ')||'--';
+    document.getElementById('companyTabDesc').textContent=d.company_about||'لا يوجد وصف عن الشركة.';
   }catch(e){showToast('حدث خطأ في تحميل تفاصيل الفرصة');}
 }
 
