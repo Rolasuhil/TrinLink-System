@@ -291,7 +291,7 @@
  
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
-  <a href="#" class="nav-logo">
+  <a href="01-home.html" class="nav-logo">
     <div class="nav-logo-icon"><i class="ti ti-briefcase"></i></div>
     <span class="nav-logo-text">TrainLink</span>
   </a>
@@ -602,6 +602,17 @@ if(token && user) {
   if(btns) {
     btns.innerHTML = '<a href="'+dashUrl+'" class="btn-primary"><i class="ti ti-layout-dashboard"></i> لوحة التحكم</a><a href="#" class="btn-outline" onclick="localStorage.removeItem(\'trainlink_token\');localStorage.removeItem(\'trainlink_user\');window.location.reload();">تسجيل الخروج</a>';
   }
+  // Fix hero buttons for logged-in users
+  var heroBtns = document.querySelectorAll('.hero-btns a, .cta-btn-trans');
+  heroBtns.forEach(function(btn){
+    if(user.person_type === 'company' && btn.textContent.indexOf('نشر') !== -1){
+      btn.setAttribute('href','../company/19-post-internship.html');
+    } else if(user.person_type === 'trainee' && btn.textContent.indexOf('بحث') !== -1){
+      btn.setAttribute('href','../trainee/09-search.html');
+    } else if(user.person_type !== 'company'){
+      btn.setAttribute('href', dashUrl);
+    }
+  });
 }
 
 // Navbar scroll effect
