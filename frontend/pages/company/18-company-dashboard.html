@@ -102,7 +102,7 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
 <div class="content">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
     <div>
-      <div style="font-size:20px;font-weight:800;color:white">مرحباً، TechPal! <i class="ti ti-hand-back-right" style="font-size:22px;color:var(--primary)"></i></div>
+      <div style="font-size:20px;font-weight:800;color:white">مرحباً، TechPal! <i class="ti ti-mood-smile" style="font-size:22px;color:var(--primary)"></i></div>
       <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:3px">لديك 8 طلبات جديدة تنتظر مراجعتك</div>
     </div>
     <a href="19-post-internship.html" style="padding:10px 20px;background:var(--primary);color:white;border-radius:var(--radius-md);font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:7px"><i class="ti ti-plus"></i>نشر فرصة جديدة</a>
@@ -268,7 +268,7 @@ async function loadProfile(){
     var cn=document.querySelector('.chip-name');if(cn)cn.textContent=name;
     var nn=document.getElementById('navCompanyName');if(nn)nn.textContent=name;
     document.querySelector('.content > div:first-child > div:first-child').innerHTML=
-      '<div style="font-size:20px;font-weight:800;color:white">مرحباً، '+name+'! <i class="ti ti-hand-back-right" style="font-size:22px;color:var(--primary)"></i></div>'+
+      '<div style="font-size:20px;font-weight:800;color:white">مرحباً، '+name+'! <i class="ti ti-mood-smile" style="font-size:22px;color:var(--primary)"></i></div>'+
       '<div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:3px" id="pendingCountLabel">جاري التحميل...</div>';
   }catch(e){showToast('⚠️ خطأ في تحميل الملف الشخصي');}
 }
