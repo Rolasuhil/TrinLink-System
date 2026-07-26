@@ -192,14 +192,8 @@ body{font-family:var(--font);background:var(--dark);color:white;min-height:100vh
     <div>
       <div class="card">
         <div class="card-header"><div class="card-title"><i class="ti ti-briefcase"></i>فرصي المنشورة</div><a href="19-post-internship.html" class="card-action">+ نشر جديد</a></div>
-        <div class="job-row" onclick="window.location.href='20-manage-applications.html'">
-          <div style="flex:1"><div style="font-size:13px;font-weight:600;color:white;margin-bottom:3px">مطور Frontend</div><div style="display:flex;gap:8px;margin-top:4px"><span class="job-badge" style="background:rgba(34,197,94,0.15);color:var(--success)">● نشط</span><span class="mini-stat"><i class="ti ti-users" style="font-size:11px"></i>18 متقدم</span><span class="mini-stat"><i class="ti ti-armchair" style="font-size:11px"></i>3 مقاعد</span></div></div>
-        </div>
-        <div class="job-row" onclick="window.location.href='20-manage-applications.html'">
-          <div style="flex:1"><div style="font-size:13px;font-weight:600;color:white;margin-bottom:3px">مطور Backend Python</div><div style="display:flex;gap:8px;margin-top:4px"><span class="job-badge" style="background:rgba(34,197,94,0.15);color:var(--success)">● نشط</span><span class="mini-stat"><i class="ti ti-users" style="font-size:11px"></i>10 متقدم</span><span class="mini-stat"><i class="ti ti-armchair" style="font-size:11px"></i>2 مقاعد</span></div></div>
-        </div>
-        <div class="job-row" onclick="window.location.href='20-manage-applications.html'">
-          <div style="flex:1"><div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);margin-bottom:3px">مصمم UI/UX</div><div style="display:flex;gap:8px;margin-top:4px"><span class="job-badge" style="background:rgba(245,158,11,0.15);color:var(--warning)">⚠ ينتهي قريباً</span><span class="mini-stat"><i class="ti ti-users" style="font-size:11px"></i>4 متقدم</span></div></div>
+        <div id="internshipList">
+          <div style="padding:16px;text-align:center;color:rgba(255,255,255,0.3);font-size:12px">جاري التحميل...</div>
         </div>
       </div>
  
@@ -280,20 +274,25 @@ async function loadInternships(){
     const data=await res.json();
     const internships=Array.isArray(data)?data:(data.results||[]);
     document.querySelectorAll('.stat-num')[2].textContent=internships.length;
-    const container=document.querySelector('.job-row')?.parentElement;
+    const container=document.getElementById('internshipList');
     if(container){
+      if(internships.length===0){
+        container.innerHTML='<div style="padding:20px;text-align:center"><div style="color:rgba(255,255,255,0.3);font-size:13px;margin-bottom:10px">لم تنشر أي فرصة بعد</div><a href="19-post-internship.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-size:12px;font-weight:700;text-decoration:none"><i class="ti ti-plus"></i>نشر فرصة جديدة</a></div>';
+        return;
+      }
       container.innerHTML='';
       internships.slice(0,5).forEach(i=>{
         const isEnding=i.deadline&&new Date(i.deadline)<new Date(Date.now()+7*86400000);
-        const badge=isEnding?
-          '<span class="job-badge" style="background:rgba(245,158,11,0.15);color:var(--warning)">⚠ ينتهي قريباً</span>':
-          '<span class="job-badge" style="background:rgba(34,197,94,0.15);color:var(--success)">● نشط</span>';
-        container.innerHTML+=
-          '<div class="job-row" onclick="window.location.href=\'20-manage-applications.html\'">'+
-          '<div style="flex:1"><div style="font-size:13px;font-weight:600;color:white;margin-bottom:3px">'+i.title+'</div>'+
-          '<div style="display:flex;gap:8px;margin-top:4px">'+badge+
-          '<span class="mini-stat"><i class="ti ti-armchair" style="font-size:11px"></i>'+(i.available_positions||0)+' مقاعد</span>'+
-          '</div></div></div>';
+        const isClosed=i.status==='closed';
+        let badge='';
+        if(isClosed) badge='<span class="job-badge" style="background:rgba(255,107,107,0.15);color:var(--accent)">● منتهي</span>';
+        else if(isEnding) badge='<span class="job-badge" style="background:rgba(245,158,11,0.15);color:var(--warning)">⚠ ينتهي قريباً</span>';
+        else badge='<span class="job-badge" style="background:rgba(34,197,94,0.15);color:var(--success)">● نشط</span>';
+        const row=document.createElement('div');
+        row.className='job-row';
+        row.onclick=function(){window.location.href='20-manage-applications.html';};
+        row.innerHTML='<div style="flex:1"><div style="font-size:13px;font-weight:600;color:white;margin-bottom:3px">'+i.title+'</div><div style="display:flex;gap:8px;margin-top:4px">'+badge+'<span class="mini-stat"><i class="ti ti-armchair" style="font-size:11px"></i>'+(i.available_positions||0)+' مقاعد</span></div></div>';
+        container.appendChild(row);
       });
     }
   }catch(e){showToast('⚠️ خطأ في تحميل الفرص');}
