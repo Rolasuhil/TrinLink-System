@@ -1,4 +1,4 @@
-﻿<!-- صفحة تعيين المتدربيين للمشرفين - تتيح للمدير اختيار متدرب وقسم وفرصة تدريبية ثم تعيينه يدوياً مع عرض نسب المطابقة والتعيينات الحالية -->
+﻿<!-- صفحة تعيين المتدربيين للمشرفين - تتيح للمدير اختيار متدرب ومشرف ثم تعيينه يدوياً مع عرض التعيينات الحالية -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -11,85 +11,94 @@
 /* إعادة تعيين شاملة لجميع العناصر */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-/* المتغيرات العامة: الألوان والخطوط والأبعاد */
-:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
-/* تخطيط الصفحة الأساسي */
-body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
+/* المتغيرات العامة والألوان والخطوط */
+:root{--primary:#5B4FCF;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--dark:#0F0E1A;--dark-2:#1A1827;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+
+/* تخطيط الصفحة الأساسية بالوضع الداكن مع قائمة جانبية ثابتة */
+body{font-family:var(--font);background:var(--dark);color:white;display:flex;min-height:100vh}
 
 /* --- أنماط القائمة الجانبية --- */
-/* حاوية القائمة الجانبية المظلمة على اليمين */
-.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+.sidebar{width:var(--sidebar);background:var(--dark-2);flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100;border-left:1px solid rgba(255,255,255,0.06)}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
+.sidebar-user{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;margin:0 auto 6px}
+.user-name{color:white;font-size:11px;font-weight:600}
+.user-badge{background:rgba(255,107,107,0.2);color:var(--accent);font-size:10px;padding:2px 10px;border-radius:20px;display:inline-block;margin-top:4px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
-.nav-item.active{background:var(--primary)}
-.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
-.nav-item.active i,.nav-item.active span{color:white}
-.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
-.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
-.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.nav-item.active{background:rgba(255,107,107,0.15)}
+.nav-item.active i,.nav-item.active span{color:var(--accent)!important}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.4);width:18px}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.4)}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:0.5px;text-transform:uppercase}
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
+
+/* --- أنماط المحتوى الرئيسي --- */
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
-.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
-.topbar-title{font-size:16px;font-weight:700}
-.topbar-sub{font-size:12px;color:var(--text-mid)}
-.content{padding:20px 24px;flex:1;max-width:900px}
+.topbar{background:var(--dark-2);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:white}
+.topbar-sub{font-size:12px;color:rgba(255,255,255,0.3)}
+.content{padding:20px 24px;flex:1}
+
+/* --- بطاقات الإحصائيات --- */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:16px;display:flex;align-items:center;gap:12px;transition:all 0.2s}
+.stat-card:hover{border-color:rgba(255,255,255,0.15)}
+.stat-icon{width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-icon i{font-size:22px}
+.stat-num{font-size:26px;font-weight:900;color:white}
+.stat-label{font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px}
 
 /* --- أنماط البطاقات --- */
-.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
-.card-title{font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.card-title i{color:var(--primary);font-size:18px}
-/* --- نموذج تعيين المتدربين --- */
-/* مجموعة حقل الإدخال */
+.card{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:700;color:white;display:flex;align-items:center;gap:6px}
+.card-title i{color:var(--accent);font-size:16px}
+
+/* --- نموذج التعيين --- */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .form-group{margin-bottom:14px}
+.form-label{font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);display:block;margin-bottom:6px}
+.form-select{width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);background:rgba(255,255,255,0.05);color:white;outline:none;cursor:pointer;transition:all 0.15s;appearance:none}
+.form-select:focus{border-color:var(--primary);background:rgba(255,255,255,0.08)}
+.form-select option{background:var(--dark-2);color:white}
 
-/* تسمية حقل الإدخال */
-.form-label{font-size:12px;font-weight:700;color:var(--text-dark);display:block;margin-bottom:5px}
-
-/* قائمة منسدلة للاختيار */
-.form-select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none;background:var(--bg);appearance:none;cursor:pointer;transition:all 0.15s}
-.form-select:focus{border-color:var(--primary);background:white}
-
-/* --- بطاقة فرصة التدريب المطابقة --- */
-.match-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;transition:all 0.15s;cursor:pointer}
-.match-card:hover{border-color:var(--primary);background:var(--primary-light)}
-.match-card.selected{border-color:var(--primary);background:var(--primary-light);box-shadow:0 0 0 2px var(--primary)}
-
-/* الصورة الرمزية لبطاقة المطابقة */
-.match-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:white;flex-shrink:0}
-
-/* معلومات الفرصة المطابقة */
-.match-info{flex:1}
-.match-name{font-size:14px;font-weight:700;color:var(--text-dark)}
-.match-dept{font-size:12px;color:var(--text-mid);margin-top:2px}
-
-/* نسبة المطابقة */
-.match-score{display:flex;flex-direction:column;align-items:center}
-.match-percent{font-size:20px;font-weight:800;color:var(--primary)}
-.match-label{font-size:10px;color:var(--text-mid)}
-
-/* دائرة الاختيار */
-.match-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all 0.15s}
-.match-card.selected .match-check{background:var(--primary);border-color:var(--primary)}
-.match-card.selected .match-check::after{content:'✓';color:white;font-size:12px;font-weight:700}
-/* الأزرار */
-.btn{padding:10px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
+/* --- أزرار --- */
+.btn{padding:10px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
 .btn-primary{background:var(--primary);color:white}
-.btn-primary:hover{background:var(--primary-dark)}
-.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
-.btn-row{display:flex;gap:10px;margin-top:16px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.btn-primary:hover{background:#4A3FB5}
+.btn-sm{padding:6px 14px;font-size:11px}
+.btn-danger{background:rgba(255,107,107,0.15);color:var(--accent);border:1px solid rgba(255,107,107,0.2)}
+.btn-danger:hover{background:rgba(255,107,107,0.25)}
+
+/* --- جدول التعيينات --- */
+.table{width:100%;border-collapse:collapse}
+.table th{font-size:11px;color:rgba(255,255,255,0.25);text-align:right;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.06);font-weight:600}
+.table td{font-size:12px;padding:12px;border-bottom:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.7);vertical-align:middle}
+.table tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* معلومات المستخدم في الجدول */
+.user-cell{display:flex;align-items:center;gap:8px}
+.u-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0}
+.u-name{font-size:12px;font-weight:600;color:white}
+.u-sub{font-size:10px;color:rgba(255,255,255,0.3)}
+
+/* شارات الحالة */
+.badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;display:inline-block}
+.badge-active{background:rgba(34,197,94,0.15);color:#22C55E}
+.badge-cancelled{background:rgba(255,107,107,0.15);color:var(--accent)}
+.badge-info{background:rgba(91,79,207,0.15);color:#A89CFF}
+
+/* رسالة التنبيه العائمة */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--dark-2);color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;border:1px solid rgba(255,255,255,0.1)}
 .toast.show{display:flex}
 
-/* --- قائمة التعيينات الحالية --- */
-.assigned-list{margin-top:16px}
-
-/* عنصر تعيين فردي في القائمة */
-.assigned-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:var(--radius-md);margin-bottom:8px}
-.assigned-item .match-avatar{width:36px;height:36px;font-size:11px}
+/* مساحة فارغة */
+.empty-state{text-align:center;padding:40px 20px;color:rgba(255,255,255,0.3);font-size:13px}
+.empty-state i{font-size:40px;display:block;margin-bottom:10px;color:rgba(255,255,255,0.15)}
 </style>
 </head>
 <body>
@@ -97,141 +106,69 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <!-- === القائمة الجانبية === -->
 <nav class="sidebar">
   <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
-  <!-- معلومات المدير -->
-  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
-    <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
-    <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
+  <div class="sidebar-user">
+    <div class="user-avatar"><i class="ti ti-shield" style="font-size:18px"></i></div>
+    <div class="user-name" id="adminName">المشرف العام</div>
+    <span class="user-badge">ADM-00001</span>
   </div>
-  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <div class="nav-section">الإدارة</div>
   <a href="28-admin-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
   <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span></a>
-  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-file-text"></i><span>إدارة المحتوى</span></a>
-  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير والإحصائيات</span></a>
-  <a href="#" class="nav-item active"><i class="ti ti-school"></i><span>تعيين المتدربيين</span></a>
-  <div class="nav-section">النظام</div>
-  <a href="#" class="nav-item"><i class="ti ti-settings"></i><span>الإعدادات</span></a>
-  <div class="sidebar-bottom">
-    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
-  </div>
+  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-flag"></i><span>إدارة المحتوى</span></a>
+  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير</span></a>
+  <a href="32-assign-trainee.html" class="nav-item active"><i class="ti ti-link"></i><span>ربط المشرفين</span></a>
+  <div class="sidebar-bottom"><a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
 </nav>
 
 <!-- === المحتوى الرئيسي === -->
 <div class="main">
   <!-- شريط العنوان -->
   <div class="topbar">
-    <div>
-      <div class="topbar-title">تعيين المتدربيين 🎯</div>
-      <div class="topbar-sub">تعيين المتدربين للشركات والفرص المناسبة يدوياً</div>
+    <div><div class="topbar-title"><i class="ti ti-link" style="color:var(--accent);margin-left:6px;font-size:18px"></i>تعيين المتدربيين للمشرفين</div><div class="topbar-sub">إدارة ربط المتدربيين بالمرشدين الأكاديميين</div></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="width:32px;height:32px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative">
+        <i class="ti ti-bell" style="color:rgba(255,255,255,0.4);font-size:15px"></i>
+      </div>
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center"><i class="ti ti-shield" style="color:white;font-size:15px"></i></div>
     </div>
   </div>
 
   <div class="content">
-    <!-- === بطاقة معايير التعيين (اختيار المتدرب والقسم والشركة والموقع) === -->
+    <!-- === شبكة الإحصائيات === -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(91,79,207,0.2)"><i class="ti ti-school" style="color:#A89CFF"></i></div><div><div class="stat-num" id="statTrainees">—</div><div class="stat-label">إجمالي المتدربيين</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(34,197,94,0.15)"><i class="ti ti-user-star" style="color:var(--success)"></i></div><div><div class="stat-num" id="statSupervisors">—</div><div class="stat-label">إجمالي المشرفين</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(245,158,11,0.15)"><i class="ti ti-link" style="color:var(--warning)"></i></div><div><div class="stat-num" id="statActive">—</div><div class="stat-label">تعيينات نشطة</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(255,107,107,0.15)"><i class="ti ti-user-off" style="color:var(--accent)"></i></div><div><div class="stat-num" id="statUnassigned">—</div><div class="stat-label">متدربيين بدون مشرف</div></div></div>
+    </div>
+
+    <!-- === بطاقة نموذج التعيين === -->
     <div class="card">
-      <div class="card-title"><i class="ti ti-settings"></i>معايير التعيين</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="card-header"><div class="card-title"><i class="ti ti-plus-circle"></i>تعيين متدرب لمشرف جديد</div></div>
+      <div class="form-row">
         <div class="form-group">
           <label class="form-label">اختر المتدرب</label>
-          <select class="form-select" id="traineeSelect" onchange="showMatches()">
+          <select class="form-select" id="traineeSelect">
             <option value="">— اختر متدرباً —</option>
-            <option value="sara">سارة محمود — IT — GPA: 3.7</option>
-            <option value="ahmed">أحمد حسن — CS — GPA: 3.5</option>
-            <option value="mona">منى ناصر — تصميم — GPA: 3.8</option>
-            <option value="khaled">خالد عمر — IT — GPA: 3.3</option>
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">القسم المطلوب</label>
-          <select class="form-select" id="categorySelect" onchange="showMatches()">
-            <option value="">— اختر القسم —</option>
-            <option>تطوير الويب</option>
-            <option>تطوير الموبايل</option>
-            <option>تصميم UI/UX</option>
-            <option>تحليل البيانات</option>
-            <option>أمن المعلومات</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">الشركة</label>
-          <select class="form-select">
-            <option value="">— جميع الشركات —</option>
-            <option>TechPal</option>
-            <option>DesignHub</option>
-            <option>DataSoft</option>
-            <option>NetSoft</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">الموقع</label>
-          <select class="form-select">
-            <option value="">— جميع المواقع —</option>
-            <option>غزة</option>
-            <option>رفح</option>
-            <option>عن بُعد</option>
+          <label class="form-label">اختر المشرف</label>
+          <select class="form-select" id="supervisorSelect">
+            <option value="">— اختر مشرفاً —</option>
           </select>
         </div>
       </div>
-    </div>
-
-    <!-- MATCHES -->
-    <!-- === قسم الفرص المطابقة (يظهر عند اختيار المتدرب) === -->
-    <div id="matchesArea" style="display:none">
-      <!-- بطاقة عرض الفرص المطابقة مع نسب المطابقة -->
-      <div class="card">
-        <div class="card-title"><i class="ti ti-sparkles"></i>الفرص المطابقة — سارة محمود</div>
-        <div class="match-card selected" onclick="this.classList.toggle('selected')">
-          <div class="match-avatar" style="background:var(--primary)">TP</div>
-          <div class="match-info"><div class="match-name">مطور Frontend — React</div><div class="match-dept">TechPal · غزة · مجاني · ينتهي 20 يوليو</div></div>
-          <div class="match-score"><div class="match-percent">95%</div><div class="match-label">مطابقة</div></div>
-          <div class="match-check"></div>
-        </div>
-        <div class="match-card" onclick="this.classList.toggle('selected')">
-          <div class="match-avatar" style="background:#FF6B6B">DH</div>
-          <div class="match-info"><div class="match-name">مصمم UI/UX</div><div class="match-dept">DesignHub · عن بُعد · مجاني · ينتهي 25 يوليو</div></div>
-          <div class="match-score"><div class="match-percent">88%</div><div class="match-label">مطابقة</div></div>
-          <div class="match-check"></div>
-        </div>
-        <div class="match-card" onclick="this.classList.toggle('selected')">
-          <div class="match-avatar" style="background:#22C55E">DS</div>
-          <div class="match-info"><div class="match-name">مطور قواعد بيانات</div><div class="match-dept">DataSoft · عن بُعد · مجاني · ينتهي 1 أغسطس</div></div>
-          <div class="match-score"><div class="match-percent">82%</div><div class="match-label">مطابقة</div></div>
-          <div class="match-check"></div>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn btn-primary" onclick="assignTrainee()"><i class="ti ti-check" style="margin-left:4px"></i>تأكيد التعيين</button>
-          <button class="btn btn-outline" onclick="document.getElementById('matchesArea').style.display='none'">إلغاء</button>
-        </div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button class="btn btn-primary" onclick="assignTrainee()"><i class="ti ti-check"></i>تأكيد التعيين</button>
       </div>
     </div>
 
-    <!-- ASSIGNED LIST -->
-    <!-- === قائمة التعيينات الحالية === -->
+    <!-- === بطاقة التعيينات الحالية === -->
     <div class="card">
-      <div class="card-title"><i class="ti ti-list"></i>التعيينات الحالية</div>
-      <div class="assigned-item">
-        <div class="match-avatar" style="background:var(--primary);width:36px;height:36px;font-size:11px">سم</div>
-        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">سارة محمود</div><div style="font-size:11px;color:var(--text-mid)">مطور Frontend — TechPal</div></div>
-        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:#15803D;font-weight:600">نشط</span>
-        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-weight:600">95% مطابقة</span>
-      </div>
-      <div class="assigned-item">
-        <div class="match-avatar" style="background:#22C55E;width:36px;height:36px;font-size:11px">أح</div>
-        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">أحمد حسن</div><div style="font-size:11px;color:var(--text-mid)">مطور Backend — TechPal</div></div>
-        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:#15803D;font-weight:600">نشط</span>
-        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-weight:600">91% مطابقة</span>
-      </div>
-      <div class="assigned-item">
-        <div class="match-avatar" style="background:#FF6B6B;width:36px;height:36px;font-size:11px">من</div>
-        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">منى ناصر</div><div style="font-size:11px;color:var(--text-mid)">مصمم UI/UX — DesignHub</div></div>
-        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:#15803D;font-weight:600">نشط</span>
-        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--primary-light);color:var(--primary);font-weight:600">97% مطابقة</span>
-      </div>
-      <div class="assigned-item" style="opacity:0.6">
-        <div class="match-avatar" style="background:#6B7280;width:36px;height:36px;font-size:11px">عب</div>
-        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">عبدالرحمن بدر</div><div style="font-size:11px;color:var(--text-mid)">مطور Frontend — TechPal</div></div>
-        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:#FEE2E2;color:#DC2626;font-weight:600">منتهي</span>
-        <span style="font-size:10px;padding:3px 10px;border-radius:20px;background:var(--success-light);color:#15803D;font-weight:600">✓ شهادة صادرة</span>
+      <div class="card-header"><div class="card-title"><i class="ti ti-list"></i>التعيينات الحالية</div><span id="assignmentCount" style="font-size:12px;color:rgba(255,255,255,0.3)"></span></div>
+      <div id="assignmentsTable">
+        <div class="empty-state"><i class="ti ti-loader"></i>جاري التحميل...</div>
       </div>
     </div>
   </div>
@@ -240,128 +177,169 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
-// === ملف جافاسكريبت لتعيين المتدربيين للمشرفين ===
-
 // التحقق من صحة تسجيل الدخول
 (function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
 
-// عنوان واجهة برمجة التطبيقات
-const API_BASE='/api';
+var API_BASE='/api';
+var allTrainees=[];
+var allSupervisors=[];
 
-// دالة الحصول على رمز المصادقة
 function getToken(){return localStorage.getItem('trainlink_token')}
-
-// دالة الحصول على بيانات المستخدم الحالي
 function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
-
-// دالة إنشاء رؤوس طلب المصادقة
 function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
 
-// === عند تحميل الصفحة بالكامل ===
+// تهيئة الصفحة وجلب البيانات من الخادم
 document.addEventListener('DOMContentLoaded',async function(){
-  var traineeSelect=document.getElementById('traineeSelect');
-
-  try{
-    // جلب البيانات من الخادم بشكل متزامن: المتدربيين، المشرفين، والتعيينات الحالية
-    var[trainRes,supRes,assignRes]=await Promise.all([
-      fetch(API_BASE+'/admin-panel/users/?type=trainee',{headers:authHeaders()}),
-      fetch(API_BASE+'/admin-panel/users/?type=supervisor',{headers:authHeaders()}),
-      fetch(API_BASE+'/admin-panel/assign/',{headers:authHeaders()})
-    ]);
-
-    // ملء قائمة المتدربيين بالبيانات من الخادم
-    if(trainRes.ok){
-      var tData=await trainRes.json();
-      var tList=tData.results||tData;
-      if(traineeSelect&&Array.isArray(tList)){
-        traineeSelect.innerHTML='<option value="">— اختر متدرباً —</option>';
-        tList.forEach(function(t){
-          var opt=document.createElement('option');
-          opt.value=t.user_id||t.id;
-          opt.textContent=(t.full_name||'متدرب');
-          traineeSelect.appendChild(opt);
-        });
-      }
-    }
-
-    // ملء قائمة المشرفين بالبيانات من الخادم
-    if(supRes.ok){
-      var sData=await supRes.json();
-      var sList=sData.results||sData;
-      var supSelect=document.getElementById('supervisorSelect');
-      if(supSelect&&Array.isArray(sList)){
-        supSelect.innerHTML='<option value="">— اختر مشرفاً —</option>';
-        sList.forEach(function(s){
-          var opt=document.createElement('option');
-          opt.value=s.user_id||s.id;
-          opt.textContent=(s.full_name||'مشرف');
-          supSelect.appendChild(opt);
-        });
-      }
-    }
-
-    // عرض التعيينات الحالية في القائمة
-    if(assignRes.ok){
-      var aData=await assignRes.json();
-      var assignments=aData.assignments||aData;
-      var listContainer=document.querySelector('.card:last-child');
-      if(listContainer&&Array.isArray(assignments)&&assignments.length){
-        var html='';
-        assignments.forEach(function(a){
-          var initials=a.trainee_name?a.trainee_name.substring(0,2):'';
-          var statusColor=a.status==='active'?'var(--success-light);color:#15803D':'#FEE2E2;color:#DC2626';
-          var statusLabel=a.status==='active'?'نشط':'منتهي';
-          html+='<div class="assigned-item">';
-          html+='<div class="match-avatar" style="background:var(--primary);width:36px;height:36px;font-size:11px">'+initials+'</div>';
-          html+='<div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">'+a.trainee_name+'</div>';
-          html+='<div style="font-size:11px;color:var(--text-mid)">'+a.supervisor_name+'</div></div>';
-          html+='<span style="font-size:10px;padding:3px 10px;border-radius:20px;background:'+statusColor+';font-weight:600">'+statusLabel+'</span>';
-          html+='</div>';
-        });
-        var titleEl=listContainer.querySelector('.card-title');
-        listContainer.innerHTML='';
-        if(titleEl)listContainer.appendChild(titleEl);
-        listContainer.insertAdjacentHTML('beforeend',html);
-      }
-    }
-  }catch(e){console.log('Error loading data:',e)}
+  var user=getUser();
+  if(user){
+    document.getElementById('adminName').textContent=user.full_name||'المشرف العام';
+  }
+  await loadData();
 });
 
-// دالة عرض الفرص المطابقة عند اختيار المتدرب
-function showMatches(){
-  var trainee=document.getElementById('traineeSelect').value;
-  if(trainee){
-    document.getElementById('matchesArea').style.display='block';
-    var sel=document.getElementById('traineeSelect');
-    var name=sel.options[sel.selectedIndex].text.split('—')[0].trim();
-    document.querySelector('#matchesArea .card-title').innerHTML='<i class="ti ti-sparkles"></i>تعيين — '+name;
-  }else{
-    document.getElementById('matchesArea').style.display='none';
+// جلب جميع البيانات من الخادم
+async function loadData(){
+  try{
+    var res=await fetch(API_BASE+'/admin-panel/assign/',{headers:authHeaders()});
+    if(!res.ok){
+      if(res.status===401){window.location.href='../public/02-login.html';return;}
+      throw new Error('Failed to load');
+    }
+    var data=await res.json();
+
+    allTrainees=data.trainees||[];
+    allSupervisors=data.supervisors||[];
+    var assignments=data.assignments||[];
+
+    // حساب عدد المتدربيين بدون مشرف
+    var unassignedCount=allTrainees.filter(function(t){return !t.is_assigned;}).length;
+
+    // تحديث الإحصائيات
+    document.getElementById('statTrainees').textContent=allTrainees.length;
+    document.getElementById('statSupervisors').textContent=allSupervisors.length;
+    document.getElementById('statActive').textContent=assignments.filter(function(a){return a.status==='active';}).length;
+    document.getElementById('statUnassigned').textContent=unassignedCount;
+
+    // ملء قوائم الاختيار
+    populateSelects();
+
+    // عرض التعيينات في الجدول
+    renderAssignments(assignments);
+  }catch(e){
+    console.log('Error:',e);
+    document.getElementById('assignmentsTable').innerHTML='<div class="empty-state"><i class="ti ti-alert-triangle"></i>حدث خطأ في تحميل البيانات</div>';
   }
 }
 
-// دالة تأكيد تعيين المتدرب للمشرف وإرسال الطلب للخادم
-async function assignTrainee(){
-  var traineeId=document.getElementById('traineeSelect').value;
-  var supervisorSelect=document.getElementById('supervisorSelect');
-  var supervisorId=supervisorSelect?supervisorSelect.value:'';
-  if(!traineeId){showToast('يرجى اختيار متدرب');return;}
-  if(!supervisorId){showToast('يرجى اختيار مشرف');return;}
-  try{
-    var res=await fetch(API_BASE+'/admin-panel/assign/',{method:'POST',headers:authHeaders(),body:JSON.stringify({trainee_id:traineeId,supervisor_id:supervisorId})});
-    if(res.ok){
-      showToast('تم تعيين المتدرب بنجاح ✓');
-      document.getElementById('matchesArea').style.display='none';
-      document.getElementById('traineeSelect').value='';
-      location.reload();
-    }else{
-      var err=await res.json();
-      showToast(err.error||'حدث خطأ في التعيين');
-    }
-  }catch(e){console.log(e);showToast('حدث خطأ');}
+// ملء قوائم المتدربين والمشرفين
+function populateSelects(){
+  var traineeSel=document.getElementById('traineeSelect');
+  var supervisorSel=document.getElementById('supervisorSelect');
+
+  traineeSel.innerHTML='<option value="">— اختر متدرباً —</option>';
+  allTrainees.forEach(function(t){
+    var status=t.is_assigned?'(معيّن)':'';
+    var opt=document.createElement('option');
+    opt.value=t.id;
+    opt.textContent=t.full_name+' — '+t.major+' — GPA: '+t.gpa+' '+status;
+    if(t.is_assigned){opt.style.color='rgba(255,255,255,0.3)';}
+    traineeSel.appendChild(opt);
+  });
+
+  supervisorSel.innerHTML='<option value="">— اختر مشرفاً —</option>';
+  allSupervisors.forEach(function(s){
+    var opt=document.createElement('option');
+    opt.value=s.id;
+    opt.textContent=s.full_name+' — '+s.department+' ('+s.active_count+' متدرّب)';
+    supervisorSel.appendChild(opt);
+  });
 }
 
-// دالة عرض رسالة تنبيه عائمة
+// عرض التعيينات في الجدول
+function renderAssignments(assignments){
+  var container=document.getElementById('assignmentsTable');
+  document.getElementById('assignmentCount').textContent=assignments.length+' تعيين';
+
+  if(!assignments.length){
+    container.innerHTML='<div class="empty-state"><i class="ti ti-link-off"></i>لا توجد تعيينات حالياً</div>';
+    return;
+  }
+
+  var colors=['#5B4FCF','#22C55E','#FF6B6B','#F59E0B','#A89CFF','#06B6D4'];
+  var html='<table class="table"><thead><tr><th>المتدرب</th><th>المشرف</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>';
+
+  assignments.forEach(function(a,index){
+    var c=colors[index%colors.length];
+    var initials=a.trainee_name?a.trainee_name.substring(0,2):'';
+    var badge=a.status==='active'?'badge-active':'badge-cancelled';
+    var label=a.status==='active'?'نشط':'ملغي';
+    var canCancel=a.status==='active';
+
+    html+='<tr>';
+    html+='<td><div class="user-cell"><div class="u-avatar" style="background:'+c+'">'+initials+'</div><div><div class="u-name">'+a.trainee_name+'</div><div class="u-sub">'+a.trainee_id+'</div></div></div></td>';
+    html+='<td><div class="user-cell"><div class="u-avatar" style="background:rgba(255,255,255,0.1)">'+(a.supervisor_name?a.supervisor_name.substring(0,2):'')+'</div><div><div class="u-name">'+a.supervisor_name+'</div></div></div></td>';
+    html+='<td style="font-size:11px;color:rgba(255,255,255,0.4)">'+a.created_at+'</td>';
+    html+='<td><span class="badge '+badge+'">'+label+'</span></td>';
+    html+='<td>';
+    if(canCancel){
+      html+='<button class="btn btn-sm btn-danger" onclick="cancelAssignment('+a.id+')"><i class="ti ti-x"></i>إلغاء</button>';
+    }else{
+      html+='<span style="font-size:11px;color:rgba(255,255,255,0.2)">—</span>';
+    }
+    html+='</td>';
+    html+='</tr>';
+  });
+
+  html+='</tbody></table>';
+  container.innerHTML=html;
+}
+
+// تعيين متدرب لمشرف
+async function assignTrainee(){
+  var traineeId=document.getElementById('traineeSelect').value;
+  var supervisorId=document.getElementById('supervisorSelect').value;
+
+  if(!traineeId){showToast('يرجى اختيار متدرب');return;}
+  if(!supervisorId){showToast('يرجى اختيار مشرف');return;}
+
+  try{
+    var res=await fetch(API_BASE+'/admin-panel/assign/',{
+      method:'POST',
+      headers:authHeaders(),
+      body:JSON.stringify({trainee_id:parseInt(traineeId),supervisor_id:parseInt(supervisorId)})
+    });
+    var data=await res.json();
+    if(res.ok){
+      showToast('تم تعيين المتدرب بنجاح ✓');
+      document.getElementById('traineeSelect').value='';
+      document.getElementById('supervisorSelect').value='';
+      await loadData();
+    }else{
+      showToast(data.error||'حدث خطأ في التعيين');
+    }
+  }catch(e){showToast('حدث خطأ في الاتصال');}
+}
+
+// إلغاء تعيين
+async function cancelAssignment(id){
+  if(!confirm('هل أنت متأكد من إلغاء هذا التعيين؟')){return;}
+  try{
+    var res=await fetch(API_BASE+'/admin-panel/assign/',{
+      method:'DELETE',
+      headers:authHeaders(),
+      body:JSON.stringify({assignment_id:id})
+    });
+    var data=await res.json();
+    if(res.ok){
+      showToast('تم إلغاء التعيين بنجاح');
+      await loadData();
+    }else{
+      showToast(data.error||'حدث خطأ');
+    }
+  }catch(e){showToast('حدث خطأ');}
+}
+
+// عرض رسالة تنبيه
 function showToast(msg){
   var t=document.getElementById('toast');
   document.getElementById('toastMsg').textContent=msg;

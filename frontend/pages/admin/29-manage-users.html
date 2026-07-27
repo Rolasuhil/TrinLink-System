@@ -1,5 +1,4 @@
-﻿<!-- صفحة إدارة المستخدمين - تتيح للمدير عرض وبحث وتصفية جميع المستخدمين المسجلين (المتدربيين، الشركات، المشرفين) وإدارتهم بالتفعيل والحذف والحظر -->
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -8,420 +7,379 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-/* إعادة تعيين شاملة لجميع العناصر */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-/* المتغيرات العامة: الألوان والخطوط والأبعاد */
-:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
-
-/* تخطيط الصفحة الأساسي مع خلفية فاتحة وقائمة جانبية */
-body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
-
-/* --- أنماط القائمة الجانبية --- */
-/* حاوية القائمة الجانبية المظلمة على اليمين */
-.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
-
-/* شعار التطبيق في أعلى القائمة */
+:root{--primary:#5B4FCF;--accent:#FF6B6B;--success:#22C55E;--warning:#F59E0B;--dark:#0F0E1A;--dark-2:#1A1827;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--dark);color:white;display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:var(--dark-2);flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100;border-left:1px solid rgba(255,255,255,0.06)}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
-
-/* عناصر التنقل في القائمة الجانبية */
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
-.nav-item.active{background:var(--primary)}
-.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
-.nav-item.active i,.nav-item.active span{color:white}
-.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-item.active{background:rgba(255,107,107,0.15)}
+.nav-item.active i,.nav-item.active span{color:var(--accent)!important}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.4);width:18px}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.4)}
 .nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
-
-/* عنوان أقسام التنقل */
-.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
-
-/* الجزء السفلي من القائمة الجانبية */
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:0.5px;text-transform:uppercase}
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
-
-/* --- أنماط المحتوى الرئيسي --- */
-/* الحاوية الرئيسية بجانب القائمة الجانبية */
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
-
-/* شريط العنوان العلوي */
-.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
-.topbar-title{font-size:16px;font-weight:700}
-.topbar-sub{font-size:12px;color:var(--text-mid)}
-
-/* حاوية المحتوى */
+.topbar{background:var(--dark-2);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:white}
+.topbar-sub{font-size:12px;color:rgba(255,255,255,0.3)}
 .content{padding:20px 24px;flex:1}
-
-/* --- شريط التصفية --- */
-/* أزرار تصفية المستخدمين (الكل، متدربيين، شركات، مشرفين، بانتظار التأكيد) */
-.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
-.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1.5px solid var(--border);background:white;color:var(--text-mid);font-family:var(--font);font-weight:600;transition:all 0.15s}
-.filter-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
-
-/* حقل البحث بالاسم أو البريد الإلكتروني */
-.search-bar{padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);outline:none;background:white;width:250px;margin-right:auto}
-.search-bar:focus{border-color:var(--primary)}
-
-/* --- أنماط البطاقة والجدول --- */
-.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:14px}
-
-/* جدول عرض المستخدمين */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.mini-stat{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.2s}
+.mini-stat:hover{border-color:rgba(255,107,107,0.3)}
+.mini-stat-icon{width:38px;height:38px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
+.mini-stat-icon i{font-size:20px}
+.mini-stat-num{font-size:22px;font-weight:800;color:white}
+.mini-stat-label{font-size:11px;color:rgba(255,255,255,0.3)}
+.filters-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.s-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.3);font-size:16px}
+.search-input{width:100%;padding:9px 38px 9px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:white;background:rgba(255,255,255,0.05);outline:none}
+.search-input::placeholder{color:rgba(255,255,255,0.2)}
+.search-input:focus{border-color:var(--accent)}
+.filter-select{padding:9px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:rgba(255,255,255,0.6);background:var(--dark-2);outline:none}
+.filter-select option{background:var(--dark-2)}
+.tab-row{display:flex;gap:4px;margin-bottom:16px}
+.tab{padding:7px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.4);font-family:var(--font);transition:all 0.15s}
+.tab.active{background:var(--accent);color:white}
+.tab:hover:not(.active){background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7)}
+.table-wrap{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);overflow:hidden}
 .table{width:100%;border-collapse:collapse}
-.table th{text-align:right;padding:10px 12px;font-size:11px;font-weight:700;color:var(--text-mid);border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:0.3px}
-.table td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.table th{font-size:11px;color:rgba(255,255,255,0.25);text-align:right;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.06);font-weight:600;background:rgba(255,255,255,0.02)}
+.table td{font-size:13px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
 .table tr:last-child td{border-bottom:none}
-.table tr:hover td{background:var(--bg)}
-
-/* خلية معلومات المستخدم مع الصورة الرمزية */
+.table tr:hover td{background:rgba(255,255,255,0.02)}
 .user-cell{display:flex;align-items:center;gap:10px}
-.user-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
-.user-name{font-weight:700;color:var(--text-dark)}
-.user-email{font-size:11px;color:var(--text-mid)}
-
-/* شارة الحالة */
-.status-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;display:inline-block}
-
-/* أزرار الإجراءات في الجدول (عرض، تعديل، حظر، تأكيد، رفض) */
-.action-btns{display:flex;gap:4px}
-.action-btn{width:30px;height:30px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
-.action-btn i{font-size:14px;color:var(--text-mid)}
-.action-btn:hover{border-color:var(--primary);background:var(--primary-light)}
-.action-btn:hover i{color:var(--primary)}
-.action-btn.danger:hover{border-color:var(--accent);background:#FEE2E2}
-.action-btn.danger:hover i{color:var(--accent)}
-
-/* الأزرار العامة */
-.btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
-.btn-primary{background:var(--primary);color:white}
-.btn-success{background:var(--success);color:white}
-.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
-
-/* رسالة التنبيه العائمة */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.u-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.u-name{font-size:13px;font-weight:600;color:white}
+.u-email{font-size:11px;color:rgba(255,255,255,0.3);margin-top:1px}
+.type-badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700}
+.status-badge{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700}
+.action-cell{display:flex;gap:5px}
+.btn-a{padding:5px 12px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s;display:flex;align-items:center;gap:4px}
+.btn-approve{background:rgba(34,197,94,0.15);color:var(--success)}
+.btn-approve:hover{background:rgba(34,197,94,0.25)}
+.btn-reject{background:rgba(255,107,107,0.1);color:var(--accent)}
+.btn-reject:hover{background:rgba(255,107,107,0.2)}
+.btn-ban{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1)}
+.btn-view{background:rgba(91,79,207,0.15);color:#A89CFF}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--dark-2);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:28px;width:90%;max-width:500px}
+.modal-title{font-size:18px;font-weight:800;color:white;margin-bottom:16px}
+.info-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px}
+.info-row:last-child{border-bottom:none}
+.info-key{color:rgba(255,255,255,0.4)}
+.info-val{color:white;font-weight:600}
+.modal-footer{display:flex;gap:10px;margin-top:16px}
+.btn-modal-cancel{flex:1;padding:10px;border-radius:var(--radius-md);font-size:13px;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-family:var(--font)}
+.btn-modal-approve{flex:2;padding:10px;border-radius:var(--radius-md);font-size:13px;font-weight:700;color:white;background:var(--success);border:none;cursor:pointer;font-family:var(--font)}
+.btn-modal-reject{flex:1;padding:10px;border-radius:var(--radius-md);font-size:13px;font-weight:700;color:white;background:var(--accent);border:none;cursor:pointer;font-family:var(--font)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2D2B3E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;border:1px solid rgba(255,255,255,0.1)}
 .toast.show{display:flex}
-
-/* صف الإحصائيات المصغرة (إجمالي المتدربيين، الشركات، المشرفين) */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.stat-mini{background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;text-align:center}
-.stat-mini-num{font-size:20px;font-weight:800;color:var(--primary)}
-.stat-mini-label{font-size:11px;color:var(--text-mid);margin-top:2px}
+.loading{text-align:center;padding:40px;color:rgba(255,255,255,0.3)}
 </style>
 </head>
 <body>
-
-<!-- === القائمة الجانبية === -->
 <nav class="sidebar">
-  <!-- شعار التطبيق -->
-  <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
-  <!-- معلومات المدير الحالي -->
-  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
-    <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
-    <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:12px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 5px"><i class="ti ti-shield" style="color:white;font-size:16px"></i></div>
+    <div style="color:white;font-size:11px;font-weight:600">المشرف العام</div>
+    <div id="adminId" style="background:rgba(255,107,107,0.2);color:var(--accent);font-size:9px;padding:2px 8px;border-radius:20px;display:inline-block;margin-top:3px"></div>
   </div>
-  <!-- روابط التنقل -->
-  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <div class="nav-section">الإدارة</div>
   <a href="28-admin-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
-  <a href="#" class="nav-item active"><i class="ti ti-users"></i><span>إدارة المستخدمين</span><span class="nav-badge">5</span></a>
-  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-file-text"></i><span>إدارة المحتوى</span></a>
-  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير والإحصائيات</span></a>
-  <a href="32-assign-trainee.html" class="nav-item"><i class="ti ti-school"></i><span>تعيين المتدربيين</span></a>
-  <!-- قسم الإعدادات -->
-  <div class="nav-section">النظام</div>
-  <a href="#" class="nav-item"><i class="ti ti-settings"></i><span>الإعدادات</span></a>
-  <!-- زر تسجيل الخروج -->
-  <div class="sidebar-bottom">
-    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
-  </div>
+  <a href="#" class="nav-item active"><i class="ti ti-users"></i><span>إدارة المستخدمين</span></a>
+  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-flag"></i><span>إدارة المحتوى</span></a>
+  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير</span></a>
+  <a href="32-assign-supervisor.html" class="nav-item"><i class="ti ti-link"></i><span>ربط المشرفين</span></a>
+  <div class="sidebar-bottom"><a href="02-login.html" class="nav-item" onclick="localStorage.clear()"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
 </nav>
 
-<!-- === المحتوى الرئيسي === -->
 <div class="main">
-  <!-- شريط العنوان -->
   <div class="topbar">
-    <div>
-      <div class="topbar-title">إدارة المستخدمين 👥</div>
-      <div class="topbar-sub">إدارة وعرض جميع المستخدمين المسجلين</div>
-    </div>
+    <div><div class="topbar-title">إدارة المستخدمين</div><div class="topbar-sub" id="totalSub">إجمالي 0 مستخدم مسجل</div></div>
   </div>
 
   <div class="content">
-    <!-- === صف الإحصائيات المصغرة === -->
     <div class="stats-row">
-      <div class="stat-mini"><div class="stat-mini-num">1,089</div><div class="stat-mini-label">متدربين</div></div>
-      <div class="stat-mini"><div class="stat-mini-num" style="color:var(--accent)">42</div><div class="stat-mini-label">شركات</div></div>
-      <div class="stat-mini"><div class="stat-mini-num" style="color:var(--warning)">116</div><div class="stat-mini-label">مشرفين</div></div>
-      <div class="stat-mini"><div class="stat-mini-num" style="color:var(--success)">1,247</div><div class="stat-mini-label">الإجمالي</div></div>
+      <div class="mini-stat" onclick="filterByType('trainee')"><div class="mini-stat-icon" style="background:rgba(91,79,207,0.2)"><i class="ti ti-user" style="color:#A89CFF"></i></div><div><div class="mini-stat-num" id="statTrainees">0</div><div class="mini-stat-label">متدرب</div></div></div>
+      <div class="mini-stat" onclick="filterByType('company')"><div class="mini-stat-icon" style="background:rgba(245,158,11,0.15)"><i class="ti ti-building" style="color:var(--warning)"></i></div><div><div class="mini-stat-num" id="statCompanies">0</div><div class="mini-stat-label">شركة</div></div></div>
+      <div class="mini-stat" onclick="filterByType('supervisor')"><div class="mini-stat-icon" style="background:rgba(34,197,94,0.15)"><i class="ti ti-school" style="color:var(--success)"></i></div><div><div class="mini-stat-num" id="statSupervisors">0</div><div class="mini-stat-label">مشرف</div></div></div>
+      <div class="mini-stat" onclick="filterByStatus('pending')"><div class="mini-stat-icon" style="background:rgba(255,107,107,0.15)"><i class="ti ti-clock" style="color:var(--accent)"></i></div><div><div class="mini-stat-num" id="statPending">0</div><div class="mini-stat-label">ينتظر موافقة</div></div></div>
     </div>
 
-    <!-- === شريط التصفية والبحث === -->
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="filterUsers(this,'all')">الكل</button>
-      <button class="filter-btn" onclick="filterUsers(this,'trainee')">المتدربيين</button>
-      <button class="filter-btn" onclick="filterUsers(this,'company')">الشركات</button>
-      <button class="filter-btn" onclick="filterUsers(this,'supervisor')">المشرفين</button>
-      <button class="filter-btn" onclick="filterUsers(this,'pending')">بانتظار التأكيد <span style="background:var(--accent);color:white;padding:1px 5px;border-radius:8px;font-size:9px;margin-right:2px">5</span></button>
-      <input class="search-bar" placeholder="🔍 بحث بالاسم أو البريد...">
+    <div class="filters-row">
+      <div class="search-wrap"><i class="ti ti-search s-icon"></i><input class="search-input" id="searchInput" placeholder="بحث بالاسم أو البريد..." oninput="searchUsers(this.value)"></div>
+      <select class="filter-select" id="typeFilter" onchange="filterByType(this.value)">
+        <option value="all">كل الأنواع</option>
+        <option value="trainee">متدرب</option>
+        <option value="company">شركة</option>
+        <option value="supervisor">مشرف</option>
+      </select>
+      <select class="filter-select" id="statusFilter" onchange="filterByStatus(this.value)">
+        <option value="all">كل الحالات</option>
+        <option value="active">نشط</option>
+        <option value="pending">انتظار</option>
+        <option value="banned">محظور</option>
+      </select>
     </div>
 
-    <!-- === جدول المستخدمين === -->
-    <div class="card" style="padding:0;overflow-x:auto">
-      <table class="table">
+    <div class="tab-row">
+      <button class="tab active" onclick="switchTab(this,'all')">الكل (<span id="tabAll">0</span>)</button>
+      <button class="tab" onclick="switchTab(this,'pending')">انتظار (<span id="tabPending">0</span>)</button>
+      <button class="tab" onclick="switchTab(this,'active')">نشط (<span id="tabActive">0</span>)</button>
+      <button class="tab" onclick="switchTab(this,'banned')">محظور (<span id="tabBanned">0</span>)</button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table" id="usersTable">
         <thead>
-          <tr><th>المستخدم</th><th>النوع</th><th>التاريخ</th><th>الحالة</th><th>إجراءات</th></tr>
+          <tr>
+            <th>المستخدم</th>
+            <th>النوع</th>
+            <th>الجامعة / الشركة</th>
+            <th>تاريخ التسجيل</th>
+            <th>الحالة</th>
+            <th>الإجراءات</th>
+          </tr>
         </thead>
-        <tbody>
-          <!-- مستخدم: سارة محمود - متدربة - نشطة -->
-          <tr data-type="trainee" data-status="active">
-            <td><div class="user-cell"><div class="user-avatar" style="background:var(--primary)">سم</div><div><div class="user-name">سارة محمود</div><div class="user-email">sara@alazhar.edu</div></div></div></td>
-            <td><span style="font-size:12px;font-weight:600">متدربة</span></td>
-            <td><span style="font-size:12px;color:var(--text-mid)">1 يوليو 2026</span></td>
-            <td><span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span></td>
-            <td><div class="action-btns">
-              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
-              <button class="action-btn" title="تعديل"><i class="ti ti-edit"></i></button>
-              <button class="action-btn danger" title="حظر"><i class="ti ti-ban"></i></button>
-            </div></td>
-          </tr>
-          <!-- مستخدم: أحمد حسن - متدرب - نشط -->
-          <tr data-type="trainee" data-status="active">
-            <td><div class="user-cell"><div class="user-avatar" style="background:#22C55E">أح</div><div><div class="user-name">أحمد حسن</div><div class="user-email">ahmed@alazhar.edu</div></div></div></td>
-            <td><span style="font-size:12px;font-weight:600">متدرب</span></td>
-            <td><span style="font-size:12px;color:var(--text-mid)">5 يوليو 2026</span></td>
-            <td><span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span></td>
-            <td><div class="action-btns">
-              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
-              <button class="action-btn" title="تعديل"><i class="ti ti-edit"></i></button>
-              <button class="action-btn danger" title="حظر"><i class="ti ti-ban"></i></button>
-            </div></td>
-          </tr>
-          <!-- مستخدم: TechPal - شركة - بانتظار التأكيد -->
-          <tr data-type="company" data-status="pending">
-            <td><div class="user-cell"><div class="user-avatar" style="background:#7C3AED">TP</div><div><div class="user-name">TechPal</div><div class="user-email">hr@techpal.com</div></div></div></td>
-            <td><span style="font-size:12px;font-weight:600">شركة</span></td>
-            <td><span style="font-size:12px;color:var(--text-mid)">20 يوليو 2026</span></td>
-            <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span></td>
-            <td><div class="action-btns">
-              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
-              <button class="action-btn" style="border-color:var(--success)" title="تأكيد" onclick="activateUser(this,'TechPal')"><i class="ti ti-check" style="color:var(--success)"></i></button>
-              <button class="action-btn danger" title="رفض" onclick="rejectUser(this,'TechPal')"><i class="ti ti-x"></i></button>
-            </div></td>
-          </tr>
-          <!-- مستخدم: DesignHub - شركة - بانتظار التأكيد -->
-          <tr data-type="company" data-status="pending">
-            <td><div class="user-cell"><div class="user-avatar" style="background:#FF6B6B">DH</div><div><div class="user-name">DesignHub</div><div class="user-email">info@designhub.com</div></div></div></td>
-            <td><span style="font-size:12px;font-weight:600">شركة</span></td>
-            <td><span style="font-size:12px;color:var(--text-mid)">19 يوليو 2026</span></td>
-            <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span></td>
-            <td><div class="action-btns">
-              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
-              <button class="action-btn" style="border-color:var(--success)" title="تأكيد" onclick="activateUser(this,'DesignHub')"><i class="ti ti-check" style="color:var(--success)"></i></button>
-              <button class="action-btn danger" title="رفض" onclick="rejectUser(this,'DesignHub')"><i class="ti ti-x"></i></button>
-            </div></td>
-          </tr>
-          <!-- مستخدم: د. محمد أبو سمرة - مشرف - نشط -->
-          <tr data-type="supervisor" data-status="active">
-            <td><div class="user-cell"><div class="user-avatar" style="background:#22C55E">مش</div><div><div class="user-name">د. محمد أبو سمرة</div><div class="user-email">mohammed@alazhar.edu</div></div></div></td>
-            <td><span style="font-size:12px;font-weight:600">مشرف</span></td>
-            <td><span style="font-size:12px;color:var(--text-mid)">15 يونيو 2026</span></td>
-            <td><span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span></td>
-            <td><div class="action-btns">
-              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
-              <button class="action-btn" title="تعديل"><i class="ti ti-edit"></i></button>
-              <button class="action-btn danger" title="حظر"><i class="ti ti-ban"></i></button>
-            </div></td>
-          </tr>
-          <!-- مستخدم: DataSoft - شركة - بانتظار التأكيد -->
-          <tr data-type="company" data-status="pending">
-            <td><div class="user-cell"><div class="user-avatar" style="background:#F59E0B">DS</div><div><div class="user-name">DataSoft</div><div class="user-email">team@datasoft.com</div></div></div></td>
-            <td><span style="font-size:12px;font-weight:600">شركة</span></td>
-            <td><span style="font-size:12px;color:var(--text-mid)">18 يوليو 2026</span></td>
-            <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span></td>
-            <td><div class="action-btns">
-              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
-              <button class="action-btn" style="border-color:var(--success)" title="تأكيد" onclick="activateUser(this,'DataSoft')"><i class="ti ti-check" style="color:var(--success)"></i></button>
-              <button class="action-btn danger" title="رفض" onclick="rejectUser(this,'DataSoft')"><i class="ti ti-x"></i></button>
-            </div></td>
-          </tr>
-          <!-- مستخدم: منى ناصر - متدربة - نشطة -->
-          <tr data-type="trainee" data-status="active">
-            <td><div class="user-cell"><div class="user-avatar" style="background:#FF6B6B">من</div><div><div class="user-name">منى ناصر</div><div class="user-email">mona@alquds.edu</div></div></div></td>
-            <td><span style="font-size:12px;font-weight:600">متدربة</span></td>
-            <td><span style="font-size:12px;color:var(--text-mid)">3 يوليو 2026</span></td>
-            <td><span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span></td>
-            <td><div class="action-btns">
-              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
-              <button class="action-btn" title="تعديل"><i class="ti ti-edit"></i></button>
-              <button class="action-btn danger" title="حظر"><i class="ti ti-ban"></i></button>
-            </div></td>
-          </tr>
-          <!-- مستخدم: حمزة عويضة - متدرب - محظور -->
-          <tr data-type="trainee" data-status="blocked">
-            <td><div class="user-cell"><div class="user-avatar" style="background:#6B7280">حم</div><div><div class="user-name">حمزة عويضة</div><div class="user-email">hamza@alazhar.edu</div></div></div></td>
-            <td><span style="font-size:12px;font-weight:600">متدرب</span></td>
-            <td><span style="font-size:12px;color:var(--text-mid)">10 يونيو 2026</span></td>
-            <td><span class="status-badge" style="background:#FEE2E2;color:#DC2626">محظور</span></td>
-            <td><div class="action-btns">
-              <button class="action-btn" title="عرض"><i class="ti ti-eye"></i></button>
-              <button class="action-btn" style="border-color:var(--success)" title="إلغاء الحظر" onclick="unblockUser(this)"><i class="ti ti-lock-open" style="color:var(--success)"></i></button>
-            </div></td>
-          </tr>
+        <tbody id="usersBody">
+          <tr><td colspan="6" class="loading"><i class="ti ti-loader" style="font-size:24px;display:block;margin-bottom:8px"></i>جارٍ تحميل البيانات...</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- رسالة التنبيه العائمة -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div class="modal-title">تفاصيل المستخدم</div>
+      <button onclick="document.getElementById('userModal').classList.remove('open')" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:20px"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="info-row"><span class="info-key">الاسم</span><span class="info-val" id="mName">—</span></div>
+    <div class="info-row"><span class="info-key">النوع</span><span class="info-val" id="mType">—</span></div>
+    <div class="info-row"><span class="info-key">البريد الإلكتروني</span><span class="info-val" id="mEmail">—</span></div>
+    <div class="info-row"><span class="info-key">المؤسسة</span><span class="info-val" id="mOrg">—</span></div>
+    <div class="info-row"><span class="info-key">المعرف</span><span class="info-val" id="mUserId">—</span></div>
+    <div class="info-row"><span class="info-key">الحالة</span><span class="info-val" id="mStatus">—</span></div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="document.getElementById('userModal').classList.remove('open')">إغلاق</button>
+      <button class="btn-modal-reject" id="modalBanBtn" onclick="toggleBanFromModal()">تعليق</button>
+      <button class="btn-modal-approve" id="modalApproveBtn" onclick="approveFromModal()">تفعيل</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
-// === ملف جافاسكريبت لإدارة المستخدمين ===
+const API = 'http://127.0.0.1:8000/api';
+const token = localStorage.getItem('trainlink_token');
+let allUsers = [];
+let currentModalUser = null;
 
-// التحقق من صحة تسجيل الدخول عند تحميل الصفحة
-(function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+if (!token) { window.location.href = '02-login.html'; }
 
-// عنوان واجهة برمجة التطبيقات
-const API_BASE='/api';
+// Load admin info
+async function loadAdminInfo() {
+  try {
+    const r = await fetch(API + '/auth/profile/', { headers: { 'Authorization': 'Bearer ' + token } });
+    const d = await r.json();
+    document.getElementById('adminId').textContent = d.user_id || '';
+  } catch(e) {}
+}
 
-// دالة الحصول على رمز المصادقة
-function getToken(){return localStorage.getItem('trainlink_token')}
-
-// دالة الحصول على بيانات المستخدم الحالي من التخزين المحلي
-function getUser(){return JSON.parse(localStorage.getItem('trainlink_user')||'null')}
-
-// دالة إنشاء رؤوس طلب المصادقة
-function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
-
-// التصفية الحالية (الكل، متدربيين، شركات، مشرفين، بانتظار التأكيد)
-var currentFilter='all';
-
-// === عند تحميل الصفحة بالكامل ===
-document.addEventListener('DOMContentLoaded',async function(){
-  // تحميل جميع المستخدمين
-  await loadUsers('all');
-
-  // إعداد حقل البحث للتصفية الفورية حسب النص المُدخل
-  var searchInput=document.querySelector('.search-bar');
-  if(searchInput){
-    searchInput.addEventListener('input',function(){
-      var q=this.value.toLowerCase();
-      document.querySelectorAll('tbody tr').forEach(function(row){
-        row.style.display=row.textContent.toLowerCase().indexOf(q)!==-1?'table-row':'none';
-      });
-    });
-  }
-});
-
-// دالة تحميل المستخدمين من الخادم وعرضهم في الجدول حسب النوع المحدد
-async function loadUsers(type){
-  var tbody=document.querySelector('tbody');
-  if(tbody)tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-mid)">جارٍ التحميل...</td></tr>';
-  try{
-    var url=type&&type!=='all'&&type!=='pending'?API_BASE+'/admin-panel/users/?type='+type:API_BASE+'/admin-panel/users/';
-    var res=await fetch(url,{headers:authHeaders()});
-    if(!res.ok)throw new Error('Failed');
-    var data=await res.json();
-    var list=data.results||data;
-    if(!tbody||!Array.isArray(list))return;
-    tbody.innerHTML='';
-    var colors=['var(--primary)','#22C55E','#7C3AED','#FF6B6B','#F59E0B','#6B7280'];
-
-    // حساب الإحصائيات حسب نوع المستخدم
-    var counts={trainee:0,company:0,supervisor:0,total:list.length,pending:0};
-    list.forEach(function(u,i){
-      if(u.person_type==='trainee')counts.trainee++;
-      if(u.person_type==='company')counts.company++;
-      if(u.person_type==='supervisor')counts.supervisor++;
-      if(!u.is_verified)counts.pending++;
-    });
-
-    // تحديث أرقام الإحصائيات في أعلى الصفحة
-    var statNums=document.querySelectorAll('.stat-mini-num');
-    if(statNums[0])statNums[0].textContent=counts.trainee;
-    if(statNums[1])statNums[1].textContent=counts.company;
-    if(statNums[2])statNums[2].textContent=counts.supervisor;
-    if(statNums[3])statNums[3].textContent=counts.total;
-
-    var typeLabels={trainee:'متدرب',company:'شركة',supervisor:'مشرف'};
-    var isPendingType=type==='pending';
-
-    // إنشاء صفوف الجدول لكل مستخدم
-    list.forEach(function(u,i){
-      if(isPendingType&&u.is_verified)return;
-      var ini=u.full_name?u.full_name.substring(0,2):'?';
-      var col=colors[i%colors.length];
-      var row=document.createElement('tr');
-      row.setAttribute('data-type',u.person_type||'');
-      row.setAttribute('data-status',u.is_active?'active':'blocked');
-      var typeLabel=u.person_type_display||typeLabels[u.person_type]||u.person_type||'';
-      var date=u.created_at?new Date(u.created_at).toLocaleDateString('ar'):'';
-
-      // تحديد حالة المستخدم ولونها
-      var statusHtml=u.is_active?'<span class="status-badge" style="background:var(--success-light);color:#15803D">مفعّل</span>':u.is_verified?'<span class="status-badge" style="background:#FEE2E2;color:#DC2626">محظور</span>':'<span class="status-badge" style="background:var(--warning-light);color:#B45309">بانتظار التأكيد</span>';
-
-      // تحديد الأزرار المتاحة حسب حالة المستخدم
-      var actions='';
-      if(!u.is_verified){
-        actions='<button class="action-btn" style="border-color:var(--success)" title="تأكيد" onclick="activateUser(\''+u.user_id+'\','+(i)+')"><i class="ti ti-check" style="color:var(--success)"></i></button><button class="action-btn danger" title="رفض" onclick="deleteUser(\''+u.user_id+'\','+(i)+')"><i class="ti ti-x"></i></button>';
-      }else if(!u.is_active){
-        actions='<button class="action-btn" style="border-color:var(--success)" title="إلغاء الحظر" onclick="activateUser(\''+u.user_id+'\','+(i)+')"><i class="ti ti-lock-open" style="color:var(--success)"></i></button>';
-      }else{
-        actions='<button class="action-btn danger" title="حظر" onclick="deactivateUser(\''+u.user_id+'\','+(i)+')"><i class="ti ti-ban"></i></button>';
-      }
-      row.innerHTML='<td><div class="user-cell"><div class="user-avatar" style="background:'+col+'">'+ini+'</div><div><div class="user-name">'+(u.full_name||'مستخدم')+'</div><div class="user-email">'+(u.email||'')+'</div></div></div></td><td><span style="font-size:12px;font-weight:600">'+typeLabel+'</span></td><td><span style="font-size:12px;color:var(--text-mid)">'+date+'</span></td><td>'+statusHtml+'</td><td><div class="action-btns">'+actions+'</div></td>';
-      tbody.appendChild(row);
-    });
-  }catch(e){
-    if(tbody)tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-mid)">حدث خطأ في تحميل البيانات</td></tr>';
-    console.log('Error loading users:',e);
+// Load all users
+async function loadUsers() {
+  try {
+    const r = await fetch(API + '/admin-panel/users/', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (!r.ok) throw new Error('Failed');
+    allUsers = await r.json();
+    renderStats();
+    renderTable(allUsers);
+  } catch(e) {
+    document.getElementById('usersBody').innerHTML = '<tr><td colspan="6" class="loading">فشل تحميل البيانات</td></tr>';
   }
 }
 
-// دالة تفعيل مستخدم: تغيير الحالة إلى نشط ومؤكد
-async function activateUser(userId){
-  try{
-    var res=await fetch(API_BASE+'/admin-panel/users/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({user_id:userId,is_active:true,is_verified:true})});
-    if(res.ok){showToast('تم التفعيل بنجاح ✓');loadUsers(currentFilter);}
-    else{showToast('حدث خطأ');}
-  }catch(e){console.log(e);showToast('حدث خطأ');}
+function renderStats() {
+  const trainees = allUsers.filter(u => u.person_type === 'trainee').length;
+  const companies = allUsers.filter(u => u.person_type === 'company').length;
+  const supervisors = allUsers.filter(u => u.person_type === 'supervisor').length;
+  const pending = allUsers.filter(u => u.status === 'pending').length;
+  const active = allUsers.filter(u => u.status === 'active').length;
+  const banned = allUsers.filter(u => u.status === 'banned').length;
+
+  document.getElementById('statTrainees').textContent = trainees;
+  document.getElementById('statCompanies').textContent = companies;
+  document.getElementById('statSupervisors').textContent = supervisors;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('totalSub').textContent = 'إجمالي ' + allUsers.length + ' مستخدم مسجل';
+  document.getElementById('tabAll').textContent = allUsers.length;
+  document.getElementById('tabPending').textContent = pending;
+  document.getElementById('tabActive').textContent = active;
+  document.getElementById('tabBanned').textContent = banned;
 }
 
-// دالة حظر مستخدم: تغيير الحالة إلى غير نشط
-async function deactivateUser(userId){
-  try{
-    var res=await fetch(API_BASE+'/admin-panel/users/',{method:'PATCH',headers:authHeaders(),body:JSON.stringify({user_id:userId,is_active:false})});
-    if(res.ok){showToast('تم الحظر بنجاح');loadUsers(currentFilter);}
-    else{showToast('حدث خطأ');}
-  }catch(e){console.log(e);showToast('حدث خطأ');}
+function renderTable(users) {
+  const colors = { trainee: '#5B4FCF', company: '#22C55E', supervisor: '#7C3AED', admin: '#FF6B6B' };
+  const labels = { trainee: 'متدرب', company: 'شركة', supervisor: 'مشرف', admin: 'أدمن' };
+  const statusStyles = {
+    active: 'background:rgba(34,197,94,0.15);color:#22C55E',
+    pending: 'background:rgba(245,158,11,0.15);color:#F59E0B',
+    banned: 'background:rgba(107,114,128,0.2);color:#9CA3AF'
+  };
+  const statusLabels = { active: 'نشط', pending: 'انتظار', banned: 'محظور' };
+
+  if (users.length === 0) {
+    document.getElementById('usersBody').innerHTML = '<tr><td colspan="6" class="loading">لا يوجد مستخدمين</td></tr>';
+    return;
+  }
+
+  let html = '';
+  users.forEach(u => {
+    const initials = u.full_name.substring(0, 2);
+    const bg = colors[u.person_type] || '#6B7280';
+    const typeLabel = labels[u.person_type] || u.person_type;
+    const org = u.company_name || u.university || '—';
+
+    let actions = '';
+    if (u.status === 'pending') {
+      actions = `<button class="btn-a btn-approve" onclick="approveUser(${u.id})"><i class="ti ti-check"></i>تفعيل</button>
+                 <button class="btn-a btn-reject" onclick="rejectUser(${u.id})"><i class="ti ti-x"></i>رفض</button>`;
+    } else if (u.status === 'banned') {
+      actions = `<button class="btn-a btn-approve" onclick="unbanUser(${u.id})"><i class="ti ti-refresh"></i>إلغاء الحظر</button>`;
+    } else {
+      actions = `<button class="btn-a btn-view" onclick="viewUser(${u.id})"><i class="ti ti-eye"></i>عرض</button>
+                 <button class="btn-a btn-ban" onclick="banUser(${u.id})"><i class="ti ti-ban"></i>تعليق</button>`;
+    }
+
+    html += `<tr data-type="${u.person_type}" data-status="${u.status}" data-name="${u.full_name}">
+      <td><div class="user-cell"><div class="u-av" style="background:${bg}">${initials}</div><div><div class="u-name">${u.full_name}</div><div class="u-email">${u.email} · ${u.user_id}</div></div></div></td>
+      <td><span class="type-badge" style="background:${bg}22;color:${bg}">${typeLabel}</span></td>
+      <td style="color:rgba(255,255,255,0.5);font-size:12px">${org}</td>
+      <td style="color:rgba(255,255,255,0.4);font-size:12px">${u.created_at}</td>
+      <td><span class="status-badge" style="${statusStyles[u.status]}">${statusLabels[u.status]}</span></td>
+      <td><div class="action-cell">${actions}</div></td>
+    </tr>`;
+  });
+  document.getElementById('usersBody').innerHTML = html;
 }
 
-// دالة حذف مستخدم نهائياً من النظام
-async function deleteUser(userId){
-  try{
-    var res=await fetch(API_BASE+'/admin-panel/users/',{method:'DELETE',headers:authHeaders(),body:JSON.stringify({user_id:userId})});
-    if(res.ok){showToast('تم الحذف بنجاح');loadUsers(currentFilter);}
-    else{showToast('حدث خطأ');}
-  }catch(e){console.log(e);showToast('حدث خطأ');}
-}
-
-// دالة تصفية المستخدمين حسب النوع عند النقر على زر التصفية
-function filterUsers(btn,type){
-  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+function switchTab(btn, status) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  currentFilter=type;
-  if(type==='all'||type==='pending')loadUsers(type);
-  else loadUsers(type);
+  filterByStatus(status === 'all' ? 'all' : status);
 }
 
-// دالة عرض رسالة تنبيه عائمة
-function showToast(msg){
-  var t=document.getElementById('toast');
-  document.getElementById('toastMsg').textContent=msg;
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show')},3000);
+function searchUsers(q) {
+  const filtered = allUsers.filter(u => u.full_name.toLowerCase().includes(q.toLowerCase()) || u.email.toLowerCase().includes(q.toLowerCase()));
+  renderTable(filtered);
 }
+
+function filterByType(type) {
+  document.getElementById('typeFilter').value = type;
+  let filtered = allUsers;
+  if (type !== 'all') filtered = filtered.filter(u => u.person_type === type);
+  const status = document.getElementById('statusFilter').value;
+  if (status !== 'all') filtered = filtered.filter(u => u.status === status);
+  renderTable(filtered);
+}
+
+function filterByStatus(status) {
+  document.getElementById('statusFilter').value = status;
+  let filtered = allUsers;
+  if (status !== 'all') filtered = filtered.filter(u => u.status === status);
+  const type = document.getElementById('typeFilter').value;
+  if (type !== 'all') filtered = filtered.filter(u => u.person_type === type);
+  renderTable(filtered);
+}
+
+async function approveUser(id) {
+  await fetch(API + '/admin-panel/users/', {
+    method: 'PATCH',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: id, is_verified: true, is_active: true })
+  });
+  showToast('تم تفعيل الحساب بنجاح');
+  loadUsers();
+}
+
+async function rejectUser(id) {
+  await fetch(API + '/admin-panel/users/', {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: id })
+  });
+  showToast('تم حذف الحساب');
+  loadUsers();
+}
+
+async function banUser(id) {
+  await fetch(API + '/admin-panel/users/', {
+    method: 'PATCH',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: id, is_active: false })
+  });
+  showToast('تم تعليق الحساب');
+  loadUsers();
+}
+
+async function unbanUser(id) {
+  await fetch(API + '/admin-panel/users/', {
+    method: 'PATCH',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: id, is_active: true })
+  });
+  showToast('تم إلغاء الحظر');
+  loadUsers();
+}
+
+function viewUser(id) {
+  currentModalUser = allUsers.find(u => u.id === id);
+  if (!currentModalUser) return;
+  document.getElementById('mName').textContent = currentModalUser.full_name;
+  document.getElementById('mType').textContent = currentModalUser.person_type_display;
+  document.getElementById('mEmail').textContent = currentModalUser.email;
+  document.getElementById('mOrg').textContent = currentModalUser.company_name || currentModalUser.university || '—';
+  document.getElementById('mUserId').textContent = currentModalUser.user_id;
+  document.getElementById('mStatus').textContent = currentModalUser.status === 'active' ? 'نشط' : currentModalUser.status === 'pending' ? 'انتظار' : 'محظور';
+  document.getElementById('userModal').classList.add('open');
+}
+
+async function approveFromModal() {
+  if (!currentModalUser) return;
+  await approveUser(currentModalUser.id);
+  document.getElementById('userModal').classList.remove('open');
+}
+
+async function toggleBanFromModal() {
+  if (!currentModalUser) return;
+  if (currentModalUser.status === 'banned') {
+    await unbanUser(currentModalUser.id);
+  } else {
+    await banUser(currentModalUser.id);
+  }
+  document.getElementById('userModal').classList.remove('open');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+loadAdminInfo();
+loadUsers();
 </script>
 </body>
 </html>

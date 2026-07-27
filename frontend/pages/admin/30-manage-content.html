@@ -1,5 +1,4 @@
-﻿<!-- صفحة إدارة المحتوى - تتيح للمدير إدارة Opportunities التدريبية والمنشورات والأقسام مع إمكانية الحذف والتنقل بين التبويبات -->
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -8,272 +7,117 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-/* إعادة تعيين شاملة لجميع العناصر */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-/* المتغيرات العامة: الألوان والخطوط والأبعاد */
-:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
-
-/* تخطيط الصفحة الأساسي مع خلفية فاتحة */
-body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
-
-/* --- أنماط القائمة الجانبية --- */
-/* حاوية القائمة الجانبية المظلمة */
-.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
-
-/* شعار التطبيق */
+:root{--primary:#5B4FCF;--accent:#FF6B6B;--success:#22C55E;--warning:#F59E0B;--dark:#0F0E1A;--dark-2:#1A1827;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--dark);color:white;display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:var(--dark-2);flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100;border-left:1px solid rgba(255,255,255,0.06)}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
-
-/* عناصر التنقل */
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
-.nav-item.active{background:var(--primary)}
-.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
-.nav-item.active i,.nav-item.active span{color:white}
-.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
-.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
-
-/* عنوان أقسام التنقل */
-.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
-
-/* الجزء السفلي من القائمة الجانبية */
+.nav-item.active{background:rgba(255,107,107,0.15)}
+.nav-item.active i,.nav-item.active span{color:var(--accent)!important}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.4);width:18px}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.4)}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:0.5px;text-transform:uppercase}
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
-
-/* --- أنماط المحتوى الرئيسي --- */
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
-
-/* شريط العنوان العلوي */
-.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
-.topbar-title{font-size:16px;font-weight:700}
-.topbar-sub{font-size:12px;color:var(--text-mid)}
-
-/* حاوية المحتوى */
+.topbar{background:var(--dark-2);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:white}
+.topbar-sub{font-size:12px;color:rgba(255,255,255,0.3)}
 .content{padding:20px 24px;flex:1}
-
-/* --- التبويبات --- */
-/* حاوية التبويبات للتنقل بين فرص التدريب والمنشورات والأقسام */
-.tabs{display:flex;gap:4px;background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:4px;margin-bottom:16px;width:fit-content}
-.tab{padding:7px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-mid);font-family:var(--font);transition:all 0.15s}
-.tab.active{background:var(--primary);color:white}
-
-/* --- أنماط البطاقة والجدول --- */
-.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:14px}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px}
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
-.card-title i{color:var(--primary);font-size:16px}
-
-/* جدول عرض المحتوى */
-.table{width:100%;border-collapse:collapse}
-.table th{text-align:right;padding:10px 12px;font-size:11px;font-weight:700;color:var(--text-mid);border-bottom:2px solid var(--border);text-transform:uppercase}
-.table td{padding:12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
-.table tr:last-child td{border-bottom:none}
-.table tr:hover td{background:var(--bg)}
-
-/* شارة الحالة */
-.status-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;display:inline-block}
-
-/* أزرار الإجراءات في الجدول */
-.action-btns{display:flex;gap:4px}
-.action-btn{width:30px;height:30px;border-radius:var(--radius-sm);border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
-.action-btn i{font-size:14px;color:var(--text-mid)}
-.action-btn:hover{border-color:var(--primary);background:var(--primary-light)}
-.action-btn:hover i{color:var(--primary)}
-.action-btn.danger:hover{border-color:var(--accent);background:#FEE2E2}
-.action-btn.danger:hover i{color:var(--accent)}
-
-/* صف الإحصائيات المصغرة */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.stat-mini{background:white;border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;text-align:center}
-.stat-mini-num{font-size:20px;font-weight:800;color:var(--primary)}
-.stat-mini-label{font-size:11px;color:var(--text-mid);margin-top:2px}
-
-/* رسالة التنبيه العائمة */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1E1B2E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999}
+.card-title{font-size:14px;font-weight:700;color:white;display:flex;align-items:center;gap:6px}
+.card-title i{font-size:16px}
+.reported-item{background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.15);border-radius:var(--radius-md);padding:14px;margin-bottom:10px}
+.reported-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.r-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.r-name{font-size:13px;font-weight:700;color:white;margin-bottom:2px}
+.r-meta{font-size:11px;color:rgba(255,255,255,0.3)}
+.r-reason{background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.2);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;color:rgba(255,107,107,0.8);margin-bottom:10px;display:flex;gap:6px;align-items:flex-start}
+.r-content{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:10px;background:rgba(255,255,255,0.03);padding:10px;border-radius:var(--radius-sm)}
+.r-actions{display:flex;gap:8px}
+.btn-r{padding:6px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:5px;border:none;transition:all 0.15s}
+.btn-remove{background:rgba(255,107,107,0.15);color:var(--accent)}
+.btn-remove:hover{background:rgba(255,107,107,0.25)}
+.btn-keep{background:rgba(34,197,94,0.1);color:var(--success)}
+.btn-keep:hover{background:rgba(34,197,94,0.2)}
+.btn-warn{background:rgba(245,158,11,0.1);color:var(--warning)}
+.intern-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.intern-item:last-child{border-bottom:none}
+.i-logo{width:34px;height:34px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.i-title{font-size:13px;font-weight:600;color:white;margin-bottom:2px}
+.i-meta{font-size:11px;color:rgba(255,255,255,0.3)}
+.i-status{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;margin-right:auto}
+.i-actions{display:flex;gap:5px}
+.btn-i{padding:5px 10px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
+.btn-i-hide{background:rgba(245,158,11,0.1);color:var(--warning)}
+.btn-i-delete{background:rgba(255,107,107,0.1);color:var(--accent)}
+.stats-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.sm{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:14px;text-align:center}
+.sm-num{font-size:24px;font-weight:800;color:white}
+.sm-label{font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2D2B3E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;border:1px solid rgba(255,255,255,0.1)}
 .toast.show{display:flex}
+.loading{text-align:center;padding:40px;color:rgba(255,255,255,0.3)}
 </style>
 </head>
 <body>
-
-<!-- === القائمة الجانبية === -->
 <nav class="sidebar">
-  <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
-  <!-- معلومات المدير -->
-  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
-    <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
-    <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:12px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 5px"><i class="ti ti-shield" style="color:white;font-size:16px"></i></div>
+    <div style="color:white;font-size:11px;font-weight:600">المشرف العام</div>
   </div>
-  <!-- روابط التنقل -->
-  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <div class="nav-section">الإدارة</div>
   <a href="28-admin-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
-  <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span><span class="nav-badge">5</span></a>
-  <a href="#" class="nav-item active"><i class="ti ti-file-text"></i><span>إدارة المحتوى</span></a>
-  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير والإحصائيات</span></a>
-  <a href="32-assign-trainee.html" class="nav-item"><i class="ti ti-school"></i><span>تعيين المتدربيين</span></a>
-  <div class="nav-section">النظام</div>
-  <a href="#" class="nav-item"><i class="ti ti-settings"></i><span>الإعدادات</span></a>
-  <div class="sidebar-bottom">
-    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
-  </div>
+  <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-flag"></i><span>إدارة المحتوى</span></a>
+  <a href="31-reports-statistics.html" class="nav-item"><i class="ti ti-chart-bar"></i><span>التقارير</span></a>
+  <a href="32-assign-supervisor.html" class="nav-item"><i class="ti ti-link"></i><span>ربط المشرفين</span></a>
+  <div class="sidebar-bottom"><a href="02-login.html" class="nav-item" onclick="localStorage.clear()"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
 </nav>
 
-<!-- === المحتوى الرئيسي === -->
 <div class="main">
-  <!-- شريط العنوان -->
   <div class="topbar">
-    <div>
-      <div class="topbar-title">إدارة المحتوى 📄</div>
-      <div class="topbar-sub">إدارة الفرص والمنشورات والمحتوى</div>
-    </div>
+    <div><div class="topbar-title">إدارة المحتوى</div><div class="topbar-sub">مراجعة المحتوى المُبلَّغ عنه وإدارة الفرص</div></div>
   </div>
 
   <div class="content">
-    <!-- === شريط التبويبات للتنقل بين الأقسام === -->
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab(this,'internships')">الفرص التدريبية</button>
-      <button class="tab" onclick="switchTab(this,'posts')">المنشورات</button>
-      <button class="tab" onclick="switchTab(this,'categories')">الأقسام</button>
+    <div class="stats-mini">
+      <div class="sm"><div class="sm-num" style="color:var(--accent)" id="statReports">0</div><div class="sm-label">محتوى مُبلَّغ</div></div>
+      <div class="sm"><div class="sm-num" style="color:var(--success)" id="statActive">0</div><div class="sm-label">فرص نشطة</div></div>
+      <div class="sm"><div class="sm-num" style="color:var(--warning)" id="statHidden">0</div><div class="sm-label">فرص مخفية</div></div>
     </div>
 
-    <!-- === تبويب الفرص التدريبية === -->
-    <div id="internships">
-      <!-- إحصائيات فرص التدريب -->
-      <div class="stats-row">
-        <div class="stat-mini"><div class="stat-mini-num">186</div><div class="stat-mini-label">إجمالي الفرص</div></div>
-        <div class="stat-mini"><div class="stat-mini-num" style="color:var(--success)">156</div><div class="stat-mini-label">نشطة</div></div>
-        <div class="stat-mini"><div class="stat-mini-num" style="color:var(--text-mid)">22</div><div class="stat-mini-label">مسودات</div></div>
-        <div class="stat-mini"><div class="stat-mini-num" style="color:var(--accent)">8</div><div class="stat-mini-label">منتهية</div></div>
+    <div class="layout">
+      <div>
+        <div class="card">
+          <div class="card-header"><div class="card-title" style="color:var(--accent)"><i class="ti ti-flag" style="color:var(--accent)"></i>محتوى مُبلَّغ عنه (<span id="reportCount">0</span>)</div></div>
+          <div id="reportsList"><div class="loading">جارٍ التحميل...</div></div>
+        </div>
       </div>
-      <!-- جدول فرص التدريب -->
-      <div class="card" style="padding:0;overflow-x:auto">
-        <table class="table">
-          <thead><tr><th>الفرصة</th><th>الشركة</th><th>الموقع</th><th>الحالة</th><th>إجراءات</th></tr></thead>
-          <tbody>
-            <!-- فرصة: مطور Frontend في TechPal - نشطة -->
-            <tr>
-              <td><span style="font-weight:700;color:var(--text-dark)">مطور Frontend — React</span></td>
-              <td><span style="font-size:12px">TechPal</span></td>
-              <td><span style="font-size:12px;color:var(--text-mid)">غزة</span></td>
-              <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
-              <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn"><i class="ti ti-edit"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
-            </tr>
-            <!-- فرصة: مصمم UI/UX في DesignHub - نشطة -->
-            <tr>
-              <td><span style="font-weight:700;color:var(--text-dark)">مصمم UI/UX</span></td>
-              <td><span style="font-size:12px">DesignHub</span></td>
-              <td><span style="font-size:12px;color:var(--text-mid)">عن بُعد</span></td>
-              <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
-              <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn"><i class="ti ti-edit"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
-            </tr>
-            <!-- فرصة: مطور Backend في TechPal - نشطة -->
-            <tr>
-              <td><span style="font-weight:700;color:var(--text-dark)">مطور Backend — Django</span></td>
-              <td><span style="font-size:12px">TechPal</span></td>
-              <td><span style="font-size:12px;color:var(--text-mid)">غزة</span></td>
-              <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
-              <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn"><i class="ti ti-edit"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
-            </tr>
-            <!-- فرصة: محلل بيانات في DataSoft - مسودة -->
-            <tr>
-              <td><span style="font-weight:700;color:var(--text-dark)">محلل بيانات</span></td>
-              <td><span style="font-size:12px">DataSoft</span></td>
-              <td><span style="font-size:12px;color:var(--text-mid)">عن بُعد</span></td>
-              <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">مسودة</span></td>
-              <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn"><i class="ti ti-edit"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
-            </tr>
-            <!-- فرصة: مطور Mobile في NetSoft - منتهية -->
-            <tr>
-              <td><span style="font-weight:700;color:var(--text-dark)">مطور Mobile — Flutter</span></td>
-              <td><span style="font-size:12px">NetSoft</span></td>
-              <td><span style="font-size:12px;color:var(--text-mid)">رفح</span></td>
-              <td><span class="status-badge" style="background:#FEE2E2;color:#DC2626">منتهي</span></td>
-              <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
 
-    <!-- === تبويب المنشورات === -->
-    <div id="posts" style="display:none">
-      <!-- إحصائيات المنشورات -->
-      <div class="stats-row">
-        <div class="stat-mini"><div class="stat-mini-num">234</div><div class="stat-mini-label">إجمالي المنشورات</div></div>
-        <div class="stat-mini"><div class="stat-mini-num" style="color:var(--success)">210</div><div class="stat-mini-label">نشطة</div></div>
-        <div class="stat-mini"><div class="stat-mini-num" style="color:var(--accent)">12</div><div class="stat-mini-label">محذوفة</div></div>
-        <div class="stat-mini"><div class="stat-mini-num" style="color:var(--warning)">12</div><div class="stat-mini-label">مُبلّغ عنها</div></div>
-      </div>
-      <!-- جدول المنشورات -->
-      <div class="card" style="padding:0;overflow-x:auto">
-        <table class="table">
-          <thead><tr><th>المنشور</th><th>الكاتب</th><th>النوع</th><th>الحالة</th><th>إجراءات</th></tr></thead>
-          <tbody>
-            <!-- منشور: تجربة تدريبية -->
-            <tr>
-              <td><span style="font-weight:600;color:var(--text-dark)">تجربتي الممتازة في TechPal...</span></td>
-              <td><span style="font-size:12px">أحمد حسن</span></td>
-              <td><span class="status-badge" style="background:var(--success-light);color:#15803D">تجربة</span></td>
-              <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
-              <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
-            </tr>
-            <!-- منشور: تقييم شركة -->
-            <tr>
-              <td><span style="font-weight:600;color:var(--text-dark)">تقييم DesignHub — 5 نجوم</span></td>
-              <td><span style="font-size:12px">منى ناصر</span></td>
-              <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">تقييم</span></td>
-              <td><span class="status-badge" style="background:var(--success-light);color:#15803D">نشط</span></td>
-              <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
-            </tr>
-            <!-- منشور: سؤال مُبلّغ عنه -->
-            <tr>
-              <td><span style="font-weight:600;color:var(--text-dark)">هل يطلبون خبرة في TechPal؟</span></td>
-              <td><span style="font-size:12px">خالد عمر</span></td>
-              <td><span class="status-badge" style="background:var(--primary-light);color:var(--primary)">سؤال</span></td>
-              <td><span class="status-badge" style="background:var(--warning-light);color:#B45309">مُبلّغ</span></td>
-              <td><div class="action-btns"><button class="action-btn"><i class="ti ti-eye"></i></button><button class="action-btn danger"><i class="ti ti-trash"></i></button></div></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-briefcase" style="color:#A89CFF"></i>إدارة فرص التدريب</div></div>
+          <div style="margin-bottom:12px">
+            <input type="text" placeholder="بحث في الفرص..." id="internSearch" oninput="filterInternships(this.value)" style="width:100%;padding:8px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-md);font-size:12px;font-family:var(--font);color:white;background:rgba(255,255,255,0.04);outline:none">
+          </div>
+          <div id="internshipsList"><div class="loading">جارٍ التحميل...</div></div>
+        </div>
 
-    <!-- === تبويب الأقسام === -->
-    <div id="categories" style="display:none">
-      <!-- شبكة الأقسام التخصصية مع عدد الفرص في كل قسم -->
-      <div class="card">
-        <div class="card-header"><div class="card-title"><i class="ti ti-folder"></i>الأقسام</div></div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-          <!-- قسم تطوير الويب -->
-          <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--primary-light);display:flex;align-items:center;justify-content:center"><i class="ti ti-code" style="color:var(--primary);font-size:18px"></i></div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">تطوير الويب</div><div style="font-size:11px;color:var(--text-mid)">56 فرصة</div></div>
-          </div>
-          <!-- قسم تطوير الموبايل -->
-          <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--success-light);display:flex;align-items:center;justify-content:center"><i class="ti ti-device-mobile" style="color:var(--success);font-size:18px"></i></div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">تطوير الموبايل</div><div style="font-size:11px;color:var(--text-mid)">32 فرصة</div></div>
-          </div>
-          <!-- قسم تصميم UI/UX -->
-          <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:#FFF0F0;display:flex;align-items:center;justify-content:center"><i class="ti ti-palette" style="color:var(--accent);font-size:18px"></i></div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">تصميم UI/UX</div><div style="font-size:11px;color:var(--text-mid)">28 فرصة</div></div>
-          </div>
-          <!-- قسم تحليل البيانات -->
-          <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--warning-light);display:flex;align-items:center;justify-content:center"><i class="ti ti-database" style="color:var(--warning);font-size:18px"></i></div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">تحليل البيانات</div><div style="font-size:11px;color:var(--text-mid)">24 فرصة</div></div>
-          </div>
-          <!-- قسم أمن المعلومات -->
-          <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:#FEE2E2;display:flex;align-items:center;justify-content:center"><i class="ti ti-shield-lock" style="color:#DC2626;font-size:18px"></i></div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">أمن المعلومات</div><div style="font-size:11px;color:var(--text-mid)">18 فرصة</div></div>
-          </div>
-          <!-- قسم الذكاء الاصطناعي -->
-          <div style="padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
-            <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:#E0F2FE;display:flex;align-items:center;justify-content:center"><i class="ti ti-robot" style="color:#0EA5E9;font-size:18px"></i></div>
-            <div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">الذكاء الاصطناعي</div><div style="font-size:11px;color:var(--text-mid)">14 فرصة</div></div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><i class="ti ti-chart-donut" style="color:#A89CFF"></i>إحصائيات المحتوى</div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--success)" id="statPosts">0</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">منشور في المجتمع</div></div>
+            <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--warning)" id="statRatings">0</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">تقييم شركة</div></div>
+            <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--primary)" id="statInternTotal">0</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">فرص نشطة</div></div>
+            <div style="background:rgba(255,107,107,0.08);border-radius:var(--radius-md);padding:12px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--accent)" id="statNewReports">0</div><div style="font-size:10px;color:rgba(255,255,255,0.3)">بلاغات جديدة</div></div>
           </div>
         </div>
       </div>
@@ -281,118 +125,154 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
   </div>
 </div>
 
-<!-- رسالة التنبيه العائمة -->
 <div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
 
 <script>
-// === ملف جافاسكريبت لإدارة المحتوى ===
+const API = 'http://127.0.0.1:8000/api';
+const token = localStorage.getItem('trainlink_token');
+let allInternships = [];
 
-// التحقق من صحة تسجيل الدخول
-(function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+if (!token) { window.location.href = '02-login.html'; }
 
-// عنوان واجهة برمجة التطبيقات
-const API_BASE='/api';
+async function loadContent() {
+  try {
+    const r = await fetch(API + '/admin-panel/content/', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (!r.ok) throw new Error('Failed');
+    const d = await r.json();
 
-// دالة الحصول على رمز المصادقة
-function getToken(){return localStorage.getItem('trainlink_token')}
+    // Stats
+    document.getElementById('statReports').textContent = d.stats.pending_reports || 0;
+    document.getElementById('statActive').textContent = d.stats.active_internships || 0;
+    document.getElementById('statHidden').textContent = d.stats.hidden_internships || 0;
+    document.getElementById('reportCount').textContent = d.reports ? d.reports.length : 0;
+    document.getElementById('statPosts').textContent = d.stats.total_posts || 0;
+    document.getElementById('statRatings').textContent = d.stats.total_ratings || 0;
+    document.getElementById('statInternTotal').textContent = d.stats.total_internships || 0;
+    document.getElementById('statNewReports').textContent = d.stats.pending_reports || 0;
 
-// دالة إنشاء رؤوس طلب المصادقة
-function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
+    // Reports
+    renderReports(d.reports || []);
 
-// === عند تحميل الصفحة بالكامل ===
-document.addEventListener('DOMContentLoaded',async function(){
-  try{
-    // جلب بيانات المحتوى من الخادم (الفرص، المنشورات، الأقسام، الإحصائيات)
-    var res=await fetch(API_BASE+'/admin-panel/content/',{headers:authHeaders()});
-    if(!res.ok)throw new Error('Failed');
-    var data=await res.json();
-
-    // تحديث إحصائيات فرص التدريب
-    var stats=data.stats||{};
-    var statNums=document.querySelectorAll('.stat-mini-num');
-    if(statNums[0])statNums[0].textContent=stats.total_internships||0;
-    if(statNums[1])statNums[1].textContent=stats.active_internships||0;
-    if(statNums[2])statNums[2].textContent=stats.draft_internships||0;
-    if(statNums[3])statNums[3].textContent=stats.closed_internships||0;
-
-    // إنشاء صفوف جدول فرص التدريب من البيانات
-    var internships=data.internships||[];
-    var internshipBody=document.querySelector('#internships tbody');
-    if(internshipBody&&internships.length){
-      internshipBody.innerHTML='';
-      internships.forEach(function(item){
-        var row=document.createElement('tr');
-        var statusMap={'open':'نشط','draft':'مسودة','closed':'منتهي','paused':'متوقف'};
-        var colorMap={'open':'var(--success-light);color:#15803D','draft':'var(--warning-light);color:#B45309','closed':'#FEE2E2;color:#DC2626','paused':'var(--warning-light);color:#B45309'};
-        row.innerHTML='<td><span style="font-weight:700;color:var(--text-dark)">'+item.title+'</span></td><td><span style="font-size:12px">'+item.company+'</span></td><td><span style="font-size:12px;color:var(--text-mid)">'+item.location+'</span></td><td><span class="status-badge" style="background:'+(colorMap[item.status]||'var(--success-light);color:#15803D')+'">'+(statusMap[item.status]||item.status)+'</span></td><td><div class="action-btns"><button class="action-btn danger" onclick="deleteItem(\'internship\','+item.id+')"><i class="ti ti-trash"></i></button></div></td>';
-        internshipBody.appendChild(row);
-      });
-    }
-
-    // إنشاء صفوف جدول المنشورات من البيانات
-    var posts=data.posts||[];
-    var postsBody=document.querySelector('#posts tbody');
-    if(postsBody&&posts.length){
-      postsBody.innerHTML='';
-      posts.forEach(function(item){
-        var row=document.createElement('tr');
-        row.innerHTML='<td><span style="font-weight:600;color:var(--text-dark)">'+item.title+'</span></td><td><span style="font-size:12px">'+item.author+'</span></td><td><span class="status-badge" style="background:var(--success-light);color:#15803D">'+item.type+'</span></td><td><span class="status-badge" style="background:var(--success-light);color:#15803D">'+item.status+'</span></td><td><div class="action-btns"><button class="action-btn danger" onclick="deleteItem(\'post\','+item.id+')"><i class="ti ti-trash"></i></button></div></td>';
-        postsBody.appendChild(row);
-      });
-    }
-
-    // إنشاء بطاقات الأقسام من البيانات
-    var categories=data.categories||[];
-    var catContainer=document.querySelector('#categories div[style*="grid-template-columns"]');
-    if(catContainer&&categories.length){
-      catContainer.innerHTML='';
-      var icons=['ti-code','ti-device-mobile','ti-palette','ti-database','ti-shield-lock','ti-robot'];
-      var bgColors=['var(--primary-light)','var(--success-light)','#FFF0F0','var(--warning-light)','#FEE2E2','#E0F2FE'];
-      var iconColors=['var(--primary)','var(--success)','var(--accent)','var(--warning)','#DC2626','#0EA5E9'];
-      categories.forEach(function(c,i){
-        var div=document.createElement('div');
-        div.style.cssText='padding:14px;background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.15s';
-        div.onmouseover=function(){this.style.borderColor='var(--primary)'};
-        div.onmouseout=function(){this.style.borderColor='var(--border)'};
-        div.innerHTML='<div style="width:40px;height:40px;border-radius:var(--radius-sm);background:'+bgColors[i%bgColors.length]+';display:flex;align-items:center;justify-content:center"><i class="ti '+(icons[i%icons.length])+'" style="color:'+(iconColors[i%iconColors.length])+';font-size:18px"></i></div><div><div style="font-size:13px;font-weight:700;color:var(--text-dark)">'+c.name+'</div><div style="font-size:11px;color:var(--text-mid)">'+c.count+' فرصة</div></div>';
-        catContainer.appendChild(div);
-      });
-    }
-
-    // تحديث إحصائيات المنشورات
-    var postStatNums=document.querySelectorAll('#posts .stat-mini-num');
-    if(postStatNums[0])postStatNums[0].textContent=stats.total_posts||0;
-    if(postStatNums[1])postStatNums[1].textContent=stats.total_posts||0;
-
-  }catch(e){console.log('Error loading content:',e)}
-});
-
-// دالة حذف محتوى (فرصة تدريبية أو منشور) بعد التأكيد
-async function deleteItem(type,id){
-  if(!confirm('هل أنت متأكد من الحذف؟'))return;
-  try{
-    var res=await fetch(API_BASE+'/admin-panel/content/',{method:'DELETE',headers:authHeaders(),body:JSON.stringify({content_type:type,content_id:id})});
-    if(res.ok){showToast('تم الحذف بنجاح');setTimeout(function(){location.reload()},1000);}
-    else{showToast('حدث خطأ');}
-  }catch(e){console.log(e);showToast('حدث خطأ');}
+    // Internships
+    allInternships = d.internships || [];
+    renderInternships(allInternships);
+  } catch(e) {
+    document.getElementById('reportsList').innerHTML = '<div class="loading">فشل تحميل البيانات</div>';
+    document.getElementById('internshipsList').innerHTML = '<div class="loading">فشل تحميل البيانات</div>';
+  }
 }
 
-// دالة التبديل بين التبويبات (فرص تدريبية، منشورات، أقسام)
-function switchTab(btn,id){
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
-  btn.classList.add('active');
-  ['internships','posts','categories'].forEach(function(t){
-    document.getElementById(t).style.display=t===id?'block':'none';
+function renderReports(reports) {
+  if (reports.length === 0) {
+    document.getElementById('reportsList').innerHTML = '<div class="loading">لا توجد بلاغات معلقة</div>';
+    return;
+  }
+  let html = '';
+  reports.forEach(r => {
+    const initials = r.reported_by.substring(0, 2);
+    html += `<div class="reported-item" id="report-${r.id}">
+      <div class="reported-header">
+        <div class="r-avatar" style="background:#5B4FCF">${initials}</div>
+        <div style="flex:1"><div class="r-name">بلاغ من ${r.reported_by}</div><div class="r-meta">${r.content_type} · ${r.created_at}</div></div>
+      </div>
+      <div class="r-reason"><i class="ti ti-alert-triangle" style="font-size:14px;flex-shrink:0;margin-top:1px"></i><span><strong>سبب البلاغ:</strong> ${r.reason}</span></div>
+      <div class="r-actions">
+        <button class="btn-r btn-remove" onclick="removeReport(${r.id})"><i class="ti ti-trash"></i>حذف المحتوى</button>
+        <button class="btn-r btn-keep" onclick="keepReport(${r.id})"><i class="ti ti-check"></i>إبقاء</button>
+      </div>
+    </div>`;
   });
+  document.getElementById('reportsList').innerHTML = html;
 }
 
-// دالة عرض رسالة تنبيه عائمة
-function showToast(msg){
-  var t=document.getElementById('toast');
-  document.getElementById('toastMsg').textContent=msg;
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show')},3000);
+function renderInternships(interns) {
+  if (interns.length === 0) {
+    document.getElementById('internshipsList').innerHTML = '<div class="loading">لا توجد فرص تدريب</div>';
+    return;
+  }
+  const colors = ['#5B4FCF', '#22C55E', '#F59E0B', '#FF6B6B', '#7C3AED'];
+  let html = '';
+  interns.forEach((i, idx) => {
+    const initials = i.company.substring(0, 2) || '??';
+    const isOpen = i.status === 'open';
+    const statusStyle = isOpen ? 'background:rgba(34,197,94,0.15);color:#22C55E' : 'background:rgba(107,114,128,0.2);color:#9CA3AF';
+    const statusLabel = isOpen ? 'نشط' : 'مخفي';
+    const bgColor = colors[idx % colors.length];
+
+    html += `<div class="intern-item" id="intern-${i.id}">
+      <div class="i-logo" style="background:${bgColor}">${initials}</div>
+      <div style="flex:1"><div class="i-title">${i.title}</div><div class="i-meta">${i.company} · ${i.applications_count} متقدم</div></div>
+      <span class="i-status" style="${statusStyle}">${statusLabel}</span>
+      <div class="i-actions">
+        <button class="btn-i btn-i-hide" onclick="toggleInternship(${i.id})">${isOpen ? 'إخفاء' : 'إظهار'}</button>
+        <button class="btn-i btn-i-delete" onclick="deleteInternship(${i.id})">حذف</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('internshipsList').innerHTML = html;
 }
+
+function filterInternships(q) {
+  const filtered = allInternships.filter(i => i.title.includes(q) || i.company.includes(q));
+  renderInternships(filtered);
+}
+
+async function removeReport(id) {
+  await fetch(API + '/admin-panel/content/', {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content_type: 'report', content_id: id })
+  });
+  const el = document.getElementById('report-' + id);
+  if (el) { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }
+  showToast('تم حذف المحتوى المخالف');
+}
+
+async function keepReport(id) {
+  await fetch(API + '/admin-panel/content/', {
+    method: 'PATCH',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content_type: 'report', content_id: id, action: 'keep' })
+  });
+  const el = document.getElementById('report-' + id);
+  if (el) {
+    el.style.borderColor = 'rgba(34,197,94,0.3)';
+    el.style.background = 'rgba(34,197,94,0.05)';
+    el.querySelector('.r-actions').innerHTML = '<span style="font-size:12px;color:#22C55E;display:flex;align-items:center;gap:4px"><i class="ti ti-check"></i>تمت المراجعة — إبقاء</span>';
+  }
+  showToast('تم الإبقاء على المحتوى');
+}
+
+async function toggleInternship(id) {
+  await fetch(API + '/admin-panel/content/', {
+    method: 'PATCH',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content_type: 'internship', content_id: id, action: 'toggle_visibility' })
+  });
+  showToast('تم تحديث حالة الفرصة');
+  loadContent();
+}
+
+async function deleteInternship(id) {
+  if (!confirm('هل أنت متأكد من حذف هذه الفرصة؟')) return;
+  await fetch(API + '/admin-panel/content/', {
+    method: 'DELETE',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content_type: 'internship', content_id: id })
+  });
+  const el = document.getElementById('intern-' + id);
+  if (el) { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }
+  showToast('تم حذف الفرصة');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+loadContent();
 </script>
 </body>
 </html>

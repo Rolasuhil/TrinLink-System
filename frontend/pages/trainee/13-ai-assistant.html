@@ -54,7 +54,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
 .upload-zone{border:2px dashed var(--border);border-radius:var(--radius-lg);padding:32px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:14px}
 .upload-zone:hover,.upload-zone.dragover{border-color:var(--primary);background:var(--primary-light)}
 .upload-zone.has-file{border-color:var(--success);background:var(--success-light);border-style:solid}
-.upload-icon{font-size:40px;margin-bottom:10px;display:block}
+.upload-icon{margin-bottom:10px;display:block}
 .upload-text{font-size:14px;color:var(--text-mid);margin-bottom:4px}
 .upload-text span{color:var(--primary);font-weight:600}
 .upload-hint{font-size:12px;color:var(--text-mid)}
@@ -146,7 +146,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
           <div class="upload-sub">ارفع CV وسيقوم Gemini AI بتحليله وتقديم اقتراحات تحسين مخصصة لك</div>
           <div class="upload-zone" id="uploadZone" onclick="document.getElementById('cvFileInput').click()" ondragover="handleDrag(event)" ondrop="handleDrop(event)">
             <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFileSelect(event)">
-            <span class="upload-icon" id="uploadIcon">📄</span>
+            <span class="upload-icon" id="uploadIcon"><i class="ti ti-upload" style="font-size:36px;color:var(--primary)"></i></span>
             <div class="upload-text" id="uploadText"><span>اضغط لرفع CV</span> أو اسحبه هنا</div>
             <div class="upload-hint" id="uploadHint">PDF أو Word — حد أقصى 5MB</div>
           </div>
@@ -156,7 +156,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display
         </div>
         <div class="results-card">
           <div id="emptyState" style="text-align:center;padding:40px 20px">
-            <div style="font-size:48px;margin-bottom:12px">🤖</div>
+            <div style="font-size:48px;margin-bottom:12px;color:var(--primary)"><i class="ti ti-robot"></i></div>
             <div style="font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:6px">في انتظار CV</div>
             <div style="font-size:13px;color:var(--text-mid);line-height:1.7">ارفع سيرتك الذاتية وسيظهر<br>تحليل الذكاء الاصطناعي هنا</div>
           </div>
@@ -275,7 +275,7 @@ function processFile(file){
   const hint=document.getElementById('uploadHint');
   const btn=document.getElementById('analyzeBtn');
   zone.classList.add('has-file');
-  icon.textContent='✅';
+  icon.innerHTML='<i class="ti ti-circle-check" style="font-size:36px;color:var(--success)"></i>';
   const size = file.size > 1024*1024 ? (file.size/(1024*1024)).toFixed(1)+' MB' : (file.size/1024).toFixed(0)+' KB';
   text.innerHTML='<strong style="color:var(--success)">'+file.name+'</strong>';
   hint.textContent=size+' — جاهز للتحليل';
@@ -384,7 +384,7 @@ function loadMatches(){
   })
   .then(data => {
     if(!data || !data.matches || !data.matches.length){
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px">🔍</div><div style="font-size:15px;font-weight:700">لا توجد فرص حالياً</div><div style="font-size:13px;color:var(--text-mid)">ستظهر التوصيات هنا عندما تتوفر فرص جديدة</div></div>';
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px"><div style="font-size:48px;margin-bottom:12px;color:var(--text-mid)"><i class="ti ti-search"></i></div><div style="font-size:15px;font-weight:700">لا توجد فرص حالياً</div><div style="font-size:13px;color:var(--text-mid)">ستظهر التوصيات هنا عندما تتوفر فرص جديدة</div></div>';
       return;
     }
     grid.innerHTML = data.matches.map(m => {

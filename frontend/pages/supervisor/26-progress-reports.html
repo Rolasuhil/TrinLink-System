@@ -180,9 +180,16 @@ function getScoreColor(s){if(!s)return'var(--text-mid)';if(s>=4.5)return'var(--s
 // دالة تحويل رقم التقييم إلى نجوم مرئية (5 نجوم)
 function getStars(s){if(!s)return'';const full=Math.floor(s);return '★'.repeat(full)+'☆'.repeat(5-full)}
 
-// دالة عرض التقارير: تصفية حسب الحالة ثم الفرز ثم إنشاء البطاقات
+// دالة عرض التقارير: تصفية حسب المتدرب والحالة ثم الفرز ثم إنشاء البطاقات
 function renderReports(){
   let list=[...allReports];
+  // تطبيق فلتر أسماء المتدربين
+  const traineeCheckboxes=document.querySelectorAll('.trainee-filter');
+  const checkedNames=[];
+  traineeCheckboxes.forEach(cb=>{if(cb.checked)checkedNames.push(cb.dataset.name)});
+  if(traineeCheckboxes.length&&checkedNames.length){
+    list=list.filter(r=>checkedNames.includes(r.trainee_name));
+  }
   // تطبيق فلتر حالة الحضور
   const confirmed=document.getElementById('filterConfirmed').checked;
   const notConfirmed=document.getElementById('filterNotConfirmed').checked;
@@ -260,6 +267,14 @@ function renderReports(){
 document.addEventListener('DOMContentLoaded',async()=>{
   if(!getToken()){window.location.href='../public/02-login.html';return}
   try{
+    // عرض معلومات المستخدم في الشريط الجانبي
+    const user=JSON.parse(localStorage.getItem('trainlink_user')||'null');
+    if(user){
+      document.getElementById('sideName').textContent=user.full_name||'--';
+      document.getElementById('sideId').textContent=user.user_id||'--';
+      const ini=getInitials(user.full_name);
+      document.getElementById('sideAvatar').textContent=ini;
+    }
     // جلب التقارير والمتدربين في نفس الوقت (Promise.all)
     const [reportsRes,traineesRes]=await Promise.all([
       fetch(API+'/performance-reports/',{headers:{'Authorization':'Bearer '+getToken()}}),
@@ -268,11 +283,12 @@ document.addEventListener('DOMContentLoaded',async()=>{
     if(reportsRes.ok)allReports=await reportsRes.json();
     if(traineesRes.ok)allTrainees=await traineesRes.json();
 
-    // تحديث عداد التقارير
+    // تحديث عداد التقارير والمتدربيين
     document.getElementById('reportCount').textContent=allReports.length+' تقارير أداء';
+    document.getElementById('navTraineeCount').textContent=allTrainees.length;
     // إنشاء فلاتر المتدربين ديناميكياً من أسماء المتدربين الفريدة
     const traineeNames=[...new Set(allReports.map(r=>r.trainee_name))];
-    document.getElementById('traineeFilters').innerHTML=traineeNames.length?traineeNames.map(n=>'<label class="filter-opt"><input type="checkbox" checked onchange="renderReports()">'+n+'</label>').join(''):'<span style="font-size:12px;color:var(--text-mid)">لا يوجد متدربون</span>';
+    document.getElementById('traineeFilters').innerHTML=traineeNames.length?traineeNames.map(n=>'<label class="filter-opt"><input type="checkbox" class="trainee-filter" data-name="'+n+'" checked onchange="renderReports()">'+n+'</label>').join(''):'<span style="font-size:12px;color:var(--text-mid)">لا يوجد متدربون</span>';
     renderReports();
   }catch(e){
     // عرض رسالة خطأ في حال فشل التحميل

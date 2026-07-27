@@ -1,5 +1,4 @@
-﻿<!-- صفحة التقارير والإحصائيات - تعرض نظرة شاملة على أداء المنصة تتضمن إحصائيات المستخدمين وفرص التدريب وطلبات التدريب ونسبة النجاح مع رسوم بيانية تفاعلية -->
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -8,352 +7,301 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-/* إعادة تعيين شاملة لجميع العناصر */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-/* المتغيرات العامة: الألوان والخطوط والأبعاد */
-:root{--primary:#5B4FCF;--primary-dark:#4A3FB5;--primary-light:#EEF0FF;--accent:#FF6B6B;--success:#22C55E;--success-light:#F0FFF4;--warning:#F59E0B;--warning-light:#FEF3C7;--text-dark:#1E1B2E;--text-mid:#6B7280;--border:#E5E7EB;--bg:#F9F7FF;--white:#FFFFFF;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
-/* تخطيط الصفحة الأساسي */
-body{font-family:var(--font);background:var(--bg);color:var(--text-dark);display:flex;min-height:100vh}
-
-/* --- أنماط القائمة الجانبية --- */
-/* حاوية القائمة الجانبية المظلمة على اليمين */
-.sidebar{width:var(--sidebar);background:#1E1B2E;flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100}
+:root{--primary:#5B4FCF;--accent:#FF6B6B;--success:#22C55E;--warning:#F59E0B;--dark:#0F0E1A;--dark-2:#1A1827;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--font:'Cairo',sans-serif;--sidebar:220px}
+body{font-family:var(--font);background:var(--dark);color:white;display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:var(--dark-2);flex-shrink:0;display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;right:0;height:100vh;z-index:100;border-left:1px solid rgba(255,255,255,0.06)}
 .sidebar-logo{display:flex;align-items:center;gap:8px;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,0.08)}
 .sidebar-logo-icon{width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .sidebar-logo-icon i{color:white;font-size:15px}
 .sidebar-logo-text{font-size:15px;font-weight:800;color:white}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;margin:1px 8px;border-radius:var(--radius-sm);transition:all 0.15s;text-decoration:none}
 .nav-item:hover{background:rgba(255,255,255,0.06)}
-.nav-item.active{background:var(--primary)}
-.nav-item i{font-size:16px;color:rgba(255,255,255,0.5);width:18px}
-.nav-item.active i,.nav-item.active span{color:white}
-.nav-item span{font-size:12px;color:rgba(255,255,255,0.5)}
-.nav-badge{background:var(--accent);color:white;font-size:9px;padding:1px 6px;border-radius:20px;margin-right:auto}
-.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.5px;text-transform:uppercase}
+.nav-item.active{background:rgba(255,107,107,0.15)}
+.nav-item.active i,.nav-item.active span{color:var(--accent)!important}
+.nav-item i{font-size:16px;color:rgba(255,255,255,0.4);width:18px}
+.nav-item span{font-size:12px;color:rgba(255,255,255,0.4)}
+.nav-section{padding:8px 16px 4px;font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:0.5px;text-transform:uppercase}
 .sidebar-bottom{margin-top:auto;padding:12px 8px 0;border-top:1px solid rgba(255,255,255,0.08)}
 .main{margin-right:var(--sidebar);flex:1;display:flex;flex-direction:column}
-.topbar{background:white;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
-.topbar-title{font-size:16px;font-weight:700}
-.topbar-sub{font-size:12px;color:var(--text-mid)}
+.topbar{background:var(--dark-2);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:white}
+.topbar-sub{font-size:12px;color:rgba(255,255,255,0.3)}
 .content{padding:20px 24px;flex:1}
-/* --- بطاقات الإحصائيات الرئيسية --- */
-/* شبكة عرض 4 بطاقات إحصائية */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;text-align:center;transition:all 0.2s}
-.stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(91,79,207,0.1)}
-.stat-icon{width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
-.stat-icon i{font-size:22px}
-.stat-num{font-size:28px;font-weight:800;color:var(--text-dark)}
-.stat-label{font-size:11px;color:var(--text-mid);margin-top:2px}
-.stat-change{font-size:10px;font-weight:600;margin-top:4px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:14px}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.card-title{font-size:14px;font-weight:700;color:var(--text-dark);display:flex;align-items:center;gap:6px}
-.card-title i{color:var(--primary);font-size:16px}
-.card-action{font-size:12px;color:var(--primary);cursor:pointer;text-decoration:none;font-weight:600}
-/* --- الرسم البياني الشريطي (للتسجيلات الشهرية) --- */
-.chart-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.chart-label{font-size:12px;color:var(--text-dark);width:100px;flex-shrink:0;text-align:left}
-.chart-track{flex:1;height:10px;background:var(--bg);border-radius:5px;overflow:hidden}
-.chart-fill{height:100%;border-radius:5px}
-.chart-val{font-size:12px;font-weight:700;color:var(--text-mid);width:50px;text-align:left}
-/* --- الرسم البياني الدائري (Donut) --- */
-.donut{width:120px;height:120px;border-radius:50%;position:relative;margin:0 auto 12px}
-.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.donut-num{font-size:22px;font-weight:800;color:var(--text-dark)}
-.donut-label{font-size:10px;color:var(--text-mid)}
-/* المفتاح التوضيحي للرسوم البيانية */
-.legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-mid)}
-.legend-dot{width:10px;height:10px;border-radius:50%}
-.btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:var(--font);transition:all 0.15s}
-.btn-primary{background:var(--primary);color:white}
-.btn-outline{background:white;color:var(--primary);border:1.5px solid var(--primary)}
-/* عناصر القوائم (أفضل الشركات) */
-.report-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.report-item:last-child{border-bottom:none}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.kpi-card{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:18px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;right:0;width:4px;height:100%;border-radius:0 var(--radius-lg) var(--radius-lg) 0}
+.kpi-card.c1::before{background:var(--primary)}
+.kpi-card.c2::before{background:var(--success)}
+.kpi-card.c3::before{background:var(--warning)}
+.kpi-card.c4::before{background:var(--accent)}
+.kpi-label{font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.kpi-label i{font-size:14px}
+.kpi-num{font-size:32px;font-weight:900;color:white;margin-bottom:6px}
+.kpi-sub{font-size:11px;color:rgba(255,255,255,0.2);margin-top:4px}
+.charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.chart-card{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:18px}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.chart-title{font-size:14px;font-weight:700;color:white;display:flex;align-items:center;gap:6px}
+.chart-title i{color:#A89CFF;font-size:16px}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:140px;padding:4px 0}
+.bar-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.bar-val{font-size:10px;color:rgba(255,255,255,0.3)}
+.bar-col{border-radius:4px 4px 0 0;width:100%;min-height:4px;transition:all 0.3s;cursor:pointer;position:relative}
+.bar-col:hover{opacity:0.8}
+.bar-label{font-size:9px;color:rgba(255,255,255,0.3)}
+.donut-wrap{display:flex;align-items:center;gap:20px}
+.donut{width:120px;height:120px;border-radius:50%;position:relative;flex-shrink:0}
+.donut::after{content:'';position:absolute;inset:28px;border-radius:50%;background:var(--dark-2)}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;z-index:1}
+.donut-legend{display:flex;flex-direction:column;gap:10px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.6)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.table-card{background:var(--dark-2);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:16px}
+.table-title{font-size:13px;font-weight:700;color:white;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.table-title i{color:#A89CFF}
+.rank-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.rank-item:last-child{border-bottom:none}
+.rank-num{font-size:14px;font-weight:800;color:rgba(255,255,255,0.2);width:20px;text-align:center;flex-shrink:0}
+.rank-logo{width:30px;height:30px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0}
+.rank-name{font-size:12px;font-weight:600;color:white;flex:1}
+.rank-val{font-size:12px;font-weight:700}
+.prog-row{margin-bottom:10px}
+.prog-label-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px}
+.prog-track{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px}
+.export-row{display:flex;gap:8px;margin-top:16px}
+.btn-export{padding:8px 18px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;border:none;transition:all 0.15s}
+.btn-pdf{background:rgba(255,107,107,0.15);color:var(--accent)}
+.btn-csv{background:rgba(34,197,94,0.1);color:var(--success)}
+.btn-share{background:rgba(91,79,207,0.15);color:#A89CFF}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2D2B3E;color:white;padding:12px 20px;border-radius:var(--radius-lg);font-size:13px;display:none;align-items:center;gap:10px;z-index:9999;border:1px solid rgba(255,255,255,0.1)}
+.toast.show{display:flex}
+.loading{text-align:center;padding:40px;color:rgba(255,255,255,0.3)}
 </style>
 </head>
 <body>
-
-<!-- === القائمة الجانبية === -->
 <nav class="sidebar">
-  <a href="../public/01-home.html" class="sidebar-logo" style="text-decoration:none;cursor:pointer"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></a>
-  <!-- معلومات المدير -->
-  <div style="padding:14px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
-    <div style="width:36px;height:36px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;margin:0 auto 6px">أد</div>
-    <div style="color:white;font-size:11px;font-weight:600">الأدمن</div>
+  <div class="sidebar-logo"><div class="sidebar-logo-icon"><i class="ti ti-briefcase"></i></div><span class="sidebar-logo-text">TrainLink</span></div>
+  <div style="padding:12px 16px 8px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:8px;text-align:center">
+    <div style="width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 5px"><i class="ti ti-shield" style="color:white;font-size:16px"></i></div>
+    <div style="color:white;font-size:11px;font-weight:600">المشرف العام</div>
   </div>
-  <!-- روابط التنقل -->
-  <a href="../public/01-home.html" class="nav-item"><i class="ti ti-home"></i><span>الرئيسية</span></a>
+  <div class="nav-section">الإدارة</div>
   <a href="28-admin-dashboard.html" class="nav-item"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></a>
   <a href="29-manage-users.html" class="nav-item"><i class="ti ti-users"></i><span>إدارة المستخدمين</span></a>
-  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-file-text"></i><span>إدارة المحتوى</span></a>
-  <a href="#" class="nav-item active"><i class="ti ti-chart-bar"></i><span>التقارير والإحصائيات</span></a>
-  <a href="32-assign-trainee.html" class="nav-item"><i class="ti ti-school"></i><span>تعيين المتدربيين</span></a>
-  <div class="nav-section">النظام</div>
-  <a href="#" class="nav-item"><i class="ti ti-settings"></i><span>الإعدادات</span></a>
-  <div class="sidebar-bottom">
-    <a href="../public/02-login.html" class="nav-item"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a>
-  </div>
+  <a href="30-manage-content.html" class="nav-item"><i class="ti ti-flag"></i><span>إدارة المحتوى</span></a>
+  <a href="#" class="nav-item active"><i class="ti ti-chart-bar"></i><span>التقارير</span></a>
+  <a href="32-assign-supervisor.html" class="nav-item"><i class="ti ti-link"></i><span>ربط المشرفين</span></a>
+  <div class="sidebar-bottom"><a href="02-login.html" class="nav-item" onclick="localStorage.clear()"><i class="ti ti-logout" style="color:rgba(255,107,107,0.7)"></i><span style="color:rgba(255,107,107,0.7)">تسجيل الخروج</span></a></div>
 </nav>
 
 <div class="main">
-  <!-- شريط العنوان مع أزرار التصدير والتحديث -->
   <div class="topbar">
-    <div>
-      <div class="topbar-title">التقارير والإحصائيات 📊</div>
-      <div class="topbar-sub">نظرة شاملة على أداء المنصة</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <!-- زر تصدير التقرير كملف PDF -->
-      <button class="btn btn-outline" style="padding:7px 14px"><i class="ti ti-download" style="margin-left:4px"></i>تصدير PDF</button>
-      <!-- زر تحديث البيانات -->
-      <button class="btn btn-primary" style="padding:7px 14px"><i class="ti ti-refresh" style="margin-left:4px"></i>تحديث</button>
+    <div><div class="topbar-title">التقارير والإحصائيات</div><div class="topbar-sub">نظرة شاملة على أداء المنصة</div></div>
+    <div class="export-row" style="margin:0">
+      <button class="btn-export btn-pdf" onclick="showToast('جارٍ تصدير PDF...')"><i class="ti ti-file-type-pdf"></i>PDF</button>
+      <button class="btn-export btn-csv" onclick="showToast('جارٍ تصدير CSV...')"><i class="ti ti-file-spreadsheet"></i>CSV</button>
+      <button class="btn-export btn-share" onclick="showToast('تم نسخ رابط التقرير!')"><i class="ti ti-share"></i>مشاركة</button>
     </div>
   </div>
 
   <div class="content">
-    <!-- === شبكة البطاقات الإحصائية الرئيسية === -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--primary-light)"><i class="ti ti-users" style="color:var(--primary)"></i></div>
-        <div class="stat-num">1,247</div>
-        <div class="stat-label">إجمالي المستخدمين</div>
-        <div class="stat-change" style="color:var(--success)">↑ 23 هذا الشهر</div>
+    <div class="kpi-grid">
+      <div class="kpi-card c1">
+        <div class="kpi-label"><i class="ti ti-users"></i>إجمالي المستخدمين</div>
+        <div class="kpi-num" id="kpiUsers">—</div>
+        <div class="kpi-sub" id="kpiUsersSub"></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--success-light)"><i class="ti ti-briefcase" style="color:var(--success)"></i></div>
-        <div class="stat-num">186</div>
-        <div class="stat-label">فرص التدريب</div>
-        <div class="stat-change" style="color:var(--success)">↑ 12 هذا الشهر</div>
+      <div class="kpi-card c2">
+        <div class="kpi-label"><i class="ti ti-briefcase"></i>فرص التدريب</div>
+        <div class="kpi-num" id="kpiInternships">—</div>
+        <div class="kpi-sub" id="kpiInternSub"></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background:var(--warning-light)"><i class="ti ti-file-text" style="color:var(--warning)"></i></div>
-        <div class="stat-num">3,456</div>
-        <div class="stat-label">طلبات التدريب</div>
-        <div class="stat-change" style="color:var(--success)">↑ 156 هذا الشهر</div>
+      <div class="kpi-card c3">
+        <div class="kpi-label"><i class="ti ti-send"></i>الطلبات المقدّمة</div>
+        <div class="kpi-num" id="kpiApps">—</div>
+        <div class="kpi-sub" id="kpiAppsSub"></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background:#FFF0F0"><i class="ti ti-star" style="color:var(--accent)"></i></div>
-        <div class="stat-num">4.5</div>
-        <div class="stat-label">متوسط التقييم</div>
-        <div class="stat-change" style="color:var(--success)">ممتاز</div>
+      <div class="kpi-card c4">
+        <div class="kpi-label"><i class="ti ti-star"></i>متوسط التقييم</div>
+        <div class="kpi-num" id="kpiRating">—</div>
+        <div class="kpi-sub" id="kpiRatingSub"></div>
       </div>
     </div>
 
-    <!-- === الشبكة الرئيسية: الرسوم البيانية والقوائم === -->
-    <div class="grid-2">
-      <!-- العمود الأول: الرسوم البيانية الشهرية والتوزيع حسب التخصص -->
-      <div>
-        <!-- الرسم البياني الشريطي للتسجيلات الشهرية -->
-          <div class="chart-bar"><div class="chart-label">يناير</div><div class="chart-track"><div class="chart-fill" style="width:40%;background:var(--primary)"></div></div><div class="chart-val">45</div></div>
-          <div class="chart-bar"><div class="chart-label">فبراير</div><div class="chart-track"><div class="chart-fill" style="width:55%;background:var(--primary)"></div></div><div class="chart-val">62</div></div>
-          <div class="chart-bar"><div class="chart-label">مارس</div><div class="chart-track"><div class="chart-fill" style="width:70%;background:var(--primary)"></div></div><div class="chart-val">78</div></div>
-          <div class="chart-bar"><div class="chart-label">أبريل</div><div class="chart-track"><div class="chart-fill" style="width:60%;background:var(--primary)"></div></div><div class="chart-val">67</div></div>
-          <div class="chart-bar"><div class="chart-label">مايو</div><div class="chart-track"><div class="chart-fill" style="width:80%;background:var(--primary)"></div></div><div class="chart-val">89</div></div>
-          <div class="chart-bar"><div class="chart-label">يونيو</div><div class="chart-track"><div class="chart-fill" style="width:90%;background:var(--success)"></div></div><div class="chart-val">101</div></div>
-          <div class="chart-bar"><div class="chart-label">يوليو</div><div class="chart-track"><div class="chart-fill" style="width:100%;background:var(--success)"></div></div><div class="chart-val">112</div></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title"><i class="ti ti-chart-bar"></i>التسجيلات الشهرية</div>
         </div>
-
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i class="ti ti-chart-pie"></i>توزيع المتدربيين حسب التخصص</div></div>
-          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center">
-            <div class="donut" style="background:conic-gradient(var(--primary) 0% 35%,var(--success) 35% 55%,var(--accent) 55% 72%,var(--warning) 72% 85%,#7C3AED 85% 100%)">
-              <div class="donut-center" style="width:70px;height:70px;background:white;border-radius:50%"><div class="donut-num">1,089</div><div class="donut-label">متدرب</div></div>
-            </div>
-            <div class="legend">
-              <div class="legend-item"><div class="legend-dot" style="background:var(--primary)"></div>تطوير ويب 35%</div>
-              <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div>موبايل 20%</div>
-              <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>تصميم 17%</div>
-              <div class="legend-item"><div class="legend-dot" style="background:var(--warning)"></div>بيانات 13%</div>
-              <div class="legend-item"><div class="legend-dot" style="background:#7C3AED"></div>أخرى 15%</div>
-            </div>
-          </div>
-        </div>
+        <div class="bar-chart" id="barChart"><div class="loading">جارٍ التحميل...</div></div>
       </div>
-
-      <!-- العمود الثاني: القوائم والتقارير -->
-      <div>
-        <!-- قائمة أفضل الشركات حسب عدد المتدربيين والتقييم -->
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i class="ti ti-trophy"></i>أفضل الشركات</div></div>
-          <div class="report-item">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white">1</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">TechPal</div><div style="font-size:11px;color:var(--text-mid)">45 متدرب · 4.8 تقييم</div></div>
-            <div style="color:var(--warning);font-size:14px">★★★★★</div>
-          </div>
-          <div class="report-item">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--success);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white">2</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">DesignHub</div><div style="font-size:11px;color:var(--text-mid)">32 متدرب · 4.7 تقييم</div></div>
-            <div style="color:var(--warning);font-size:14px">★★★★★</div>
-          </div>
-          <div class="report-item">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--warning);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white">3</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">DataSoft</div><div style="font-size:11px;color:var(--text-mid)">28 متدرب · 4.5 تقييم</div></div>
-            <div style="color:var(--warning);font-size:14px">★★★★☆</div>
-          </div>
-          <div class="report-item">
-            <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white">4</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-dark)">NetSoft</div><div style="font-size:11px;color:var(--text-mid)">18 متدرب · 4.2 تقييم</div></div>
-            <div style="color:var(--warning);font-size:14px">★★★★☆</div>
-          </div>
-        </div>
-
-        <!-- الرسم البياني الدائري لنسبة النجاح في طلبات التدريب -->
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i class="ti ti-circle-check"></i>نسبة النجاح</div></div>
-          <div style="text-align:center;padding:10px 0">
-            <div style="width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--success) 0% 83.6%,var(--warning) 83.6% 93.2%,var(--accent) 93.2% 100%);margin:0 auto 12px;position:relative">
-              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;height:60px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column"><div style="font-size:18px;font-weight:800;color:var(--success)">83.6%</div><div style="font-size:9px;color:var(--text-mid)">مقبولة</div></div>
-            </div>
-          </div>
-          <div class="legend" style="justify-content:center">
-            <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div>مقبولة 83.6%</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--warning)"></div>معلقة 9.6%</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>مرفوضة 6.8%</div>
-          </div>
-        </div>
-
-        <!-- الرسم البياني العمودي لنشاط آخر 7 أيام -->
-        <div class="card">
-          <div class="card-header"><div class="card-title"><i class="ti ti-calendar"></i>نشاط آخر 7 أيام</div></div>
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;height:80px;padding:0 4px">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;background:var(--primary);border-radius:4px 4px 0 0;height:30px"></div><div style="font-size:10px;color:var(--text-mid)">سبت</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;background:var(--primary);border-radius:4px 4px 0 0;height:45px"></div><div style="font-size:10px;color:var(--text-mid)">أحد</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;background:var(--primary);border-radius:4px 4px 0 0;height:60px"></div><div style="font-size:10px;color:var(--text-mid)">إثن</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;background:var(--primary);border-radius:4px 4px 0 0;height:50px"></div><div style="font-size:10px;color:var(--text-mid)">ثلا</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;background:var(--primary);border-radius:4px 4px 0 0;height:75px"></div><div style="font-size:10px;color:var(--text-mid)">أرب</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;background:var(--success);border-radius:4px 4px 0 0;height:80px"></div><div style="font-size:10px;color:var(--text-mid)">خمي</div></div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:24px;background:var(--primary-light);border:1px solid var(--border);border-radius:4px 4px 0 0;height:20px"></div><div style="font-size:10px;color:var(--text-mid)">جمع</div></div>
-          </div>
-        </div>
+      <div class="chart-card">
+        <div class="chart-header"><div class="chart-title"><i class="ti ti-chart-donut"></i>توزيع المستخدمين</div></div>
+        <div id="donutSection"><div class="loading">جارٍ التحميل...</div></div>
       </div>
+    </div>
+
+    <div class="data-grid">
+      <div class="table-card">
+        <div class="table-title"><i class="ti ti-trophy"></i>أفضل الشركات تقييماً</div>
+        <div id="bestCompanies"><div class="loading">جارٍ التحميل...</div></div>
+      </div>
+      <div class="table-card">
+        <div class="table-title"><i class="ti ti-heart-rate-monitor"></i>صحة المنصة</div>
+        <div id="platformHealth"><div class="loading">جارٍ التحميل...</div></div>
+      </div>
+    </div>
+
+    <div class="chart-card" style="margin-bottom:0">
+      <div class="chart-header"><div class="chart-title"><i class="ti ti-book"></i>توزيع التخصصات</div></div>
+      <div id="specDist" style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:8px"><div class="loading">جارٍ التحميل...</div></div>
     </div>
   </div>
 </div>
 
+<div class="toast" id="toast"><i class="ti ti-circle-check" style="color:var(--success);font-size:18px"></i><span id="toastMsg"></span></div>
+
 <script>
-// === ملف جافاسكريبت للتقارير والإحصائيات ===
+const API = 'http://127.0.0.1:8000/api';
+const token = localStorage.getItem('trainlink_token');
 
-// التحقق من صحة تسجيل الدخول
-(function(){var t=localStorage.getItem('trainlink_token');if(!t){window.location.href='../public/02-login.html';}})();
+if (!token) { window.location.href = '02-login.html'; }
 
-// عنوان واجهة برمجة التطبيقات
-const API_BASE='/api';
+async function loadReports() {
+  try {
+    const r = await fetch(API + '/admin-panel/reports/', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (!r.ok) throw new Error('Failed');
+    const d = await r.json();
 
-// دالة الحصول على رمز المصادقة
-function getToken(){return localStorage.getItem('trainlink_token')}
+    // KPIs
+    document.getElementById('kpiUsers').textContent = d.total_users.toLocaleString();
+    const ud = d.user_distribution || {};
+    document.getElementById('kpiUsersSub').textContent = (ud.trainees||0) + ' متدرب · ' + (ud.companies||0) + ' شركة · ' + (ud.supervisors||0) + ' مشرف';
 
-// دالة إنشاء رؤوس طلب المصادقة
-function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()}}
+    document.getElementById('kpiInternships').textContent = d.total_internships.toLocaleString();
+    document.getElementById('kpiInternSub').textContent = d.open_internships + ' مفتوحة';
 
-// === عند تحميل الصفحة بالكامل ===
-document.addEventListener('DOMContentLoaded',async function(){
-  // إعداد زر التحديث لإعادة تحميل الصفحة
-  document.querySelector('.btn-primary').addEventListener('click',function(){location.reload()});
+    document.getElementById('kpiApps').textContent = d.total_applications.toLocaleString();
+    document.getElementById('kpiAppsSub').textContent = 'نسبة قبول: ' + d.acceptance_rate + '%';
 
-  try{
-    // جلب بيانات التقارير من الخادم
-    var res=await fetch(API_BASE+'/admin-panel/reports/',{headers:authHeaders()});
-    if(!res.ok)throw new Error('fail');
-    var d=await res.json();
+    document.getElementById('kpiRating').textContent = d.average_rating || '—';
+    document.getElementById('kpiRatingSub').textContent = 'من تقييمات المتدربين';
 
-    // تحديث البطاقات الإحصائية الرئيسية بالبيانات من الخادم
-    var statNums=document.querySelectorAll('.stat-num');
-    if(statNums[0])statNums[0].textContent=Number(d.total_users||0).toLocaleString();
-    if(statNums[1])statNums[1].textContent=Number(d.total_internships||0).toLocaleString();
-    if(statNums[2])statNums[2].textContent=Number(d.total_applications||0).toLocaleString();
-    if(statNums[3])statNums[3].textContent=d.average_rating||'0';
+    // Bar chart
+    renderBarChart(d.monthly_registrations || []);
 
-    // تحديث معلومات التغيير أسفل كل بطاقة إحصائية
-    var statChanges=document.querySelectorAll('.stat-change');
-    if(statChanges[0]&&d.total_users)statChanges[0].textContent='إجمالي مسجل';
-    if(statChanges[1]&&d.total_internships)statChanges[1].textContent=d.open_internships?d.open_internships+' نشطة':'إجمالي';
-    if(statChanges[2]&&d.total_applications)statChanges[2].textContent=d.accepted_count+' مقبولة';
-    if(statChanges[3])statChanges[3].textContent=d.average_rating>=4?'ممتاز':d.average_rating>=3?'جيد':'متوسط';
+    // Donut
+    renderDonut(ud);
 
-    // تحديث الرسم البياني الشريطي للتسجيلات الشهرية
-    if(d.monthly_registrations&&d.monthly_registrations.length){
-      var bars=document.querySelectorAll('.grid-2 .card:first-child .chart-bar');
-      var maxCount=Math.max.apply(null,d.monthly_registrations.map(function(m){return m.count}));
-      d.monthly_registrations.forEach(function(m,i){
-        if(bars[i]){
-          var pct=maxCount>0?Math.round(m.count/maxCount*100):0;
-          bars[i].querySelector('.chart-fill').style.width=pct+'%';
-          bars[i].querySelector('.chart-val').textContent=m.count;
-          bars[i].querySelector('.chart-label').textContent=m.month;
-        }
-      });
-    }
+    // Best companies
+    renderBestCompanies(d.best_companies || []);
 
-    // تحديث قائمة أفضل الشركات
-    if(d.best_companies&&d.best_companies.length){
-      var companyItems=document.querySelectorAll('.grid-2 .card:nth-child(2) .report-item');
-      var colors=['var(--primary)','var(--success)','var(--warning)','var(--accent)'];
-      d.best_companies.forEach(function(c,i){
-        if(companyItems[i]){
-          companyItems[i].querySelector('div:first-child').textContent=i+1;
-          companyItems[i].querySelector('div:first-child').style.background=colors[i%colors.length];
-          companyItems[i].querySelector('.p-name,.report-item div:nth-child(2) div:first-child').textContent=c.name;
-          companyItems[i].querySelector('.report-item div:nth-child(2) div:nth-child(2)').textContent=c.count+' فرصة';
-        }
-      });
-    }
+    // Platform health
+    const ph = d.platform_health || {};
+    renderHealth(ph);
 
-    // تحديث الرسم البياني الدائري لنسبة النجاح
-    if(d.success_rate!==undefined){
-      var sRate=d.success_rate;
-      var pRate=d.pending_rate||0;
-      var rRate=d.rejected_rate||0;
-      var donutEl=document.querySelector('.grid-2 .card:nth-child(3) div[style*="conic-gradient"]');
-      if(donutEl){
-        donutEl.style.background='conic-gradient(var(--success) 0% '+sRate+'%,var(--warning) '+sRate+'% '+(sRate+pRate)+'%,var(--accent) '+(sRate+pRate)+'% 100%)';
-      }
-      var donutNum=document.querySelector('.grid-2 .card:nth-child(3) div[style*="font-size:18px"]');
-      if(donutNum)donutNum.textContent=sRate+'%';
-      var legends=document.querySelectorAll('.grid-2 .card:nth-child(3) .legend-item');
-      if(legends[0])legends[0].innerHTML='<div class="legend-dot" style="background:var(--success)"></div>مقبولة '+sRate+'%';
-      if(legends[1])legends[1].innerHTML='<div class="legend-dot" style="background:var(--warning)"></div>معلقة '+pRate+'%';
-      if(legends[2])legends[2].innerHTML='<div class="legend-dot" style="background:var(--accent)"></div>مرفوضة '+rRate+'%';
-    }
+    // Specialization
+    renderSpecDist(d.specialization_distribution || []);
 
-    // تحديث الرسم البياني العمودي لنشاط آخر 7 أيام
-    if(d.weekly_activity&&d.weekly_activity.length){
-      var actBars=document.querySelectorAll('.grid-2 > div:last-child > .card:last-child div[style*="flex-direction:column"]');
-      var maxAct=Math.max.apply(null,d.weekly_activity.map(function(w){return w.count}||1));
-      d.weekly_activity.forEach(function(w,i){
-        if(actBars[i]){
-          var barH=maxAct>0?Math.round(w.count/maxAct*80):0;
-          actBars[i].querySelector('div:first-child').style.height=Math.max(barH,10)+'px';
-          actBars[i].querySelector('div:last-child').textContent=w.day;
-        }
-      });
-    }
-
-    // تحديث إجمالي المتدربيين من توزيع التخصصات
-    if(d.specialization_distribution&&d.specialization_distribution.length){
-      var totalSpec=d.specialization_distribution.reduce(function(s,x){return s+x.count},0);
-      var specDonutCenter=document.querySelectorAll('.donut-num');
-      if(specDonutCenter[0])specDonutCenter[0].textContent=totalSpec.toLocaleString();
-    }
-  }catch(e){
-    // محاولة جلب البيانات من لوحة التحكم كبديل في حال فشل طلب التقارير
-    try{
-      var dashRes=await fetch(API_BASE+'/admin-panel/dashboard/',{headers:authHeaders()});
-      if(dashRes.ok){
-        var d=await dashRes.json();
-        var statNums=document.querySelectorAll('.stat-num');
-        if(statNums[0])statNums[0].textContent=Number(d.total_users||0).toLocaleString();
-        if(statNums[1])statNums[1].textContent=Number(d.total_internships||0).toLocaleString();
-        if(statNums[2])statNums[2].textContent=Number(d.total_applications||0).toLocaleString();
-      }
-    }catch(e2){}
-    console.log('Error loading reports:',e);
+  } catch(e) {
+    document.getElementById('barChart').innerHTML = '<div class="loading">فشل تحميل البيانات</div>';
   }
-});
+}
+
+function renderBarChart(data) {
+  if (data.length === 0) {
+    document.getElementById('barChart').innerHTML = '<div class="loading">لا توجد بيانات</div>';
+    return;
+  }
+  const max = Math.max(...data.map(d => d.count), 1);
+  let html = '';
+  data.forEach(d => {
+    const h = Math.max((d.count / max) * 100, 5);
+    html += `<div class="bar-item"><div class="bar-val">${d.count}</div><div class="bar-col" style="height:${h}%;background:var(--primary)"></div><div class="bar-label">${d.month}</div></div>`;
+  });
+  document.getElementById('barChart').innerHTML = html;
+}
+
+function renderDonut(ud) {
+  const total = (ud.trainees||0) + (ud.companies||0) + (ud.supervisors||0) + (ud.admins||0);
+  if (total === 0) {
+    document.getElementById('donutSection').innerHTML = '<div class="loading">لا توجد بيانات</div>';
+    return;
+  }
+  const tPct = ((ud.trainees||0)/total*360);
+  const cPct = ((ud.companies||0)/total*360);
+  const sPct = ((ud.supervisors||0)/total*360);
+  const aPct = ((ud.admins||0)/total*360);
+  const gradient = `conic-gradient(var(--primary) 0deg ${tPct}deg, var(--success) ${tPct}deg ${tPct+cPct}deg, var(--warning) ${tPct+cPct}deg ${tPct+cPct+sPct}deg, rgba(255,255,255,0.15) ${tPct+cPct+sPct}deg 360deg)`;
+
+  document.getElementById('donutSection').innerHTML = `<div class="donut-wrap">
+    <div style="position:relative"><div class="donut" style="background:${gradient}"></div><div class="donut-center" style="font-size:14px">${total}</div></div>
+    <div class="donut-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--primary)"></div><div><div style="font-weight:600;color:white">متدرب</div><div style="font-size:10px">${ud.trainees||0}</div></div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div><div><div style="font-weight:600;color:white">شركة</div><div style="font-size:10px">${ud.companies||0}</div></div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--warning)"></div><div><div style="font-weight:600;color:white">مشرف</div><div style="font-size:10px">${ud.supervisors||0}</div></div></div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.15)"></div><div><div style="font-weight:600;color:white">أدمن</div><div style="font-size:10px">${ud.admins||0}</div></div></div>
+    </div>
+  </div>`;
+}
+
+function renderBestCompanies(companies) {
+  if (companies.length === 0) {
+    document.getElementById('bestCompanies').innerHTML = '<div class="loading">لا توجد تقييمات</div>';
+    return;
+  }
+  const colors = ['#5B4FCF', '#FF6B6B', '#22C55E', '#7C3AED', '#F59E0B'];
+  const medals = ['🥇', '🥈', '🥉'];
+  let html = '';
+  companies.forEach((c, i) => {
+    const initials = c.name.substring(0, 2);
+    html += `<div class="rank-item"><span class="rank-num">${i < 3 ? medals[i] : (i+1)}</span><div class="rank-logo" style="background:${colors[i]}">${initials}</div><div class="rank-name">${c.name}</div><span class="rank-val" style="color:var(--warning)">${c.avg_score}★</span></div>`;
+  });
+  document.getElementById('bestCompanies').innerHTML = html;
+}
+
+function renderHealth(ph) {
+  const items = [
+    { label: 'نسبة القبول', value: ph.acceptance_rate || 0, color: 'var(--success)' },
+    { label: 'رضا المتدربين', value: ph.satisfaction_rate || 0, color: 'var(--success)' },
+    { label: 'معدل الإتمام', value: ph.completion_rate || 0, color: 'var(--warning)' },
+    { label: 'دقة AI مطابقة', value: ph.ai_accuracy || 0, color: 'var(--primary)' },
+    { label: 'نسبة الحضور', value: ph.attendance_rate || 0, color: 'var(--success)' },
+    { label: 'فرص مجانية', value: ph.free_internships_pct || 0, color: 'var(--primary)' },
+  ];
+  let html = '';
+  items.forEach(i => {
+    html += `<div class="prog-row"><div class="prog-label-row"><span style="font-size:12px;color:rgba(255,255,255,0.6)">${i.label}</span><span style="font-size:12px;color:${i.color};font-weight:700">${i.value}%</span></div><div class="prog-track"><div class="prog-fill" style="width:${i.value}%;background:${i.color}"></div></div></div>`;
+  });
+  document.getElementById('platformHealth').innerHTML = html;
+}
+
+function renderSpecDist(specs) {
+  if (specs.length === 0) {
+    document.getElementById('specDist').innerHTML = '<div class="loading">لا توجد بيانات تخصصات</div>';
+    return;
+  }
+  const total = specs.reduce((a, s) => a + s.count, 0);
+  const colors = ['var(--primary)', 'var(--success)', 'var(--warning)', 'var(--accent)', '#A89CFF'];
+  let html = '';
+  specs.forEach((s, i) => {
+    const pct = Math.round(s.count / total * 100);
+    html += `<div style="text-align:center"><div style="font-size:24px;font-weight:800;color:${colors[i]}">${pct}%</div><div style="height:6px;background:rgba(255,255,255,0.06);border-radius:3px;margin:6px 0;overflow:hidden"><div style="height:100%;width:${pct}%;background:${colors[i]};border-radius:3px"></div></div><div style="font-size:11px;color:rgba(255,255,255,0.4)">${s.major}</div></div>`;
+  });
+  document.getElementById('specDist').innerHTML = html;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+loadReports();
 </script>
 </body>
 </html>
