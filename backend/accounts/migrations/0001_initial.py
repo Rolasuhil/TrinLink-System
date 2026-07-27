@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
             name='AdminProfile',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('role', models.CharField(choices=[('superadmin', 'スーパーアドミン'), ('support', 'دعم')], default='support', max_length=20, verbose_name='الدور')),
+                ('role', models.CharField(choices=[('superadmin', 'مدير عام'), ('support', 'دعم')], default='support', max_length=20, verbose_name='الدور')),
                 ('person', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='admin_profile', to=settings.AUTH_USER_MODEL, verbose_name='المستخدم')),
             ],
             options={

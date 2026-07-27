@@ -178,7 +178,7 @@ class RegisterTraineeSerializerTest(TestCase):
             'email': 'new@test.com',
             'password': 'securepass123',
             'university': 'الجامعة الإسلامية',
-            'major': '计算机科学',
+            'major': 'علوم الحاسب',
         })
         self.assertTrue(serializer.is_valid())
 

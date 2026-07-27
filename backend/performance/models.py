@@ -7,7 +7,7 @@ from accounts.models import Trainee, SupervisorProfile, CompanyProfile
 
 class SupervisionAssignment(models.Model):
     """نموذج تعيين الإشراف
-    يربط المتدرب بالمشرف負責 متابعته أثناء فترة التدريب
+    يربط المتدرب بالمشرف المسؤول عن متابعته أثناء فترة التدريب
     """
 
     # خيارات حالة الإشراف

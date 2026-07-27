@@ -17,7 +17,7 @@ class SupervisionAssignmentTest(TestCase):
         )
         self.supervisor = SupervisorProfile.objects.create(
             person=self.supervisor_person,
-            department='ال计算机',
+            department='العلوم الحاسب',
             job_title='مشرف أكاديمي',
         )
         self.trainee_person = Person.objects.create(
